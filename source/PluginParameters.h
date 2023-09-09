@@ -23,14 +23,18 @@ public:
     float volume();
     static float normalise_volume(float gain);
 
+    float width();
+
 private:
     Apvts apvts;
     Apvts::ParameterLayout parameter_layout();
 
     std::atomic<float> *volume_norm;
+    std::atomic<float> *width_norm;
 
     double sample_rate;
     SmoothLinear smooth_volume;
+    SmoothLinear smooth_width;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginParameters)
 };

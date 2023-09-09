@@ -135,16 +135,27 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     // Update parameter values once per block
     // TODO..
     const float volume = p.volume();
+    const float width = p.width();
 
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    // PROCESS AUDIO
+    for (int n = 0; n < buffer.getNumSamples(); ++n)
     {
-        // Process channel audio
+        float mono_sum = 0.0f;
 
-        auto *x = buffer.getWritePointer(channel);
-
-        for (int n = 0; n < buffer.getNumSamples(); ++n)
+        for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {
+            auto *x = buffer.getWritePointer(channel);
+            // Apply output volume
             x[n] = volume * x[n];
+
+            mono_sum += x[n];
+        }
+
+        // Apply stereo width setting
+        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        {
+            auto *x = buffer.getWritePointer(channel);
+            x[n] = width * x[n] + (1.0f - width) * mono_sum;
         }
     }
 }
