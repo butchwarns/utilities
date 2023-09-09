@@ -36,7 +36,7 @@ void PluginParameters::replace_state(juce::ValueTree const &new_state)
 float PluginParameters::volume()
 {
     smooth_volume.set_target_val(*volume_norm);
-    float volume_smoothed = smooth_volume.next();
+    const float volume_smoothed = smooth_volume.next();
 
     const float db = bdsp::maps::map_linear_norm_pos<float>(volume_smoothed, -66.1f, 35.0f);
     const float gain = bdsp::decibel::db_to_raw_gain_off(db, -66.0f);
