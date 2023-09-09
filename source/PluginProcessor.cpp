@@ -133,6 +133,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
     // Update parameter values once per block
     // TODO..
+    const float volume = p.volume();
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -142,7 +143,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
         for (int n = 0; n < buffer.getNumSamples(); ++n)
         {
-            x[n] = p.volume() * x[n];
+            x[n] = volume * x[n];
         }
     }
 }
