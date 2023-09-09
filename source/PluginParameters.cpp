@@ -4,6 +4,7 @@ PluginParameters::PluginParameters(juce::AudioProcessor &processor)
     : apvts(processor, nullptr, "parameters", parameter_layout()), sample_rate(1.0)
 {
     volume_norm = apvts.getRawParameterValue("volume");
+    width_norm = apvts.getRawParameterValue("width");
 }
 
 PluginParameters::~PluginParameters()
@@ -15,7 +16,10 @@ void PluginParameters::reset(double _sample_rate)
     sample_rate = _sample_rate;
 
     smooth_volume.reset(_sample_rate);
+    smooth_width.reset(_sample_rate);
+
     smooth_volume.set_time_constant(0.0001f);
+    smooth_width.set_time_constant(0.0001f);
 }
 
 juce::ValueTree PluginParameters::copy_state()
@@ -63,6 +67,14 @@ float PluginParameters::normalise_volume(float gain)
     return norm;
 }
 
+float PluginParameters::width()
+{
+    smooth_width.set_target_val(*width_norm);
+    const float width_smoothed = smooth_width.next();
+
+    return width_smoothed;
+}
+
 Apvts::ParameterLayout PluginParameters::parameter_layout()
 {
     Apvts::ParameterLayout layout;
@@ -71,6 +83,7 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
 
     std::unique_ptr<ParameterGroup> utility_grp = std::make_unique<ParameterGroup>("utility", "UTILITY", "|");
     utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("volume", "VOLUME", 0.0f, 1.0f, normalise_volume(1.0f)));
+    utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", 0.0f, 1.0f, 1.0f));
 
     layout.add(std::move(utility_grp));
 
