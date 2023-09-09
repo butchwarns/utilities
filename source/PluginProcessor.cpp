@@ -85,6 +85,7 @@ void PluginProcessor::changeProgramName(int index, const juce::String &newName)
 void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     juce::ignoreUnused(samplesPerBlock);
+    p.reset(sampleRate);
 }
 
 void PluginProcessor::releaseResources()

@@ -1,13 +1,21 @@
 #include "PluginParameters.h"
 
 PluginParameters::PluginParameters(juce::AudioProcessor &processor)
-    : apvts(processor, nullptr, "parameters", parameter_layout())
+    : apvts(processor, nullptr, "parameters", parameter_layout()), sample_rate(1.0)
 {
     volume_norm = apvts.getRawParameterValue("volume");
 }
 
 PluginParameters::~PluginParameters()
 {
+}
+
+void PluginParameters::reset(double _sample_rate)
+{
+    sample_rate = _sample_rate;
+
+    smooth_volume.reset(_sample_rate);
+    smooth_volume.set_time_constant(0.0001f);
 }
 
 juce::ValueTree PluginParameters::copy_state()
@@ -27,8 +35,12 @@ void PluginParameters::replace_state(juce::ValueTree const &new_state)
 
 float PluginParameters::volume()
 {
-    const float db = bdsp::maps::map_linear_norm_pos<float>(*volume_norm, -66.1f, 35.0f);
+    smooth_volume.set_target_val(*volume_norm);
+    float volume_smoothed = smooth_volume.next();
+
+    const float db = bdsp::maps::map_linear_norm_pos<float>(volume_smoothed, -66.1f, 35.0f);
     const float gain = bdsp::decibel::db_to_raw_gain_off(db, -66.0f);
+
     return gain;
 }
 
