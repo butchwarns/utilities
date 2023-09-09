@@ -2,6 +2,8 @@
 #define __PLUGIN_PARAMETERS_H__
 
 #include <JuceHeader.h>
+#include "../BDSP/source/decibel.h"
+#include "../BDSP/source/maps.h"
 
 typedef juce::AudioProcessorValueTreeState Apvts;
 
@@ -16,6 +18,7 @@ public:
     void replace_state(juce::ValueTree const &new_state);
 
     float volume();
+    static float normalise_volume(float gain);
 
 private:
     Apvts apvts;
