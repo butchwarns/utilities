@@ -33,7 +33,8 @@ set(SRC_PLUGIN_BASE
         source/PluginProcessor.cpp
         source/PluginParameters.cpp)
 
-set(SRC_DSP)
+set(SRC_DSP
+        source/dsp/SmoothLinear.cpp)
 
 set(SRC_GUI)
 
