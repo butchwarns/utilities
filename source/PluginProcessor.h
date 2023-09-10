@@ -2,6 +2,10 @@
 
 #include "PluginParameters.h"
 #include <juce_audio_processors/juce_audio_processors.h>
+#include "../BDSP/source/filter/LP1_RC_TPT.h"
+#include "../BDSP/source/filter/HP1_RC_TPT.h"
+
+constexpr int NUM_CROSSOVER_POLES = 2;
 
 class PluginProcessor : public juce::AudioProcessor
 {
@@ -38,6 +42,9 @@ public:
 
 private:
     PluginParameters p;
+
+    bdsp::filter::LP1_RC_TPT lp_crossover[NUM_CHANNELS][NUM_CROSSOVER_POLES];
+    bdsp::filter::HP1_RC_TPT hp_crossover[NUM_CHANNELS][NUM_CROSSOVER_POLES];
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };

@@ -6,6 +6,7 @@
 #include "dsp/SmoothLinear.h"
 #include "../BDSP/source/maps.h"
 #include "../BDSP/source/VoltPerOct.h"
+#include "no_magic_numbers.h"
 
 typedef juce::AudioProcessorValueTreeState Apvts;
 

@@ -85,7 +85,17 @@ void PluginProcessor::changeProgramName(int index, const juce::String &newName)
 void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     juce::ignoreUnused(samplesPerBlock);
+
     p.reset(sampleRate);
+
+    for (int ch = 0; ch < 2; ++ch)
+    {
+        for (int i = 0; i < 2; ++i)
+        {
+            lp_crossover[i][ch].reset(sampleRate);
+            hp_crossover[i][ch].reset(sampleRate);
+        }
+    }
 }
 
 void PluginProcessor::releaseResources()
@@ -138,8 +148,18 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     float width = p.width();
     const bool mono = p.mono();
     const ChannelsChoice channels = p.channels();
+    const bool bass_mono = p.bass_mono();
+    const float bass_mono_freq = p.bass_mono_freq();
+    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    {
+        for (int i = 0; i < NUM_CROSSOVER_POLES; ++i)
+        {
+            lp_crossover[channel][i].set_cutoff(bass_mono_freq);
+            hp_crossover[channel][i].set_cutoff(bass_mono_freq);
+        }
+    }
 
-    // Apply mono switch
+    // Apply mono switch and smoothing
     if (mono)
     {
         width = 0.0f;
@@ -163,6 +183,8 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         else // Stereo
         {
             float mono_sum = 0.0f;
+            float crossover_lower_band[NUM_CHANNELS] = {0.0f};
+            float crossover_upper_band[NUM_CHANNELS] = {0.0f};
 
             for (int channel = 0; channel < totalNumInputChannels; ++channel)
             {
@@ -171,6 +193,41 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
                 x[n] = volume * x[n];
 
                 mono_sum += x[n];
+
+                // If not mono, use bass mono crossover
+                if (!mono)
+                {
+                    crossover_lower_band[channel] = x[n];
+                    for (int i = 0; i < 2; ++i)
+                    {
+                        crossover_lower_band[channel] = lp_crossover[channel][i].process(crossover_lower_band[channel]);
+                        crossover_upper_band[channel] = hp_crossover[channel][i].process(crossover_upper_band[channel]);
+                    }
+                }
+            }
+
+            // Apply bass mono setting
+            if (bass_mono)
+            {
+                float lower_band[NUM_CHANNELS] = {0.0f};
+                float upper_band[NUM_CHANNELS] = {0.0f};
+                for (int channel = 0; channel < totalNumInputChannels; ++channel)
+                {
+                    auto *x = buffer.getWritePointer(channel);
+                    lower_band[channel] = x[n];
+                    upper_band[channel] = x[n];
+                    for (int i = 0; i < NUM_CROSSOVER_POLES; ++i)
+                    {
+                        lower_band[channel] = lp_crossover[channel][i].process(lower_band[channel]);
+                        upper_band[channel] = hp_crossover[channel][i].process(upper_band[channel]);
+                    }
+                }
+                const float lower_band_mono = (lower_band[0] + lower_band[1]) * 0.5f;
+                for (int channel = 0; channel < totalNumInputChannels; ++channel)
+                {
+                    auto *x = buffer.getWritePointer(channel);
+                    x[n] = upper_band[channel] + lower_band_mono;
+                }
             }
 
             // Apply stereo width setting or mono

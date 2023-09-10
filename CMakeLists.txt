@@ -39,7 +39,9 @@ set(SRC_DSP
 set(SRC_GUI)
 
 set(SRC_BDSP
-        BDSP/source/VoltPerOct.cpp)
+        BDSP/source/VoltPerOct.cpp
+        BDSP/source/filter/LP1_RC_TPT.cpp
+        BDSP/source/filter/HP1_RC_TPT.cpp)
 
 target_sources(BW_UTILITY
     PRIVATE
