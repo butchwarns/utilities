@@ -38,11 +38,15 @@ set(SRC_DSP
 
 set(SRC_GUI)
 
+set(SRC_BDSP
+        BDSP/source/VoltPerOct.cpp)
+
 target_sources(BW_UTILITY
     PRIVATE
         ${SRC_PLUGIN_BASE}
         ${SRC_DSP}
-        ${SRC_GUI})
+        ${SRC_GUI}
+        ${SRC_BDSP})
 
 ###############################################################################
 
