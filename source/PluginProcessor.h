@@ -4,6 +4,8 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "../BDSP/source/filter/LP1_RC_TPT.h"
 #include "../BDSP/source/filter/HP1_RC_TPT.h"
+#include "dsp/SmoothLinear.h"
+#include "no_magic_numbers.h"
 
 constexpr int NUM_CROSSOVER_POLES = 2;
 
@@ -42,6 +44,8 @@ public:
 
 private:
     PluginParameters p;
+
+    SmoothLinear smooth_width;
 
     bdsp::filter::LP1_RC_TPT lp_crossover[NUM_CHANNELS][NUM_CROSSOVER_POLES];
     bdsp::filter::HP1_RC_TPT hp_crossover[NUM_CHANNELS][NUM_CROSSOVER_POLES];

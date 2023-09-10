@@ -87,6 +87,8 @@ void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     juce::ignoreUnused(samplesPerBlock);
 
     p.reset(sampleRate);
+    smooth_width.reset(sampleRate);
+    smooth_width.set_time_constant(SMOOTHING_TIME_CONSTANT);
 
     for (int ch = 0; ch < 2; ++ch)
     {
@@ -145,7 +147,8 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     // Update parameter values once per block
     // TODO..
     const float volume = p.volume();
-    float width = p.width();
+    float target_width = p.width();
+    float width = 0.0f;
     const bool mono = p.mono();
     const ChannelsChoice channels = p.channels();
     const bool bass_mono = p.bass_mono();
@@ -162,8 +165,11 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     // Apply mono switch and smoothing
     if (mono)
     {
-        width = 0.0f;
+        target_width = 0.0f;
     }
+
+    smooth_width.set_target_val(target_width);
+    width = smooth_width.next();
 
     // PROCESS AUDIO
 
