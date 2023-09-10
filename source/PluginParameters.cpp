@@ -3,6 +3,7 @@
 PluginParameters::PluginParameters(juce::AudioProcessor &processor)
     : apvts(processor, nullptr, "parameters", parameter_layout()), sample_rate(1.0)
 {
+    channels_norm = apvts.getRawParameterValue("channels");
     volume_norm = apvts.getRawParameterValue("volume");
     width_norm = apvts.getRawParameterValue("width");
     mono_norm = apvts.getRawParameterValue("mono");
@@ -36,6 +37,12 @@ juce::Identifier PluginParameters::state_type()
 void PluginParameters::replace_state(juce::ValueTree const &new_state)
 {
     apvts.replaceState(new_state);
+}
+
+ChannelsChoice PluginParameters::channels()
+{
+    const ChannelsChoice choice = static_cast<ChannelsChoice>((int)*channels_norm);
+    return choice;
 }
 
 float PluginParameters::volume()
@@ -88,6 +95,7 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
     typedef juce::AudioProcessorParameterGroup ParameterGroup;
 
     std::unique_ptr<ParameterGroup> utility_grp = std::make_unique<ParameterGroup>("utility", "UTILITY", "|");
+    utility_grp->addChild(std::make_unique<juce::AudioParameterChoice>("channels", "CHANNELS", CHANNELS_CHOICES, 0));
     utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("volume", "VOLUME", 0.0f, 1.0f, normalise_volume(1.0f)));
     utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", 0.0f, 1.0f, 1.0f));
     utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("mono", "MONO", false));

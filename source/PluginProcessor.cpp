@@ -137,6 +137,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     const float volume = p.volume();
     float width = p.width();
     const bool mono = p.mono();
+    const ChannelsChoice channels = p.channels();
 
     // Apply mono switch
     if (mono)
@@ -145,24 +146,39 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     }
 
     // PROCESS AUDIO
+
+    float *left_ch = buffer.getWritePointer(0);
+    float *right_ch = buffer.getWritePointer(1);
+
     for (int n = 0; n < buffer.getNumSamples(); ++n)
     {
-        float mono_sum = 0.0f;
-
-        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        if (channels == ChannelsChoice::LEFT)
         {
-            auto *x = buffer.getWritePointer(channel);
-            // Apply output volume
-            x[n] = volume * x[n];
-
-            mono_sum += x[n];
+            right_ch[n] = left_ch[n];
         }
-
-        // Apply stereo width setting
-        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        else if (channels == ChannelsChoice::RIGTH)
         {
-            auto *x = buffer.getWritePointer(channel);
-            x[n] = width * x[n] + (1.0f - width) * mono_sum;
+            left_ch[n] = right_ch[n];
+        }
+        else // Stereo
+        {
+            float mono_sum = 0.0f;
+
+            for (int channel = 0; channel < totalNumInputChannels; ++channel)
+            {
+                auto *x = buffer.getWritePointer(channel);
+                // Apply output volume
+                x[n] = volume * x[n];
+
+                mono_sum += x[n];
+            }
+
+            // Apply stereo width setting or mono
+            for (int channel = 0; channel < totalNumInputChannels; ++channel)
+            {
+                auto *x = buffer.getWritePointer(channel);
+                x[n] = width * x[n] + (1.0f - width) * mono_sum;
+            }
         }
     }
 }

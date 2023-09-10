@@ -8,6 +8,14 @@
 
 typedef juce::AudioProcessorValueTreeState Apvts;
 
+const juce::StringArray CHANNELS_CHOICES{"STEREO", "LEFT", "RIGHT"};
+enum ChannelsChoice
+{
+    STEREO = 0,
+    LEFT = 1,
+    RIGTH = 2
+};
+
 class PluginParameters
 {
 public:
@@ -20,6 +28,8 @@ public:
     juce::Identifier state_type();
     void replace_state(juce::ValueTree const &new_state);
 
+    ChannelsChoice channels();
+
     float volume();
     static float normalise_volume(float gain);
 
@@ -31,6 +41,7 @@ private:
     Apvts apvts;
     Apvts::ParameterLayout parameter_layout();
 
+    std::atomic<float> *channels_norm;
     std::atomic<float> *volume_norm;
     std::atomic<float> *width_norm;
     std::atomic<float> *mono_norm;
