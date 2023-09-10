@@ -8,6 +8,7 @@
 #include "no_magic_numbers.h"
 
 constexpr int NUM_CROSSOVER_POLES = 2;
+constexpr float SMOOTHING_TIME_WIDTH = 0.00006f;
 
 class PluginProcessor : public juce::AudioProcessor
 {
