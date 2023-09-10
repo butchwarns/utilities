@@ -5,6 +5,7 @@ PluginParameters::PluginParameters(juce::AudioProcessor &processor)
 {
     volume_norm = apvts.getRawParameterValue("volume");
     width_norm = apvts.getRawParameterValue("width");
+    mono_norm = apvts.getRawParameterValue("mono");
 }
 
 PluginParameters::~PluginParameters()
@@ -75,6 +76,11 @@ float PluginParameters::width()
     return width_smoothed;
 }
 
+bool PluginParameters::mono()
+{
+    return static_cast<bool>(*mono_norm);
+}
+
 Apvts::ParameterLayout PluginParameters::parameter_layout()
 {
     Apvts::ParameterLayout layout;
@@ -84,6 +90,7 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
     std::unique_ptr<ParameterGroup> utility_grp = std::make_unique<ParameterGroup>("utility", "UTILITY", "|");
     utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("volume", "VOLUME", 0.0f, 1.0f, normalise_volume(1.0f)));
     utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", 0.0f, 1.0f, 1.0f));
+    utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("mono", "MONO", false));
 
     layout.add(std::move(utility_grp));
 

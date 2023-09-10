@@ -135,7 +135,14 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     // Update parameter values once per block
     // TODO..
     const float volume = p.volume();
-    const float width = p.width();
+    float width = p.width();
+    const bool mono = p.mono();
+
+    // Apply mono switch
+    if (mono)
+    {
+        width = 0.0f;
+    }
 
     // PROCESS AUDIO
     for (int n = 0; n < buffer.getNumSamples(); ++n)

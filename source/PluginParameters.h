@@ -25,12 +25,15 @@ public:
 
     float width();
 
+    bool mono();
+
 private:
     Apvts apvts;
     Apvts::ParameterLayout parameter_layout();
 
     std::atomic<float> *volume_norm;
     std::atomic<float> *width_norm;
+    std::atomic<float> *mono_norm;
 
     double sample_rate;
     SmoothLinear smooth_volume;
