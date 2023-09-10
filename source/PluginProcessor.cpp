@@ -88,7 +88,8 @@ void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 
     p.reset(sampleRate);
     smooth_width.reset(sampleRate);
-    smooth_width.set_time_constant(SMOOTHING_TIME_CONSTANT);
+
+    smooth_width.set_time_constant(SMOOTHING_TIME_WIDTH);
 
     for (int ch = 0; ch < 2; ++ch)
     {

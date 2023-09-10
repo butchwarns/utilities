@@ -23,9 +23,9 @@ void PluginParameters::reset(double _sample_rate)
     smooth_width.reset(_sample_rate);
     smooth_bass_mono_freq.reset(_sample_rate);
 
-    smooth_volume.set_time_constant(SMOOTHING_TIME_CONSTANT);
-    smooth_width.set_time_constant(SMOOTHING_TIME_CONSTANT);
-    smooth_bass_mono_freq.set_time_constant(SMOOTHING_TIME_CONSTANT);
+    smooth_volume.set_time_constant(SMOOTHING_TIME_DEFAULT);
+    smooth_width.set_time_constant(SMOOTHING_TIME_DEFAULT);
+    smooth_bass_mono_freq.set_time_constant(SMOOTHING_TIME_DEFAULT);
 }
 
 juce::ValueTree PluginParameters::copy_state()
