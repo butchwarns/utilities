@@ -11,10 +11,6 @@ PluginParameters::PluginParameters(juce::AudioProcessor &processor)
     bass_mono_freq_norm = apvts.getRawParameterValue("bass_mono_freq");
 }
 
-PluginParameters::~PluginParameters()
-{
-}
-
 void PluginParameters::reset(double _sample_rate)
 {
     sample_rate = _sample_rate;
@@ -33,7 +29,7 @@ juce::ValueTree PluginParameters::copy_state()
     return apvts.copyState();
 }
 
-juce::Identifier PluginParameters::state_type()
+juce::Identifier PluginParameters::state_type() const
 {
     return apvts.state.getType();
 }
@@ -45,7 +41,7 @@ void PluginParameters::replace_state(juce::ValueTree const &new_state)
 
 ChannelsChoice PluginParameters::channels()
 {
-    const ChannelsChoice choice = static_cast<ChannelsChoice>((int)*channels_norm);
+    const auto choice = static_cast<ChannelsChoice>((int)*channels_norm);
     return choice;
 }
 
@@ -54,7 +50,7 @@ float PluginParameters::volume()
     smooth_volume.set_target_val(*volume_norm);
     const float volume_smoothed_norm = smooth_volume.next();
 
-    const float db = bdsp::maps::map_linear_norm<float>(volume_smoothed_norm, -66.1f, 35.0f);
+    const auto db = bdsp::mappings::map_linear_norm<float>(volume_smoothed_norm, -66.1f, 35.0f);
     const float gain = bdsp::decibel::db_to_raw_gain_off(db, -66.0f);
 
     return gain;
@@ -74,7 +70,7 @@ float PluginParameters::normalise_volume(float gain)
     }
 
     // Normalise
-    const float norm = bdsp::maps::map_linear<float>(db, -66.0, 35.0f, 0.0f, 1.0f);
+    const auto norm = bdsp::mappings::map_linear<float>(db, -66.0, 35.0f, 0.0f, 1.0f);
 
     return norm;
 }
@@ -102,7 +98,7 @@ float PluginParameters::bass_mono_freq()
     smooth_bass_mono_freq.set_target_val(*bass_mono_freq_norm);
     const float freq_smoothed_norm = smooth_bass_mono_freq.next();
 
-    const float cv = bdsp::maps::map_linear_norm(freq_smoothed_norm, -5.f, 5.0f);
+    const float cv = bdsp::mappings::map_linear_norm(freq_smoothed_norm, -5.f, 5.0f);
     const float freq = bdsp::cv::VoltPerOct::volt_to_freq(cv, ZERO_VOLT_FREQ_BASS_MONO);
 
     return freq;
@@ -111,7 +107,7 @@ float PluginParameters::bass_mono_freq()
 float PluginParameters::normalise_bass_mono_freq(float freq)
 {
     const float cv = bdsp::cv::VoltPerOct::freq_to_volt(freq, ZERO_VOLT_FREQ_BASS_MONO);
-    const float cv_norm = bdsp::maps::map_linear(cv, -5.0f, 5.0f, 0.0f, 1.0f);
+    const float cv_norm = bdsp::mappings::map_linear(cv, -5.0f, 5.0f, 0.0f, 1.0f);
 
     return cv_norm;
 }

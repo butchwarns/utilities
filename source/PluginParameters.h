@@ -4,7 +4,7 @@
 #include <JuceHeader.h>
 #include "../BDSP/source/decibel.h"
 #include "dsp/SmoothLinear.h"
-#include "../BDSP/source/maps.h"
+#include "../BDSP/source/mappings.h"
 #include "../BDSP/source/VoltPerOct.h"
 #include "no_magic_numbers.h"
 
@@ -25,13 +25,13 @@ const float ZERO_VOLT_FREQ_BASS_MONO = 20.0f * std::powf(2.0f, 5.0f);
 class PluginParameters
 {
 public:
-    PluginParameters(juce::AudioProcessor &processor);
-    ~PluginParameters();
+    explicit PluginParameters(juce::AudioProcessor &processor);
+    ~PluginParameters() = default;
 
     void reset(double _sample_rate);
 
     juce::ValueTree copy_state();
-    juce::Identifier state_type();
+    juce::Identifier state_type() const;
     void replace_state(juce::ValueTree const &new_state);
 
     ChannelsChoice channels();
@@ -46,7 +46,7 @@ public:
 
 private:
     Apvts apvts;
-    Apvts::ParameterLayout parameter_layout();
+    static Apvts::ParameterLayout parameter_layout();
 
     std::atomic<float> *channels_norm;
     std::atomic<float> *volume_norm;
