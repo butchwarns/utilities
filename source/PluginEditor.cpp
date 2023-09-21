@@ -6,7 +6,14 @@ PluginEditor::PluginEditor(PluginProcessor &p)
 {
     juce::ignoreUnused(processorRef);
 
-    setSize(400, 300);
+    // Set window size
+    const juce::Displays::Display *display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay();
+    juce::Rectangle<int> user_area = display->userArea;
+    juce::Rectangle<int> user_area_scaled = user_area.transformed(juce::AffineTransform::scale(0.25f));
+    const int width = user_area_scaled.getWidth();
+    const int height = user_area_scaled.getHeight();
+    const int dim = width < height ? width : height;
+    setSize(dim, 1.5f * dim);
 }
 
 PluginEditor::~PluginEditor()
