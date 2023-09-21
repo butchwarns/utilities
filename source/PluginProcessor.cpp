@@ -146,7 +146,6 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         buffer.clear(i, 0, buffer.getNumSamples());
 
     // Update parameter values once per block
-    // TODO..
     const float volume = p.volume();
     float target_width = p.width();
     float width = 0.0f;
@@ -163,87 +162,71 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         }
     }
 
-    // Apply mono switch and smoothing
     if (mono)
     {
         target_width = 0.0f;
     }
-
     smooth_width.set_target_val(target_width);
     width = smooth_width.next();
 
     // PROCESS AUDIO
 
-    float *left_ch = buffer.getWritePointer(0);
-    float *right_ch = buffer.getWritePointer(1);
+    float *left = buffer.getWritePointer(0);
+    float *right = buffer.getWritePointer(1);
 
+    float mono_sum = 0.0f;
     for (int n = 0; n < buffer.getNumSamples(); ++n)
     {
-        if (channels == ChannelsChoice::LEFT)
-        {
-            right_ch[n] = left_ch[n];
-        }
-        else if (channels == ChannelsChoice::RIGTH)
-        {
-            left_ch[n] = right_ch[n];
-        }
-        else // Stereo
-        {
-            float mono_sum = 0.0f;
-            float crossover_lower_band[NUM_CHANNELS] = {0.0f};
-            float crossover_upper_band[NUM_CHANNELS] = {0.0f};
+        mono_sum = (left[n] + right[n]) / 2.0f;
 
-            for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        // Apply bass mono
+        if (width > 0.0f && bass_mono)
+        {
+            // Split both channels into bands
+            float lo_left = left[n];
+            float lo_right = right[n];
+            float hi_left = left[n];
+            float hi_right = right[n];
+
+            for (int i = 0; i < NUM_CROSSOVER_POLES; ++i)
             {
-                auto *x = buffer.getWritePointer(channel);
-                // Apply output volume
-                x[n] = volume * x[n];
-
-                mono_sum += x[n];
-
-                // If not mono, use bass mono crossover
-                if (!mono)
-                {
-                    crossover_lower_band[channel] = x[n];
-                    for (int i = 0; i < 2; ++i)
-                    {
-                        crossover_lower_band[channel] = lp_crossover[channel][i].process(crossover_lower_band[channel]);
-                        crossover_upper_band[channel] = hp_crossover[channel][i].process(crossover_upper_band[channel]);
-                    }
-                }
+                lo_left = lp_crossover[0][i].process(lo_left);
+                lo_right = lp_crossover[1][i].process(lo_right);
+                hi_left = hp_crossover[0][i].process(hi_left);
+                hi_right = hp_crossover[1][i].process(hi_right);
             }
 
-            // Apply bass mono setting
-            if (bass_mono)
-            {
-                float lower_band[NUM_CHANNELS] = {0.0f};
-                float upper_band[NUM_CHANNELS] = {0.0f};
-                for (int channel = 0; channel < totalNumInputChannels; ++channel)
-                {
-                    auto *x = buffer.getWritePointer(channel);
-                    lower_band[channel] = x[n];
-                    upper_band[channel] = x[n];
-                    for (int i = 0; i < NUM_CROSSOVER_POLES; ++i)
-                    {
-                        lower_band[channel] = lp_crossover[channel][i].process(lower_band[channel]);
-                        upper_band[channel] = hp_crossover[channel][i].process(upper_band[channel]);
-                    }
-                }
-                const float lower_band_mono = (lower_band[0] + lower_band[1]) * 0.5f;
-                for (int channel = 0; channel < totalNumInputChannels; ++channel)
-                {
-                    auto *x = buffer.getWritePointer(channel);
-                    x[n] = upper_band[channel] + lower_band_mono;
-                }
-            }
+            // Summ bass band to mono
+            const float lo_mono_sum = (lo_left + lo_right) / 2.0f;
 
-            // Apply stereo width setting or mono
-            for (int channel = 0; channel < totalNumInputChannels; ++channel)
-            {
-                auto *x = buffer.getWritePointer(channel);
-                x[n] = width * x[n] + (1.0f - width) * mono_sum;
-            }
+            // Copy to output
+            left[n] = hi_left + lo_mono_sum;
+            right[n] = hi_right + lo_mono_sum;
         }
+
+        // Apply stereo width
+        left[n] = width * left[n] + (1.0f - width) * mono_sum;
+        right[n] = width * right[n] + (1.0f - width) * mono_sum;
+
+        // Apply channels param
+        if (channels == LEFT)
+        {
+            right[n] = left[n];
+        }
+        else if (channels == RIGHT)
+        {
+            left[n] = right[n];
+        }
+        else if (channels == SWAPPED)
+        {
+            const float temp = left[n];
+            left[n] = right[n];
+            right[n] = temp;
+        }
+
+        // Apply output volume
+        left[n] = volume * left[n];
+        right[n] = volume * right[n];
     }
 }
 

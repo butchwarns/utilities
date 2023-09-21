@@ -10,12 +10,13 @@
 
 typedef juce::AudioProcessorValueTreeState Apvts;
 
-const juce::StringArray CHANNELS_CHOICES{"STEREO", "LEFT", "RIGHT"};
+const juce::StringArray CHANNELS_CHOICES{"STEREO", "LEFT", "RIGHT", "SWAPPED"};
 enum ChannelsChoice
 {
     STEREO = 0,
     LEFT = 1,
-    RIGTH = 2
+    RIGHT = 2,
+    SWAPPED = 3
 };
 
 // Tune control voltage conversion to 20Hz lowest freq (at -5V)
