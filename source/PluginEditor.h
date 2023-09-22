@@ -8,6 +8,7 @@
 #include "gui/Sliders.h"
 #include "gui/Spacer.h"
 #include "gui/colours.h"
+#include "gui/Look.h"
 
 class PluginEditor : public juce::AudioProcessorEditor
 {
@@ -20,6 +21,8 @@ public:
 
 private:
     PluginProcessor &processorRef;
+
+    Look look;
 
     Header header;
     Footer footer;

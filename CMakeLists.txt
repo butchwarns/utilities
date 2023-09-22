@@ -42,7 +42,8 @@ set(SRC_GUI
         source/gui/Channels.cpp
         source/gui/BassMono.cpp
         source/gui/Sliders.cpp
-        source/gui/Spacer.cpp)
+        source/gui/Spacer.cpp
+        source/gui/Look.cpp)
 
 set(SRC_BDSP
         BDSP/source/VoltPerOct.cpp

@@ -12,6 +12,8 @@ PluginEditor::PluginEditor(PluginProcessor &p)
 
     setSize(WIN_WIDTH, WIN_HEIGHT);
 
+    setLookAndFeel(&look);
+
     addAndMakeVisible(&header);
     addAndMakeVisible(&footer);
     addAndMakeVisible(&sliders);

@@ -4,24 +4,30 @@ BassMono::BassMono()
 {
     addAndMakeVisible(&bass_mono);
     bass_mono.setText("BASS MONO", dontSendNotification);
-    bass_mono.setJustificationType(juce::Justification::centred);
+    bass_mono.setJustificationType(Justification::centred);
+    bass_mono.setColour(Label::textColourId, Colours::black);
     bass_mono.setFont(FONT_SIZE);
 
     addAndMakeVisible(&active);
     active.setText("ACTIVE", dontSendNotification);
-    active.setJustificationType(juce::Justification::centred);
+    active.setJustificationType(Justification::centred);
+    active.setColour(Label::textColourId, Colours::black);
     active.setFont(FONT_SIZE);
 
     addAndMakeVisible(&checkbox);
 
     addAndMakeVisible(&frequency);
     frequency.setText("FREQUENCY", dontSendNotification);
-    frequency.setJustificationType(juce::Justification::centred);
+    frequency.setJustificationType(Justification::centred);
+    frequency.setColour(Label::textColourId, Colours::black);
     frequency.setFont(FONT_SIZE);
 
     addAndMakeVisible(&slider);
-    slider.setSliderStyle(juce::Slider::LinearHorizontal);
-    slider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
+    slider.setSliderStyle(Slider::LinearBar);
+    slider.setNumDecimalPlacesToDisplay(0);
+    slider.setTextValueSuffix("Hz");
+    slider.setColour(Slider::textBoxTextColourId, Colours::black);
+    slider.setTextBoxIsEditable(false);
 }
 
 void BassMono::paint(juce::Graphics &g)

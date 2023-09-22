@@ -5,20 +5,28 @@ Sliders::Sliders()
     addAndMakeVisible(&volume);
     volume.setText("VOLUME", dontSendNotification);
     volume.setJustificationType(juce::Justification::centred);
+    volume.setColour(Label::textColourId, Colours::black);
     volume.setFont(FONT_SIZE);
 
     addAndMakeVisible(&slider_volume);
     slider_volume.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     slider_volume.setTextBoxStyle(juce::Slider::TextBoxBelow, true, SLIDER_WIDTH, LABEL_HEIGHT);
+    slider_volume.setColour(Slider::textBoxTextColourId, Colours::black);
+    slider_volume.setNumDecimalPlacesToDisplay(1);
+    slider_volume.setTextValueSuffix("dB");
 
     addAndMakeVisible(&width);
     width.setText("WIDTH", dontSendNotification);
     width.setJustificationType(juce::Justification::centred);
+    width.setColour(Label::textColourId, Colours::black);
     width.setFont(FONT_SIZE);
 
     addAndMakeVisible(&slider_width);
     slider_width.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     slider_width.setTextBoxStyle(juce::Slider::TextBoxBelow, true, SLIDER_WIDTH, LABEL_HEIGHT);
+    slider_width.setColour(Slider::textBoxTextColourId, Colours::black);
+    slider_width.setNumDecimalPlacesToDisplay(0);
+    slider_width.setTextValueSuffix("%");
 }
 
 void Sliders::paint(juce::Graphics &g)
