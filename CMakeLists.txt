@@ -36,7 +36,13 @@ set(SRC_PLUGIN_BASE
 set(SRC_DSP
         source/dsp/SmoothLinear.cpp)
 
-set(SRC_GUI)
+set(SRC_GUI
+        source/gui/Header.cpp
+        source/gui/Footer.cpp
+        source/gui/Channels.cpp
+        source/gui/BassMono.cpp
+        source/gui/Sliders.cpp
+        source/gui/Spacer.cpp)
 
 set(SRC_BDSP
         BDSP/source/VoltPerOct.cpp
