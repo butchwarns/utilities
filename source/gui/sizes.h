@@ -17,8 +17,12 @@ constexpr int CHECKBOX_DIM = 20;
 constexpr int CHANNELS_HEIGHT = 70;
 constexpr int BASS_MONO_HEIGHT = 90;
 
-constexpr int SLIDERS_HEIGHT = 90; // Slider with label and textbox
+// Rotary slider with label and textbox
+constexpr int SLIDERS_HEIGHT = 90;
 constexpr int SLIDER_WIDTH = 50;
+constexpr int KNOB_DIM = 40;
+constexpr int POINTER_DIM = 8;
+constexpr int POINTER_OFFSET = 5;
 
 constexpr int SPACER_HEIGHT = 11;
 constexpr int SPACER_LINE = 1;

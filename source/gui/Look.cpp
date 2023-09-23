@@ -9,9 +9,50 @@ void Look::drawLinearSlider(Graphics &g, int x, int y, int width, int height, fl
     g.setColour(juce::Colours::black);
     g.drawRect(slider.getLocalBounds(), 2);
 
+    // Indicator region
     const auto bounds = slider.getLocalBounds();
-    g.setColour(juce::Colour(juce::uint8(0x00), juce::uint8(0x00), juce::uint8(0x00), juce::uint8(0x66)));
+    g.setColour(GREY);
     g.fillRect(bounds.getX(), bounds.getY(), (int)(sliderPos), bounds.getHeight());
+}
+
+void Look::drawRotarySlider(Graphics &g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, Slider &slider)
+{
+    const auto centre_x = ((float)x + (float)width) / 2.0f;
+    const auto centre_y = ((float)x + (float)height) / 2.0f;
+
+    // Knob
+
+    const auto knob_radius = KNOB_DIM / 2.0f;
+    Path k;
+    k.addEllipse(centre_x - knob_radius, centre_y - knob_radius, KNOB_DIM, KNOB_DIM);
+
+    g.setColour(Colours::white);
+    g.fillPath(k);
+    g.setColour(GREY);
+    g.fillPath(k);
+
+    g.setColour(Colours::black);
+    g.strokePath(k, PathStrokeType(2.0f));
+
+    // Pointer
+
+    const auto pointer_radius = POINTER_DIM / 2.0f;
+    const auto knob_offset = (width - KNOB_DIM) / 2.0f;
+    Path p;
+    p.addEllipse(x - pointer_radius, y - pointer_radius, POINTER_DIM, POINTER_DIM);
+
+    AffineTransform pointer_transform;
+    pointer_transform = pointer_transform
+                            .translated(0.0f, -knob_radius + (pointer_radius + POINTER_OFFSET))
+                            .rotated((sliderPos - 0.5f) * (rotaryEndAngle - rotaryStartAngle))
+                            .translated(knob_radius + knob_offset, knob_radius + knob_offset);
+    p.applyTransform(pointer_transform);
+
+    g.setColour(Colours::white);
+    g.fillPath(p);
+
+    g.setColour(Colours::black);
+    g.strokePath(p, PathStrokeType(2.0f));
 }
 
 void Look::drawTickBox(Graphics &g, Component &component,
@@ -30,7 +71,7 @@ void Look::drawTickBox(Graphics &g, Component &component,
 
     if (ticked)
     {
-        g.setFont(Look::getFontInterRegular(FONT_SIZE));
+        g.setFont(Look::getFontInterBlack(FONT_SIZE));
         g.drawFittedText("X", component.getLocalBounds(), juce::Justification::centred, 1, 1.0f);
     }
 }
