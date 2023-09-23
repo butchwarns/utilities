@@ -6,7 +6,7 @@ Sliders::Sliders()
     volume.setText("VOLUME", dontSendNotification);
     volume.setJustificationType(juce::Justification::centred);
     volume.setColour(Label::textColourId, Colours::black);
-    volume.setFont(FONT_SIZE);
+    volume.getProperties().set("gui_class", "bold");
 
     addAndMakeVisible(&slider_volume);
     slider_volume.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
@@ -19,7 +19,7 @@ Sliders::Sliders()
     width.setText("WIDTH", dontSendNotification);
     width.setJustificationType(juce::Justification::centred);
     width.setColour(Label::textColourId, Colours::black);
-    width.setFont(FONT_SIZE);
+    width.getProperties().set("gui_class", "bold");
 
     addAndMakeVisible(&slider_width);
     slider_width.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);

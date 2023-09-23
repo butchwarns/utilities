@@ -7,7 +7,7 @@ Channels::Channels()
     channels.setText("CHANNELS", dontSendNotification);
     channels.setJustificationType(juce::Justification::centred);
     channels.setColour(Label::textColourId, Colours::black);
-    channels.setFont(FONT_SIZE);
+    channels.getProperties().set("gui_class", "bold");
 
     addAndMakeVisible(&selector);
     selector.addItemList(CHANNELS_CHOICES, 0);
@@ -16,7 +16,7 @@ Channels::Channels()
     mono.setText("MONO", dontSendNotification);
     mono.setJustificationType(juce::Justification::centred);
     mono.setColour(Label::textColourId, Colours::black);
-    mono.setFont(FONT_SIZE);
+    mono.getProperties().set("gui_class", "label");
 
     addAndMakeVisible(&checkbox);
 }

@@ -67,18 +67,20 @@ target_compile_definitions(BW_UTILITY
         JUCE_DISPLAY_SPLASH_SCREEN=0    # If you disable the splashscreen, you either need a valid JUCE license or release under GPLv3
         JUCE_REPORT_APP_USAGE=0)
 
-# juce_add_binary_data(BWUtilityBinaryData 
-#     NAMESPACE 
-#         BinaryData
-#     SOURCES 
+juce_add_binary_data(BWUtilityBinaryData 
+    NAMESPACE 
+        BinaryData
+    SOURCES
+        resources/fonts/Inter-Regular.otf
+        resources/fonts/Inter-Black.otf)
 
 target_link_libraries(BW_UTILITY
     PRIVATE
-        # BWUtilityBinaryData
+        BWUtilityBinaryData
         juce::juce_audio_utils
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
 
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpic") # Position-independent code, needed for linking to binary target
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpic") # Position-independent code, needed for linking to binary target on linux

@@ -1,5 +1,7 @@
 #pragma once
 
+constexpr float KERNING_FACTOR = 0.1f;
+
 constexpr int PAD = 5;
 
 constexpr int HEADER_HEIGHT = 35;

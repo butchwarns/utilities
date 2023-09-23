@@ -6,13 +6,13 @@ BassMono::BassMono()
     bass_mono.setText("BASS MONO", dontSendNotification);
     bass_mono.setJustificationType(Justification::centred);
     bass_mono.setColour(Label::textColourId, Colours::black);
-    bass_mono.setFont(FONT_SIZE);
+    bass_mono.getProperties().set("gui_class", "bold");
 
     addAndMakeVisible(&active);
     active.setText("ACTIVE", dontSendNotification);
     active.setJustificationType(Justification::centred);
     active.setColour(Label::textColourId, Colours::black);
-    active.setFont(FONT_SIZE);
+    active.getProperties().set("gui_class", "label");
 
     addAndMakeVisible(&checkbox);
 
@@ -20,7 +20,7 @@ BassMono::BassMono()
     frequency.setText("FREQUENCY", dontSendNotification);
     frequency.setJustificationType(Justification::centred);
     frequency.setColour(Label::textColourId, Colours::black);
-    frequency.setFont(FONT_SIZE);
+    frequency.getProperties().set("gui_class", "label");
 
     addAndMakeVisible(&slider);
     slider.setSliderStyle(Slider::LinearBar);

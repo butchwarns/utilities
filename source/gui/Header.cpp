@@ -7,7 +7,7 @@ Header::Header()
     title.setText("UTILITY", dontSendNotification);
     title.setJustificationType(juce::Justification::centred);
     title.setColour(juce::Label::textColourId, juce::Colours::white);
-    title.setFont(FONT_SIZE_TITLE);
+    title.getProperties().set("gui_class", "title");
 }
 
 void Header::paint(juce::Graphics &g)

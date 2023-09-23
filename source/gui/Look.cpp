@@ -30,6 +30,7 @@ void Look::drawTickBox(Graphics &g, Component &component,
 
     if (ticked)
     {
+        g.setFont(Look::getFontInterRegular(FONT_SIZE));
         g.drawFittedText("X", component.getLocalBounds(), juce::Justification::centred, 1, 1.0f);
     }
 }
@@ -50,4 +51,36 @@ void Look::drawLabel(Graphics &g, Label &label)
                          jmax(1, (int)((float)textArea.getHeight() / font.getHeight())),
                          label.getMinimumHorizontalScale());
     }
+}
+
+Font Look::getLabelFont(Label &label)
+{
+    if ((label.getProperties()["gui_class"] == "label") || dynamic_cast<Slider *>(label.getParentComponent()))
+    {
+        return getFontInterRegular(FONT_SIZE);
+    }
+    else if (label.getProperties()["gui_class"] == "bold")
+    {
+        return getFontInterBlack(FONT_SIZE);
+    }
+    else if (label.getProperties()["gui_class"] == "title")
+    {
+        return getFontInterBlack(FONT_SIZE_TITLE);
+    }
+    else
+    {
+        return label.getFont();
+    }
+}
+
+Font Look::getFontInterRegular(float height)
+{
+    static auto font = Font(Typeface::createSystemTypefaceFor(BinaryData::InterRegular_otf, BinaryData::InterRegular_otfSize));
+    return font.withHeight(height).withExtraKerningFactor(KERNING_FACTOR);
+}
+
+Font Look::getFontInterBlack(float height)
+{
+    static auto font = Font(Typeface::createSystemTypefaceFor(BinaryData::InterBlack_otf, BinaryData::InterBlack_otfSize));
+    return font.withHeight(height).withExtraKerningFactor(KERNING_FACTOR);
 }

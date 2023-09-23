@@ -6,13 +6,13 @@ Footer::Footer()
     version.setText("v0.1.0", dontSendNotification);
     version.setJustificationType(juce::Justification::left);
     version.setColour(juce::Label::textColourId, juce::Colours::white);
-    version.setFont(FONT_SIZE);
+    version.getProperties().set("gui_class", "label");
 
     addAndMakeVisible(&bw);
     bw.setText("BW", dontSendNotification);
     bw.setJustificationType(juce::Justification::right);
     bw.setColour(juce::Label::textColourId, juce::Colours::white);
-    bw.setFont(FONT_SIZE);
+    bw.getProperties().set("gui_class", "label");
 
     addAndMakeVisible(&link);
     link.setURL(juce::URL("https://butchwarns.de/"));
