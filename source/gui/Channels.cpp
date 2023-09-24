@@ -1,7 +1,7 @@
 #include "Channels.h"
 #include "../PluginParameters.h"
 
-Channels::Channels()
+Channels::Channels(Apvts &apvts)
 {
     addAndMakeVisible(&channels);
     channels.setText("CHANNELS", dontSendNotification);
@@ -10,7 +10,7 @@ Channels::Channels()
     channels.getProperties().set("gui_class", "bold");
 
     addAndMakeVisible(&selector);
-    selector.addItemList(CHANNELS_CHOICES, 0);
+    selector.addItemList(CHANNELS_CHOICES, 1);
     selector.setColour(ComboBox::textColourId, Colours::black);
     selector.setJustificationType(Justification::centred);
 
@@ -21,10 +21,14 @@ Channels::Channels()
     mono.getProperties().set("gui_class", "italic");
 
     addAndMakeVisible(&checkbox);
+
+    attachment_selector = std::make_unique<ComboBoxAttachment>(apvts, "channels", selector);
+    attachment_checkbox = std::make_unique<ButtonAttachment>(apvts, "mono", checkbox);
 }
 
 void Channels::paint(juce::Graphics &g)
 {
+    ignoreUnused(g);
 }
 
 void Channels::resized()

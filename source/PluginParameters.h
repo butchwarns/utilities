@@ -6,11 +6,10 @@
 #include "dsp/SmoothLinear.h"
 #include "../BDSP/source/mappings.h"
 #include "../BDSP/source/VoltPerOct.h"
+#include "typedefs.h"
 
 // Value of time constant found by trial and error
 constexpr float SMOOTHING_TIME_DEFAULT = 0.0001f;
-
-typedef juce::AudioProcessorValueTreeState Apvts;
 
 const juce::StringArray CHANNELS_CHOICES{"STEREO", "LEFT", "RIGHT", "SWAPPED"};
 enum ChannelsChoice
@@ -29,9 +28,10 @@ class PluginParameters
 {
 public:
     explicit PluginParameters(juce::AudioProcessor &processor);
-    ~PluginParameters() = default;
 
     void reset(double _sample_rate);
+
+    Apvts &get_apvts();
 
     juce::ValueTree copy_state();
     juce::Identifier state_type() const;
@@ -40,12 +40,14 @@ public:
     ChannelsChoice channels();
 
     float volume();
-    static float normalise_volume(float gain);
+    static inline float normalise_volume(float gain);
+    static inline float denormalise_volume(float val_norm);
     float width();
     bool mono();
     bool bass_mono();
     float bass_mono_freq();
-    static float normalise_bass_mono_freq(float freq);
+    static inline float normalise_bass_mono_freq(float freq);
+    static inline float denormalise_bass_mono_freq(float val_norm);
 
 private:
     Apvts apvts;

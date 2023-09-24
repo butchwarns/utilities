@@ -2,12 +2,12 @@
 
 #include <JuceHeader.h>
 #include "sizes.h"
+#include "../typedefs.h"
 
 class Channels : public juce::Component
 {
 public:
-    Channels();
-    ~Channels() = default;
+    Channels(Apvts &apvts);
 
 private:
     void paint(juce::Graphics &g) override;
@@ -17,4 +17,7 @@ private:
     juce::ComboBox selector;
     juce::Label mono;
     juce::ToggleButton checkbox;
+
+    std::unique_ptr<ComboBoxAttachment> attachment_selector;
+    std::unique_ptr<ButtonAttachment> attachment_checkbox;
 };

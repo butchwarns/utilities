@@ -2,12 +2,12 @@
 
 #include <JuceHeader.h>
 #include "sizes.h"
+#include "../typedefs.h"
 
 class Sliders : public juce::Component
 {
 public:
-    Sliders();
-    ~Sliders() = default;
+    Sliders(Apvts &apvts);
 
 private:
     void paint(juce::Graphics &g) override;
@@ -17,4 +17,7 @@ private:
     juce::Slider slider_volume;
     juce::Label width;
     juce::Slider slider_width;
+
+    std::unique_ptr<SliderAttachment> attachment_volume;
+    std::unique_ptr<SliderAttachment> attachment_width;
 };

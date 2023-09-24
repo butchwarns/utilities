@@ -1,12 +1,12 @@
 #include "PluginEditor.h"
 #include "PluginProcessor.h"
 
-PluginEditor::PluginEditor(PluginProcessor &p)
-    : AudioProcessorEditor(&p), processorRef(p)
+PluginEditor::PluginEditor(PluginProcessor &p, Apvts &apvts)
+    : AudioProcessorEditor(&p), processorRef(p), sliders(apvts), channels(apvts), bass_mono(apvts)
 {
     juce::ignoreUnused(processorRef);
 
-    // Set window size
+    // Get (usable) screen size
     // const juce::Displays::Display *display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay();
     // juce::Rectangle<int> user_area = display->userArea;
 

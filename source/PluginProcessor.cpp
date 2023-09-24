@@ -237,7 +237,7 @@ bool PluginProcessor::hasEditor() const
 
 juce::AudioProcessorEditor *PluginProcessor::createEditor()
 {
-    return new PluginEditor(*this);
+    return new PluginEditor(*this, p.get_apvts());
 }
 
 void PluginProcessor::getStateInformation(juce::MemoryBlock &destData)

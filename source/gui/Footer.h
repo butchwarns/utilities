@@ -8,7 +8,6 @@ class Footer : public juce::Component
 {
 public:
     Footer();
-    ~Footer() = default;
 
 private:
     void paint(juce::Graphics &g) override;

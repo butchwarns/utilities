@@ -24,6 +24,11 @@ void PluginParameters::reset(double _sample_rate)
     smooth_bass_mono_freq.set_time_constant(SMOOTHING_TIME_DEFAULT);
 }
 
+Apvts &PluginParameters::get_apvts()
+{
+    return apvts;
+}
+
 juce::ValueTree PluginParameters::copy_state()
 {
     return apvts.copyState();
@@ -50,8 +55,7 @@ float PluginParameters::volume()
     smooth_volume.set_target_val(*volume_norm);
     const float volume_smoothed_norm = smooth_volume.next();
 
-    const auto db = bdsp::mappings::map_linear_norm<float>(volume_smoothed_norm, -66.1f, 35.0f);
-    const float gain = bdsp::decibel::db_to_raw_gain_off(db, -66.0f);
+    const float gain = denormalise_volume(volume_smoothed_norm);
 
     return gain;
 }
@@ -70,9 +74,18 @@ float PluginParameters::normalise_volume(float gain)
     }
 
     // Normalise
-    const auto norm = bdsp::mappings::map_linear<float>(db, -66.0, 35.0f, 0.0f, 1.0f);
+    const auto val_norm = bdsp::mappings::map_linear<float>(db, -66.0, 35.0f, 0.0f, 1.0f);
 
-    return norm;
+    return val_norm;
+}
+
+float PluginParameters::denormalise_volume(float val_norm)
+{
+
+    const auto db = bdsp::mappings::map_linear_norm<float>(val_norm, -66.1f, 35.0f);
+    const float gain = bdsp::decibel::db_to_raw_gain_off(db, -66.0f);
+
+    return gain;
 }
 
 float PluginParameters::width()
@@ -98,8 +111,7 @@ float PluginParameters::bass_mono_freq()
     smooth_bass_mono_freq.set_target_val(*bass_mono_freq_norm);
     const float freq_smoothed_norm = smooth_bass_mono_freq.next();
 
-    const float cv = bdsp::mappings::map_linear_norm(freq_smoothed_norm, -5.f, 5.0f);
-    const float freq = bdsp::cv::VoltPerOct::volt_to_freq(cv, ZERO_VOLT_FREQ_BASS_MONO);
+    const float freq = denormalise_bass_mono_freq(freq_smoothed_norm);
 
     return freq;
 }
@@ -110,6 +122,14 @@ float PluginParameters::normalise_bass_mono_freq(float freq)
     const float cv_norm = bdsp::mappings::map_linear(cv, -5.0f, 5.0f, 0.0f, 1.0f);
 
     return cv_norm;
+}
+
+float PluginParameters::denormalise_bass_mono_freq(float val_norm)
+{
+    const float cv = bdsp::mappings::map_linear_norm(val_norm, -5.f, 5.0f);
+    const float freq = bdsp::cv::VoltPerOct::volt_to_freq(cv, ZERO_VOLT_FREQ_BASS_MONO);
+
+    return freq;
 }
 
 Apvts::ParameterLayout PluginParameters::parameter_layout()

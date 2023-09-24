@@ -2,12 +2,12 @@
 
 #include <JuceHeader.h>
 #include "sizes.h"
+#include "../typedefs.h"
 
 class BassMono : public juce::Component
 {
 public:
-    BassMono();
-    ~BassMono() = default;
+    BassMono(Apvts &apvts);
 
 private:
     void paint(juce::Graphics &g) override;
@@ -18,4 +18,7 @@ private:
     juce::ToggleButton checkbox;
     juce::Label frequency;
     juce::Slider slider;
+
+    std::unique_ptr<ButtonAttachment> attachment_checkbox;
+    std::unique_ptr<SliderAttachment> attachment_slider;
 };

@@ -1,6 +1,6 @@
 #include "Sliders.h"
 
-Sliders::Sliders()
+Sliders::Sliders(Apvts &apvts)
 {
     addAndMakeVisible(&volume);
     volume.setText("VOLUME", dontSendNotification);
@@ -27,10 +27,14 @@ Sliders::Sliders()
     slider_width.setColour(Slider::textBoxTextColourId, Colours::black);
     slider_width.setNumDecimalPlacesToDisplay(0);
     slider_width.setTextValueSuffix("%");
+
+    attachment_volume.reset(new SliderAttachment(apvts, "volume", slider_volume));
+    attachment_width.reset(new SliderAttachment(apvts, "width", slider_width));
 }
 
 void Sliders::paint(juce::Graphics &g)
 {
+    ignoreUnused(g);
 }
 
 void Sliders::resized()
