@@ -11,12 +11,14 @@ Channels::Channels()
 
     addAndMakeVisible(&selector);
     selector.addItemList(CHANNELS_CHOICES, 0);
+    selector.setColour(ComboBox::textColourId, Colours::black);
+    selector.setJustificationType(Justification::centred);
 
     addAndMakeVisible(&mono);
     mono.setText("MONO", dontSendNotification);
     mono.setJustificationType(juce::Justification::centred);
     mono.setColour(Label::textColourId, Colours::black);
-    mono.getProperties().set("gui_class", "label");
+    mono.getProperties().set("gui_class", "italic");
 
     addAndMakeVisible(&checkbox);
 }

@@ -6,8 +6,7 @@
 class Spacer : public juce::Component
 {
 public:
-    Spacer();
-    ~Spacer() = default;
+    Spacer() = default;
 
 private:
     void paint(juce::Graphics &g) override;

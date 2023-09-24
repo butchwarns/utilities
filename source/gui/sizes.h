@@ -1,5 +1,7 @@
 #pragma once
 
+constexpr float OUTLINE = 2.0f;
+
 constexpr float KERNING_FACTOR = 0.1f;
 
 constexpr int PAD = 5;
@@ -7,8 +9,8 @@ constexpr int PAD = 5;
 constexpr int HEADER_HEIGHT = 35;
 constexpr int FOOTER_HEIGHT = 35;
 
-constexpr float FONT_SIZE = 11.0f;
-constexpr float FONT_SIZE_TITLE = 15.0f;
+constexpr float FONT_SIZE = 13.0f;
+constexpr float FONT_SIZE_TITLE = 17.0f;
 
 constexpr int LABEL_HEIGHT = 20;
 

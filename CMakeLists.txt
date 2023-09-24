@@ -72,6 +72,8 @@ juce_add_binary_data(BWUtilityBinaryData
         BinaryData
     SOURCES
         resources/fonts/Inter-Regular.otf
+        resources/fonts/Inter-Italic.otf
+        resources/fonts/Inter-Bold.otf
         resources/fonts/Inter-Black.otf)
 
 target_link_libraries(BW_UTILITY
