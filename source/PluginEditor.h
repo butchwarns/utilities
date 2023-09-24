@@ -10,11 +10,12 @@
 #include "gui/colours.h"
 #include "gui/Look.h"
 #include "typedefs.h"
+#include "PluginParameters.h"
 
 class PluginEditor : public juce::AudioProcessorEditor
 {
 public:
-    explicit PluginEditor(PluginProcessor &, Apvts &apvts);
+    explicit PluginEditor(PluginProcessor &, PluginParameters &params);
     ~PluginEditor() override = default;
 
     void paint(juce::Graphics &) override;

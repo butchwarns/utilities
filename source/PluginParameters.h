@@ -49,6 +49,8 @@ public:
     static inline float normalise_bass_mono_freq(float freq);
     static inline float denormalise_bass_mono_freq(float val_norm);
 
+    static float denormalise_param(float val_norm, const juce::ParameterID &parameter_id);
+
 private:
     Apvts apvts;
     static Apvts::ParameterLayout parameter_layout();

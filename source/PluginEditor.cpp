@@ -1,8 +1,8 @@
 #include "PluginEditor.h"
 #include "PluginProcessor.h"
 
-PluginEditor::PluginEditor(PluginProcessor &p, Apvts &apvts)
-    : AudioProcessorEditor(&p), processorRef(p), sliders(apvts), channels(apvts), bass_mono(apvts)
+PluginEditor::PluginEditor(PluginProcessor &p, PluginParameters &params)
+    : AudioProcessorEditor(&p), processorRef(p), sliders(params), channels(params), bass_mono(params)
 {
     juce::ignoreUnused(processorRef);
 

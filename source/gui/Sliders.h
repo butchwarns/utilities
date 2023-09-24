@@ -3,20 +3,22 @@
 #include <JuceHeader.h>
 #include "sizes.h"
 #include "../typedefs.h"
+#include "SliderNorm.h"
+#include "../PluginParameters.h"
 
 class Sliders : public juce::Component
 {
 public:
-    Sliders(Apvts &apvts);
+    Sliders(PluginParameters &p);
 
 private:
     void paint(juce::Graphics &g) override;
     void resized() override;
 
     juce::Label volume;
-    juce::Slider slider_volume;
+    SliderNorm slider_norm_volume;
     juce::Label width;
-    juce::Slider slider_width;
+    SliderNorm slider_norm_width;
 
     std::unique_ptr<SliderAttachment> attachment_volume;
     std::unique_ptr<SliderAttachment> attachment_width;

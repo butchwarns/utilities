@@ -3,11 +3,12 @@
 #include <JuceHeader.h>
 #include "sizes.h"
 #include "../typedefs.h"
+#include "../PluginParameters.h"
 
 class Channels : public juce::Component
 {
 public:
-    Channels(Apvts &apvts);
+    Channels(PluginParameters &p);
 
 private:
     void paint(juce::Graphics &g) override;

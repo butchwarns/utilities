@@ -1,7 +1,6 @@
 #include "Channels.h"
-#include "../PluginParameters.h"
 
-Channels::Channels(Apvts &apvts)
+Channels::Channels(PluginParameters &p)
 {
     addAndMakeVisible(&channels);
     channels.setText("CHANNELS", dontSendNotification);
@@ -22,8 +21,8 @@ Channels::Channels(Apvts &apvts)
 
     addAndMakeVisible(&checkbox);
 
-    attachment_selector = std::make_unique<ComboBoxAttachment>(apvts, "channels", selector);
-    attachment_checkbox = std::make_unique<ButtonAttachment>(apvts, "mono", checkbox);
+    attachment_selector = std::make_unique<ComboBoxAttachment>(p.get_apvts(), "channels", selector);
+    attachment_checkbox = std::make_unique<ButtonAttachment>(p.get_apvts(), "mono", checkbox);
 }
 
 void Channels::paint(juce::Graphics &g)

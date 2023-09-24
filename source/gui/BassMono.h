@@ -3,11 +3,12 @@
 #include <JuceHeader.h>
 #include "sizes.h"
 #include "../typedefs.h"
+#include "../PluginParameters.h"
 
 class BassMono : public juce::Component
 {
 public:
-    BassMono(Apvts &apvts);
+    BassMono(PluginParameters &p);
 
 private:
     void paint(juce::Graphics &g) override;

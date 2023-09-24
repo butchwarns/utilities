@@ -1,6 +1,6 @@
 #include "Sliders.h"
 
-Sliders::Sliders(Apvts &apvts)
+Sliders::Sliders(PluginParameters &p) : slider_norm_volume(p, "volume"), slider_norm_width(p, "width")
 {
     addAndMakeVisible(&volume);
     volume.setText("VOLUME", dontSendNotification);
@@ -8,12 +8,11 @@ Sliders::Sliders(Apvts &apvts)
     volume.setColour(Label::textColourId, Colours::black);
     volume.getProperties().set("gui_class", "bold");
 
-    addAndMakeVisible(&slider_volume);
-    slider_volume.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-    slider_volume.setTextBoxStyle(juce::Slider::TextBoxBelow, true, SLIDER_WIDTH, LABEL_HEIGHT);
-    slider_volume.setColour(Slider::textBoxTextColourId, Colours::black);
-    slider_volume.setNumDecimalPlacesToDisplay(1);
-    slider_volume.setTextValueSuffix("dB");
+    addAndMakeVisible(&slider_norm_volume);
+    slider_norm_volume.slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    slider_norm_volume.slider.setColour(Slider::textBoxTextColourId, Colours::black);
+    slider_norm_volume.set_decimal_places_to_display(1);
+    slider_norm_volume.set_value_suffix("dB");
 
     addAndMakeVisible(&width);
     width.setText("WIDTH", dontSendNotification);
@@ -21,15 +20,14 @@ Sliders::Sliders(Apvts &apvts)
     width.setColour(Label::textColourId, Colours::black);
     width.getProperties().set("gui_class", "bold");
 
-    addAndMakeVisible(&slider_width);
-    slider_width.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-    slider_width.setTextBoxStyle(juce::Slider::TextBoxBelow, true, SLIDER_WIDTH, LABEL_HEIGHT);
-    slider_width.setColour(Slider::textBoxTextColourId, Colours::black);
-    slider_width.setNumDecimalPlacesToDisplay(0);
-    slider_width.setTextValueSuffix("%");
+    addAndMakeVisible(&slider_norm_width);
+    slider_norm_width.slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    slider_norm_width.slider.setColour(Slider::textBoxTextColourId, Colours::black);
+    slider_norm_width.set_decimal_places_to_display(1);
+    slider_norm_width.set_value_suffix("%");
 
-    attachment_volume.reset(new SliderAttachment(apvts, "volume", slider_volume));
-    attachment_width.reset(new SliderAttachment(apvts, "width", slider_width));
+    attachment_volume.reset(new SliderAttachment(p.get_apvts(), "volume", slider_norm_volume.slider));
+    attachment_width.reset(new SliderAttachment(p.get_apvts(), "width", slider_norm_width.slider));
 }
 
 void Sliders::paint(juce::Graphics &g)
@@ -43,8 +41,8 @@ void Sliders::resized()
 
     auto volume_bounds = bounds.removeFromLeft(bounds.getWidth() / 2.0f);
     volume.setBounds(volume_bounds.removeFromTop(LABEL_HEIGHT));
-    slider_volume.setBounds(volume_bounds);
+    slider_norm_volume.setBounds(volume_bounds);
 
     width.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
-    slider_width.setBounds(bounds);
+    slider_norm_width.setBounds(bounds);
 }

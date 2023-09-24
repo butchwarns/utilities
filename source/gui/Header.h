@@ -8,7 +8,6 @@ class Header : public juce::Component
 {
 public:
     Header();
-    ~Header() = default;
 
 private:
     void paint(juce::Graphics &g) override;
