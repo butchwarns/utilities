@@ -6,7 +6,9 @@
 #include "dsp/SmoothLinear.h"
 #include "../BDSP/source/mappings.h"
 #include "../BDSP/source/VoltPerOct.h"
-#include "no_magic_numbers.h"
+
+// Value of time constant found by trial and error
+constexpr float SMOOTHING_TIME_DEFAULT = 0.0001f;
 
 typedef juce::AudioProcessorValueTreeState Apvts;
 
