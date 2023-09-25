@@ -4,6 +4,7 @@
 #include "sizes.h"
 #include "../typedefs.h"
 #include "../PluginParameters.h"
+#include "SliderHorizontal.h"
 
 class BassMono : public juce::Component
 {
@@ -18,7 +19,7 @@ private:
     juce::Label active;
     juce::ToggleButton checkbox;
     juce::Label frequency;
-    juce::Slider slider;
+    SliderHorizontal slider;
 
     std::unique_ptr<ButtonAttachment> attachment_checkbox;
     std::unique_ptr<SliderAttachment> attachment_slider;

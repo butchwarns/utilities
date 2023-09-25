@@ -3,11 +3,13 @@
 #include <JuceHeader.h>
 #include "sizes.h"
 #include "../PluginParameters.h"
+#include <sstream>
+#include <iomanip>
 
-class SliderNorm : public juce::Component, public juce::Slider::Listener
+class SliderRotary : public juce::Component, public juce::Slider::Listener
 {
 public:
-    SliderNorm(PluginParameters &_p, ParameterID _param_id = ParameterID(""));
+    SliderRotary(PluginParameters &_p, ParameterID _param_id = ParameterID(""));
 
     juce::Slider slider;
     juce::Label label;

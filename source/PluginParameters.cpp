@@ -82,8 +82,16 @@ float PluginParameters::normalise_volume(float gain)
 float PluginParameters::denormalise_volume(float val_norm)
 {
 
+    const auto db = denormalise_volume_db(val_norm);
+    const float gain = bdsp::decibel::db_to_raw_gain_off(db, -66.0f);
+
+    return gain;
+}
+
+float PluginParameters::denormalise_volume_db(float val_norm)
+{
+
     const auto db = bdsp::mappings::map_linear_norm<float>(val_norm, -66.1f, 35.0f);
-    // const float gain = bdsp::decibel::db_to_raw_gain_off(db, -66.0f);
 
     return db;
 }
@@ -132,12 +140,12 @@ float PluginParameters::denormalise_bass_mono_freq(float val_norm)
     return freq;
 }
 
-float PluginParameters::denormalise_param(float val_norm, const juce::ParameterID &parameter_id)
+float PluginParameters::denormalise_param_for_ui(float val_norm, const juce::ParameterID &parameter_id)
 {
     auto param = parameter_id.getParamID();
     if (param == "volume")
     {
-        return denormalise_volume(val_norm);
+        return denormalise_volume_db(val_norm);
     }
     else if (param == "bass_mono_freq")
     {

@@ -23,7 +23,7 @@ Sliders::Sliders(PluginParameters &p) : slider_norm_volume(p, "volume"), slider_
     addAndMakeVisible(&slider_norm_width);
     slider_norm_width.slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     slider_norm_width.slider.setColour(Slider::textBoxTextColourId, Colours::black);
-    slider_norm_width.set_decimal_places_to_display(1);
+    slider_norm_width.set_decimal_places_to_display(0);
     slider_norm_width.set_value_suffix("%");
 
     attachment_volume.reset(new SliderAttachment(p.get_apvts(), "volume", slider_norm_volume.slider));

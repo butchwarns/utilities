@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 #include "sizes.h"
 #include "../typedefs.h"
-#include "SliderNorm.h"
+#include "SliderRotary.h"
 #include "../PluginParameters.h"
 
 class Sliders : public juce::Component
@@ -16,9 +16,9 @@ private:
     void resized() override;
 
     juce::Label volume;
-    SliderNorm slider_norm_volume;
+    SliderRotary slider_norm_volume;
     juce::Label width;
-    SliderNorm slider_norm_width;
+    SliderRotary slider_norm_width;
 
     std::unique_ptr<SliderAttachment> attachment_volume;
     std::unique_ptr<SliderAttachment> attachment_width;

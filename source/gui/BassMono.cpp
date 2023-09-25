@@ -1,6 +1,6 @@
 #include "BassMono.h"
 
-BassMono::BassMono(PluginParameters &p)
+BassMono::BassMono(PluginParameters &p) : slider(p, "bass_mono_freq")
 {
     addAndMakeVisible(&bass_mono);
     bass_mono.setText("BASS MONO", dontSendNotification);
@@ -22,13 +22,10 @@ BassMono::BassMono(PluginParameters &p)
     frequency.setColour(Label::textColourId, Colours::black);
 
     addAndMakeVisible(&slider);
-    slider.setSliderStyle(Slider::LinearBar);
-    slider.setNumDecimalPlacesToDisplay(0);
-    slider.setTextValueSuffix("Hz");
-    slider.setColour(Slider::textBoxTextColourId, Colours::black);
-    slider.setTextBoxIsEditable(false);
+    slider.set_decimal_places_to_display(0);
+    slider.set_value_suffix("Hz");
 
-    attachment_slider = std::make_unique<SliderAttachment>(p.get_apvts(), "bass_mono_freq", slider);
+    attachment_slider = std::make_unique<SliderAttachment>(p.get_apvts(), "bass_mono_freq", slider.slider);
     attachment_checkbox = std::make_unique<ButtonAttachment>(p.get_apvts(), "bass_mono", checkbox);
 }
 

@@ -42,6 +42,7 @@ public:
     float volume();
     static inline float normalise_volume(float gain);
     static inline float denormalise_volume(float val_norm);
+    static inline float denormalise_volume_db(float val_norm);
     float width();
     bool mono();
     bool bass_mono();
@@ -49,7 +50,7 @@ public:
     static inline float normalise_bass_mono_freq(float freq);
     static inline float denormalise_bass_mono_freq(float val_norm);
 
-    static float denormalise_param(float val_norm, const juce::ParameterID &parameter_id);
+    static float denormalise_param_for_ui(float val_norm, const juce::ParameterID &parameter_id);
 
 private:
     Apvts apvts;
