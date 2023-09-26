@@ -5,7 +5,9 @@
 #include "../BDSP/source/filter/LP1_RC_TPT.h"
 #include "../BDSP/source/filter/HP1_RC_TPT.h"
 #include "dsp/SmoothLinear.h"
-#include "no_magic_numbers.h"
+
+// Plugin works in stereo
+constexpr int NUM_CHANNELS = 2;
 
 constexpr int NUM_CROSSOVER_POLES = 2;
 constexpr float SMOOTHING_TIME_WIDTH = 0.00006f;

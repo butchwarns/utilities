@@ -1,27 +1,51 @@
 #include "PluginEditor.h"
 #include "PluginProcessor.h"
 
-PluginEditor::PluginEditor(PluginProcessor &p)
-    : AudioProcessorEditor(&p), processorRef(p)
+PluginEditor::PluginEditor(PluginProcessor &p, PluginParameters &params)
+    : AudioProcessorEditor(&p), processorRef(p), sliders(params), channels(params), bass_mono(params)
 {
     juce::ignoreUnused(processorRef);
 
-    setSize(400, 300);
-}
+    // Get (usable) screen size
+    // const juce::Displays::Display *display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay();
+    // juce::Rectangle<int> user_area = display->userArea;
 
-PluginEditor::~PluginEditor()
-{
+    setSize(WIN_WIDTH, WIN_HEIGHT);
+
+    setLookAndFeel(&look);
+
+    addAndMakeVisible(&header);
+    addAndMakeVisible(&footer);
+    addAndMakeVisible(&sliders);
+    addAndMakeVisible(&spacer1);
+    addAndMakeVisible(&channels);
+    addAndMakeVisible(&spacer2);
+    addAndMakeVisible(&bass_mono);
 }
 
 void PluginEditor::paint(juce::Graphics &g)
 {
-    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-
-    g.setColour(juce::Colours::white);
-    g.setFont(25.0f);
-    g.drawFittedText("hello bw_utility!", getLocalBounds(), juce::Justification::centred, 1);
+    g.fillAll(RED);
 }
 
 void PluginEditor::resized()
 {
+    auto bounds = getLocalBounds();
+
+    header.setBounds(bounds.removeFromTop(HEADER_HEIGHT));
+    footer.setBounds(bounds.removeFromBottom(FOOTER_HEIGHT));
+
+    bounds.reduce(PAD, PAD);
+
+    sliders.setBounds(bounds.removeFromTop(SLIDERS_HEIGHT));
+
+    spacer1.setBounds(bounds.removeFromTop(SPACER_HEIGHT));
+
+    channels.setBounds(bounds.removeFromTop(CHANNELS_HEIGHT));
+
+    bounds.removeFromTop(PAD);
+
+    spacer2.setBounds(bounds.removeFromTop(SPACER_HEIGHT));
+
+    bass_mono.setBounds(bounds.removeFromTop(BASS_MONO_HEIGHT));
 }

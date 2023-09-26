@@ -6,9 +6,13 @@
 #include "dsp/SmoothLinear.h"
 #include "../BDSP/source/mappings.h"
 #include "../BDSP/source/VoltPerOct.h"
-#include "no_magic_numbers.h"
+#include "typedefs.h"
 
-typedef juce::AudioProcessorValueTreeState Apvts;
+// Value of time constant found by trial and error
+constexpr float SMOOTHING_TIME_DEFAULT = 0.0001f;
+
+// Threshold for volume slider mute
+constexpr float OFF_THRESHOLD = -66.0f;
 
 const juce::StringArray CHANNELS_CHOICES{"STEREO", "LEFT", "RIGHT", "SWAPPED"};
 enum ChannelsChoice
@@ -27,9 +31,10 @@ class PluginParameters
 {
 public:
     explicit PluginParameters(juce::AudioProcessor &processor);
-    ~PluginParameters() = default;
 
     void reset(double _sample_rate);
+
+    Apvts &get_apvts();
 
     juce::ValueTree copy_state();
     juce::Identifier state_type() const;
@@ -38,12 +43,17 @@ public:
     ChannelsChoice channels();
 
     float volume();
-    static float normalise_volume(float gain);
+    static inline float normalise_volume(float gain);
+    static inline float denormalise_volume(float val_norm);
+    static inline float denormalise_volume_db(float val_norm);
     float width();
     bool mono();
     bool bass_mono();
     float bass_mono_freq();
-    static float normalise_bass_mono_freq(float freq);
+    static inline float normalise_bass_mono_freq(float freq);
+    static inline float denormalise_bass_mono_freq(float val_norm);
+
+    static float denormalise_param_for_ui(float val_norm, const juce::ParameterID &parameter_id);
 
 private:
     Apvts apvts;
