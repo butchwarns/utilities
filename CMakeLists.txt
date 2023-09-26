@@ -45,6 +45,7 @@ set(SRC_GUI
         source/gui/Spacer.cpp
         source/gui/Look.cpp
         source/gui/SliderRotary.cpp
+        source/gui/SliderRotaryOff.cpp
         source/gui/SliderHorizontal.cpp)
 
 set(SRC_BDSP

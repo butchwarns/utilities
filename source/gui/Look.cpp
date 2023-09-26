@@ -3,19 +3,19 @@
 Font Look::getFontInterRegular(float height)
 {
     static auto font = Font(Typeface::createSystemTypefaceFor(BinaryData::InterRegular_otf, BinaryData::InterRegular_otfSize));
-    return font.withHeight(height).withExtraKerningFactor(KERNING_FACTOR);
+    return font.withHeight(height);
 }
 
 Font Look::getFontInterItalic(float height)
 {
     static auto font = Font(Typeface::createSystemTypefaceFor(BinaryData::InterItalic_otf, BinaryData::InterItalic_otfSize));
-    return font.withHeight(height).withExtraKerningFactor(KERNING_FACTOR);
+    return font.withHeight(height);
 }
 
 Font Look::getFontInterBold(float height)
 {
     static auto font = Font(Typeface::createSystemTypefaceFor(BinaryData::InterBold_otf, BinaryData::InterBold_otfSize));
-    return font.withHeight(height).withExtraKerningFactor(KERNING_FACTOR);
+    return font.withHeight(height);
 }
 
 Font Look::getFontInterBlack(float height)
@@ -62,7 +62,7 @@ void Look::drawRotarySlider(Graphics &g, int x, int y, int width, int height, fl
     g.fillPath(k);
 
     g.setColour(Colours::black);
-    g.strokePath(k, PathStrokeType(2.0f));
+    g.strokePath(k, PathStrokeType(OUTLINE));
 
     // Pointer
 
@@ -121,11 +121,12 @@ void Look::drawLabel(Graphics &g, Label &label)
         const Font font(getLabelFont(label));
         g.setFont(font);
 
-        auto textArea = getLabelBorderSize(label).subtractedFrom(label.getLocalBounds());
+        // auto textArea = getLabelBorderSize(label).subtractedFrom(label.getLocalBounds());
+        const auto bounds = label.getLocalBounds();
 
-        g.drawFittedText(label.getText(), textArea, label.getJustificationType(),
-                         jmax(1, (int)((float)textArea.getHeight() / font.getHeight())),
-                         label.getMinimumHorizontalScale());
+        g.drawFittedText(label.getText(), bounds, label.getJustificationType(),
+                         jmax(1, (int)((float)bounds.getHeight() / font.getHeight())),
+                         1.0f);
     }
 }
 

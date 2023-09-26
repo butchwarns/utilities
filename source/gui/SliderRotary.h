@@ -9,7 +9,7 @@
 class SliderRotary : public juce::Component, public juce::Slider::Listener
 {
 public:
-    SliderRotary(PluginParameters &_p, ParameterID _param_id = ParameterID(""));
+    SliderRotary(PluginParameters &p, ParameterID param_id);
 
     juce::Slider slider;
     juce::Label label;
@@ -21,11 +21,12 @@ private:
     void paint(juce::Graphics &g) override;
     void resized() override;
 
+    void sliderValueChanged(Slider *slider) override;
+
+protected:
     PluginParameters &p;
     juce::ParameterID param_id;
 
     int num_decimal_places;
     juce::String value_suffix;
-
-    void sliderValueChanged(Slider *slider) override;
 };

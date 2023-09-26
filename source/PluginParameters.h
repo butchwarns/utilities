@@ -11,6 +11,9 @@
 // Value of time constant found by trial and error
 constexpr float SMOOTHING_TIME_DEFAULT = 0.0001f;
 
+// Threshold for volume slider mute
+constexpr float OFF_THRESHOLD = -66.0f;
+
 const juce::StringArray CHANNELS_CHOICES{"STEREO", "LEFT", "RIGHT", "SWAPPED"};
 enum ChannelsChoice
 {

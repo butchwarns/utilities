@@ -2,7 +2,8 @@
 
 void Spacer::paint(juce::Graphics &g)
 {
-    g.drawRect(0, PAD, getLocalBounds().getWidth(), SPACER_LINE, 1);
+    g.setColour(Colours::black);
+    g.fillRect(getLocalBounds());
 }
 
 void Spacer::resized()

@@ -4,6 +4,7 @@
 #include "sizes.h"
 #include "../typedefs.h"
 #include "SliderRotary.h"
+#include "SliderRotaryOff.h"
 #include "../PluginParameters.h"
 
 class Sliders : public juce::Component
@@ -16,7 +17,7 @@ private:
     void resized() override;
 
     juce::Label volume;
-    SliderRotary slider_norm_volume;
+    SliderRotaryOff slider_norm_volume;
     juce::Label width;
     SliderRotary slider_norm_width;
 

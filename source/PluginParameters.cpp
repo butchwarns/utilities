@@ -83,7 +83,7 @@ float PluginParameters::denormalise_volume(float val_norm)
 {
 
     const auto db = denormalise_volume_db(val_norm);
-    const float gain = bdsp::decibel::db_to_raw_gain_off(db, -66.0f);
+    const float gain = bdsp::decibel::db_to_raw_gain_off(db, OFF_THRESHOLD);
 
     return gain;
 }
@@ -156,12 +156,11 @@ float PluginParameters::denormalise_param_for_ui(float val_norm, const juce::Par
         // TODO: Move to own denormalisation function
         return 100 * val_norm; // Convert to percent
     }
-    else if (param == "")
+    else
     {
+        jassert(false);
         return val_norm;
     }
-
-    jassert(false);
 }
 
 Apvts::ParameterLayout PluginParameters::parameter_layout()
@@ -176,7 +175,7 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
     utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", 0.0f, 1.0f, 1.0f));
     utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("mono", "MONO", false));
     utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("bass_mono", "BASS_MONO", false));
-    utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", 0.0f, 1.0f, normalise_bass_mono_freq(120.0f)));
+    utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", 0.0f, 1.0f, normalise_bass_mono_freq(145.0f)));
 
     layout.add(std::move(utility_grp));
 
