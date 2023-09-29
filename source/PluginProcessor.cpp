@@ -161,6 +161,8 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
             hp_crossover[channel][i].set_cutoff(bass_mono_freq);
         }
     }
+    const float phase_flip_l = p.phase_flip_l();
+    const float phase_flip_r = p.phase_flip_r();
 
     if (mono)
     {
@@ -227,6 +229,10 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         // Apply output volume
         left[n] = volume * left[n];
         right[n] = volume * right[n];
+
+        // Apply phase flip
+        left[n] = phase_flip_l * left[n];
+        right[n] = phase_flip_r * right[n];
     }
 }
 

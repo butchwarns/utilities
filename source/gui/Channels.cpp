@@ -1,6 +1,6 @@
 #include "Channels.h"
 
-Channels::Channels(PluginParameters &p)
+Channels::Channels(PluginParameters &p) : checkbox(p, "mono")
 {
     addAndMakeVisible(&channels);
     channels.setText("CHANNELS", dontSendNotification);
@@ -13,16 +13,11 @@ Channels::Channels(PluginParameters &p)
     selector.setColour(ComboBox::textColourId, Colours::black);
     selector.setJustificationType(Justification::centred);
 
-    addAndMakeVisible(&mono);
-    mono.setText("MONO", dontSendNotification);
-    mono.setJustificationType(juce::Justification::centred);
-    mono.setColour(Label::textColourId, Colours::black);
-    mono.getProperties().set("gui_class", "italic");
-
     addAndMakeVisible(&checkbox);
+    checkbox.label.setText("MONO", dontSendNotification);
 
     attachment_selector = std::make_unique<ComboBoxAttachment>(p.get_apvts(), "channels", selector);
-    attachment_checkbox = std::make_unique<ButtonAttachment>(p.get_apvts(), "mono", checkbox);
+    attachment_checkbox = std::make_unique<ButtonAttachment>(p.get_apvts(), "mono", checkbox.checkbox);
 }
 
 void Channels::paint(juce::Graphics &g)
@@ -35,9 +30,8 @@ void Channels::resized()
     auto bounds = getLocalBounds();
 
     channels.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
-    bounds.removeFromTop(5);
+    bounds.removeFromTop(PAD);
     selector.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
-    bounds.removeFromTop(5);
-    checkbox.setBounds(bounds.removeFromRight(CHECKBOX_DIM));
-    mono.setBounds(bounds);
+    bounds.removeFromTop(PAD);
+    checkbox.setBounds(bounds);
 }

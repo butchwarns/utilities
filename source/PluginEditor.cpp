@@ -2,7 +2,7 @@
 #include "PluginProcessor.h"
 
 PluginEditor::PluginEditor(PluginProcessor &p, PluginParameters &params)
-    : AudioProcessorEditor(&p), processorRef(p), sliders(params), channels(params), bass_mono(params)
+    : AudioProcessorEditor(&p), processorRef(p), sliders(params), channels(params), bass_mono(params), phase_flip(params)
 {
     juce::ignoreUnused(processorRef);
 
@@ -21,11 +21,13 @@ PluginEditor::PluginEditor(PluginProcessor &p, PluginParameters &params)
     addAndMakeVisible(&channels);
     addAndMakeVisible(&spacer2);
     addAndMakeVisible(&bass_mono);
+    addAndMakeVisible(&spacer3);
+    addAndMakeVisible(&phase_flip);
 }
 
 void PluginEditor::paint(juce::Graphics &g)
 {
-    g.fillAll(RED);
+    g.fillAll(BLUE);
 }
 
 void PluginEditor::resized()
@@ -38,14 +40,13 @@ void PluginEditor::resized()
     bounds.reduce(PAD, PAD);
 
     sliders.setBounds(bounds.removeFromTop(SLIDERS_HEIGHT));
-
     spacer1.setBounds(bounds.removeFromTop(SPACER_HEIGHT));
 
     channels.setBounds(bounds.removeFromTop(CHANNELS_HEIGHT));
-
-    bounds.removeFromTop(PAD);
-
     spacer2.setBounds(bounds.removeFromTop(SPACER_HEIGHT));
 
     bass_mono.setBounds(bounds.removeFromTop(BASS_MONO_HEIGHT));
+    spacer3.setBounds(bounds.removeFromTop(SPACER_HEIGHT));
+
+    phase_flip.setBounds(bounds.removeFromTop(PHASE_FLIP_HEIGHT));
 }

@@ -39,10 +39,19 @@ void SliderRotary::sliderValueChanged(Slider *slider)
 {
     const float val_denorm = p.denormalise_param_for_ui((float)(slider->getValue()), param_id);
 
-    // Format value string to the correct number of decimal places
     std::stringstream val_formatted;
-    val_formatted << std::fixed << std::setprecision(num_decimal_places);
-    val_formatted << val_denorm << value_suffix.toStdString();
+    const bool is_slider_rotary_off = slider->getProperties()["gui_class"] == "slider_rotary_off";
+    if (val_denorm <= OFF_THRESHOLD && is_slider_rotary_off)
+    {
+        // Below threshold, turn off
+        val_formatted << "OFF";
+    }
+    else
+    {
+        // Format value string to the correct number of decimal places
+        val_formatted << std::fixed << std::setprecision(num_decimal_places);
+        val_formatted << val_denorm << value_suffix.toStdString();
+    }
 
     label.setText(val_formatted.str(), dontSendNotification);
 }

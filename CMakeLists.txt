@@ -36,17 +36,23 @@ set(SRC_PLUGIN_BASE
 set(SRC_DSP
         source/dsp/SmoothLinear.cpp)
 
+set(SRC_GUI_COMPONENTS
+        source/gui/components/Spacer.cpp
+        source/gui/components/SliderRotary.cpp
+        source/gui/components/SliderRotaryLabeled.cpp
+        source/gui/components/SliderHorizontal.cpp
+        source/gui/components/SliderHorizontalLabeled.cpp
+        source/gui/components/CheckboxLabeled.cpp)
+
 set(SRC_GUI
+        ${SRC_GUI_COMPONENTS}
+        source/gui/Look.cpp
         source/gui/Header.cpp
         source/gui/Footer.cpp
         source/gui/Channels.cpp
         source/gui/BassMono.cpp
         source/gui/Sliders.cpp
-        source/gui/Spacer.cpp
-        source/gui/Look.cpp
-        source/gui/SliderRotary.cpp
-        source/gui/SliderRotaryOff.cpp
-        source/gui/SliderHorizontal.cpp)
+        source/gui/PhaseFlip.cpp)
 
 set(SRC_BDSP
         BDSP/source/VoltPerOct.cpp

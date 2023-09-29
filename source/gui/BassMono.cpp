@@ -1,6 +1,6 @@
 #include "BassMono.h"
 
-BassMono::BassMono(PluginParameters &p) : slider(p, "bass_mono_freq")
+BassMono::BassMono(PluginParameters &p) : slider(p, "bass_mono_freq"), checkbox(p, "bass_mono_active")
 {
     addAndMakeVisible(&bass_mono);
     bass_mono.setText("BASS MONO", dontSendNotification);
@@ -8,25 +8,16 @@ BassMono::BassMono(PluginParameters &p) : slider(p, "bass_mono_freq")
     bass_mono.setColour(Label::textColourId, Colours::black);
     bass_mono.getProperties().set("gui_class", "bold");
 
-    addAndMakeVisible(&active);
-    active.setText("ACTIVE", dontSendNotification);
-    active.setJustificationType(Justification::centred);
-    active.setColour(Label::textColourId, Colours::black);
-    active.getProperties().set("gui_class", "italic");
-
     addAndMakeVisible(&checkbox);
-
-    addAndMakeVisible(&frequency);
-    frequency.setText("FREQUENCY", dontSendNotification);
-    frequency.setJustificationType(Justification::centred);
-    frequency.setColour(Label::textColourId, Colours::black);
+    checkbox.label.setText("ACTIVE", dontSendNotification);
 
     addAndMakeVisible(&slider);
-    slider.set_decimal_places_to_display(0);
-    slider.set_value_suffix("Hz");
+    slider.label.setText("FREQUENCY", dontSendNotification);
+    slider.slider.set_decimal_places_to_display(0);
+    slider.slider.set_value_suffix("Hz");
 
-    attachment_slider = std::make_unique<SliderAttachment>(p.get_apvts(), "bass_mono_freq", slider.slider);
-    attachment_checkbox = std::make_unique<ButtonAttachment>(p.get_apvts(), "bass_mono", checkbox);
+    attachment_slider = std::make_unique<SliderAttachment>(p.get_apvts(), "bass_mono_freq", slider.slider.slider);
+    attachment_checkbox = std::make_unique<ButtonAttachment>(p.get_apvts(), "bass_mono", checkbox.checkbox);
 }
 
 void BassMono::paint(juce::Graphics &g)
@@ -42,11 +33,9 @@ void BassMono::resized()
     bounds.removeFromTop(PAD);
 
     auto active_check_bounds = bounds.removeFromTop(LABEL_HEIGHT);
-    checkbox.setBounds(active_check_bounds.removeFromRight(CHECKBOX_DIM));
-    active.setBounds(active_check_bounds);
+    checkbox.setBounds(active_check_bounds.removeFromTop(CHECKBOX_DIM));
 
     bounds.removeFromTop(PAD);
 
-    frequency.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
     slider.setBounds(bounds);
 }
