@@ -12,6 +12,7 @@ SliderHorizontalLabeled::SliderHorizontalLabeled(PluginParameters &p, ParameterI
 
 void SliderHorizontalLabeled::paint(Graphics &g)
 {
+    ignoreUnused(g);
 }
 
 void SliderHorizontalLabeled::resized()

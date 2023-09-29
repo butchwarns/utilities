@@ -12,6 +12,7 @@ SliderRotaryLabeled::SliderRotaryLabeled(PluginParameters &p, ParameterID param_
 
 void SliderRotaryLabeled::paint(Graphics &g)
 {
+    ignoreUnused(g);
 }
 
 void SliderRotaryLabeled::resized()

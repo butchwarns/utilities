@@ -12,6 +12,7 @@ CheckboxLabeled::CheckboxLabeled(PluginParameters &p, ParameterID param_id)
 
 void CheckboxLabeled::paint(Graphics &g)
 {
+    ignoreUnused(g);
 }
 
 void CheckboxLabeled::resized()

@@ -4,7 +4,6 @@
 #include "sizes.h"
 #include "../typedefs.h"
 #include "components/SliderRotaryLabeled.h"
-#include "components/SliderRotaryOff.h"
 #include "../PluginParameters.h"
 
 class Sliders : public juce::Component

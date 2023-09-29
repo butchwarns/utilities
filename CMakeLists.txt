@@ -40,19 +40,19 @@ set(SRC_GUI_COMPONENTS
         source/gui/components/Spacer.cpp
         source/gui/components/SliderRotary.cpp
         source/gui/components/SliderRotaryLabeled.cpp
-        source/gui/components/SliderRotaryOff.cpp
         source/gui/components/SliderHorizontal.cpp
         source/gui/components/SliderHorizontalLabeled.cpp
         source/gui/components/CheckboxLabeled.cpp)
 
 set(SRC_GUI
         ${SRC_GUI_COMPONENTS}
+        source/gui/Look.cpp
         source/gui/Header.cpp
         source/gui/Footer.cpp
         source/gui/Channels.cpp
         source/gui/BassMono.cpp
         source/gui/Sliders.cpp
-        source/gui/Look.cpp)
+        source/gui/PhaseFlip.cpp)
 
 set(SRC_BDSP
         BDSP/source/VoltPerOct.cpp
