@@ -16,16 +16,12 @@ BassMono::BassMono(PluginParameters &p) : slider(p, "bass_mono_freq")
 
     addAndMakeVisible(&checkbox);
 
-    addAndMakeVisible(&frequency);
-    frequency.setText("FREQUENCY", dontSendNotification);
-    frequency.setJustificationType(Justification::centred);
-    frequency.setColour(Label::textColourId, Colours::black);
-
     addAndMakeVisible(&slider);
-    slider.set_decimal_places_to_display(0);
-    slider.set_value_suffix("Hz");
+    slider.label.setText("FREQUENCY", dontSendNotification);
+    slider.slider.set_decimal_places_to_display(0);
+    slider.slider.set_value_suffix("Hz");
 
-    attachment_slider = std::make_unique<SliderAttachment>(p.get_apvts(), "bass_mono_freq", slider.slider);
+    attachment_slider = std::make_unique<SliderAttachment>(p.get_apvts(), "bass_mono_freq", slider.slider.slider);
     attachment_checkbox = std::make_unique<ButtonAttachment>(p.get_apvts(), "bass_mono", checkbox);
 }
 
@@ -47,6 +43,5 @@ void BassMono::resized()
 
     bounds.removeFromTop(PAD);
 
-    frequency.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
     slider.setBounds(bounds);
 }
