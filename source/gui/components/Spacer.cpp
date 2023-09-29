@@ -2,8 +2,11 @@
 
 void Spacer::paint(juce::Graphics &g)
 {
+    auto bounds = getLocalBounds();
+    bounds.reduce(0, 5);
+
     g.setColour(Colours::black);
-    g.fillRect(getLocalBounds());
+    g.fillRect(bounds);
 }
 
 void Spacer::resized()

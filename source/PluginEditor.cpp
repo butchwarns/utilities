@@ -43,8 +43,6 @@ void PluginEditor::resized()
 
     channels.setBounds(bounds.removeFromTop(CHANNELS_HEIGHT));
 
-    bounds.removeFromTop(PAD);
-
     spacer2.setBounds(bounds.removeFromTop(SPACER_HEIGHT));
 
     bass_mono.setBounds(bounds.removeFromTop(BASS_MONO_HEIGHT));

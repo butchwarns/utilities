@@ -39,6 +39,7 @@ set(SRC_DSP
 set(SRC_GUI_COMPONENTS
         source/gui/components/Spacer.cpp
         source/gui/components/SliderRotary.cpp
+        source/gui/components/SliderRotaryLabeled.cpp
         source/gui/components/SliderRotaryOff.cpp
         source/gui/components/SliderHorizontal.cpp)
 
