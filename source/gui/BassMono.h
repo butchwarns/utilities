@@ -4,7 +4,7 @@
 #include "sizes.h"
 #include "../typedefs.h"
 #include "../PluginParameters.h"
-#include "SliderHorizontal.h"
+#include "components/SliderHorizontal.h"
 
 class BassMono : public juce::Component
 {

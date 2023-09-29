@@ -3,8 +3,8 @@
 #include <JuceHeader.h>
 #include "sizes.h"
 #include "../typedefs.h"
-#include "SliderRotary.h"
-#include "SliderRotaryOff.h"
+#include "components/SliderRotary.h"
+#include "components/SliderRotaryOff.h"
 #include "../PluginParameters.h"
 
 class Sliders : public juce::Component

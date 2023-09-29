@@ -1,7 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "sizes.h"
+#include "../sizes.h"
 
 class Spacer : public juce::Component
 {

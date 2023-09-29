@@ -6,7 +6,7 @@
 #include "gui/Channels.h"
 #include "gui/BassMono.h"
 #include "gui/Sliders.h"
-#include "gui/Spacer.h"
+#include "gui/components/Spacer.h"
 #include "gui/colours.h"
 #include "gui/Look.h"
 #include "typedefs.h"
