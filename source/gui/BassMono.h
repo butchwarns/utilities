@@ -5,6 +5,7 @@
 #include "../typedefs.h"
 #include "../PluginParameters.h"
 #include "components/SliderHorizontalLabeled.h"
+#include "components/CheckboxLabeled.h"
 
 class BassMono : public juce::Component
 {
@@ -16,8 +17,7 @@ private:
     void resized() override;
 
     juce::Label bass_mono;
-    juce::Label active;
-    juce::ToggleButton checkbox;
+    CheckboxLabeled checkbox;
     SliderHorizontalLabeled slider;
 
     std::unique_ptr<ButtonAttachment> attachment_checkbox;

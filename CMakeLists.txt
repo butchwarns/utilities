@@ -42,7 +42,8 @@ set(SRC_GUI_COMPONENTS
         source/gui/components/SliderRotaryLabeled.cpp
         source/gui/components/SliderRotaryOff.cpp
         source/gui/components/SliderHorizontal.cpp
-        source/gui/components/SliderHorizontalLabeled.cpp)
+        source/gui/components/SliderHorizontalLabeled.cpp
+        source/gui/components/CheckboxLabeled.cpp)
 
 set(SRC_GUI
         ${SRC_GUI_COMPONENTS}

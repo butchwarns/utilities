@@ -4,6 +4,7 @@
 #include "sizes.h"
 #include "../typedefs.h"
 #include "../PluginParameters.h"
+#include "components/CheckboxLabeled.h"
 
 class Channels : public juce::Component
 {
@@ -16,8 +17,7 @@ private:
 
     juce::Label channels;
     juce::ComboBox selector;
-    juce::Label mono;
-    juce::ToggleButton checkbox;
+    CheckboxLabeled checkbox;
 
     std::unique_ptr<ComboBoxAttachment> attachment_selector;
     std::unique_ptr<ButtonAttachment> attachment_checkbox;
