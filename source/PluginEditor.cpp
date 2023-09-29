@@ -25,7 +25,7 @@ PluginEditor::PluginEditor(PluginProcessor &p, PluginParameters &params)
 
 void PluginEditor::paint(juce::Graphics &g)
 {
-    g.fillAll(RED);
+    g.fillAll(BLUE);
 }
 
 void PluginEditor::resized()
