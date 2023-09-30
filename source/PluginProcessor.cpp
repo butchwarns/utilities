@@ -109,7 +109,8 @@ void PluginProcessor::releaseResources()
 
 bool PluginProcessor::isBusesLayoutSupported(const BusesLayout &layouts) const
 {
-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono() && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
+    // Only stereo layout supported
+    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
     // This checks if the input layout matches the output layout
@@ -137,7 +138,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
-    // Update parameter values once per block
+    // UPDATE PARAMETER VALUES (once per block)
 
     const ChannelsChoice channels = p.channels();
     const float volume = p.volume();
@@ -166,7 +167,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
     const bool dc_block_active = p.dc_block();
 
-    // PROCESS AUDIO
+    // PROCESS AUDIO SAMPLES
 
     float *left = buffer.getWritePointer(0);
     float *right = buffer.getWritePointer(1);
