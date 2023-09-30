@@ -25,6 +25,7 @@ void BassMono::resized()
     auto bounds = getLocalBounds();
 
     bass_mono.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
+    bounds.removeFromTop(PAD);
 
     auto active_check_bounds = bounds.removeFromTop(LABEL_HEIGHT);
     checkbox.setBounds(active_check_bounds.removeFromTop(CHECKBOX_DIM));

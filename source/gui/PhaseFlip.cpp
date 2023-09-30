@@ -28,6 +28,7 @@ void PhaseFlip::resized()
     auto bounds = getLocalBounds();
 
     label.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
+    bounds.removeFromTop(PAD);
 
     check_l.setBounds(bounds.removeFromLeft((bounds.getWidth() - PAD) / 2));
     bounds.removeFromLeft(PAD);

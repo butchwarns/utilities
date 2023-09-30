@@ -24,5 +24,6 @@ void DCBlock::resized()
     auto bounds = getLocalBounds();
 
     label.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
+    bounds.removeFromTop(PAD);
     checkbox.setBounds(bounds);
 }

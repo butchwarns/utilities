@@ -30,6 +30,7 @@ void Channels::resized()
     auto bounds = getLocalBounds();
 
     channels.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
+    bounds.removeFromTop(PAD);
     selector.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
     bounds.removeFromTop(PAD);
     checkbox.setBounds(bounds);
