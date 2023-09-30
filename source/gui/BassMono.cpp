@@ -1,6 +1,6 @@
 #include "BassMono.h"
 
-BassMono::BassMono(PluginParameters &p) : checkbox(p, "bass_mono_active"), slider(p, "bass_mono_freq")
+BassMono::BassMono(PluginParameters &p) : checkbox(p, "bass_mono"), slider(p, "bass_mono_freq")
 {
     addAndMakeVisible(&bass_mono);
     bass_mono.set_text("BASS MONO");
@@ -13,13 +13,11 @@ BassMono::BassMono(PluginParameters &p) : checkbox(p, "bass_mono_active"), slide
     slider.label.setText("FREQUENCY", dontSendNotification);
     slider.slider.set_decimal_places_to_display(0);
     slider.slider.set_value_suffix("Hz");
-
-    attachment_slider = std::make_unique<SliderAttachment>(p.get_apvts(), "bass_mono_freq", slider.slider.slider);
-    attachment_checkbox = std::make_unique<ButtonAttachment>(p.get_apvts(), "bass_mono", checkbox.checkbox);
 }
 
 void BassMono::paint(juce::Graphics &g)
 {
+    ignoreUnused(g);
 }
 
 void BassMono::resized()

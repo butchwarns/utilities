@@ -13,6 +13,8 @@ SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id) : p(_p),
 
     addAndMakeVisible(&label);
     label.setJustificationType(Justification::centred);
+
+    attachment = std::make_unique<SliderAttachment>(p.get_apvts(), param_id.getParamID(), slider);
 }
 
 void SliderRotary::set_decimal_places_to_display(int _num_decimal_places)

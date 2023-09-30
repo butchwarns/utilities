@@ -2,14 +2,14 @@
 
 CheckboxLabeled::CheckboxLabeled(PluginParameters &p, ParameterID param_id)
 {
-    ignoreUnused(param_id);
-
     addAndMakeVisible(&label);
     label.setJustificationType(Justification::centred);
     label.setColour(Label::textColourId, Colours::black);
     label.getProperties().set("gui_class", "italic");
 
     addAndMakeVisible(&checkbox);
+
+    attachment = std::make_unique<ButtonAttachment>(p.get_apvts(), param_id.getParamID(), checkbox);
 }
 
 void CheckboxLabeled::paint(Graphics &g)

@@ -18,8 +18,4 @@ private:
     SliderRotaryLabeled slider_width;
     SliderRotaryLabeled slider_volume;
     SliderRotaryLabeled slider_pan;
-
-    std::unique_ptr<SliderAttachment> attachment_width;
-    std::unique_ptr<SliderAttachment> attachment_volume;
-    std::unique_ptr<SliderAttachment> attachment_pan;
 };

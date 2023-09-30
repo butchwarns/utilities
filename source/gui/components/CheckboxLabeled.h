@@ -15,4 +15,6 @@ public:
 private:
     void paint(Graphics &g) override;
     void resized() override;
+
+    std::unique_ptr<ButtonAttachment> attachment;
 };

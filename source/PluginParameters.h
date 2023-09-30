@@ -8,9 +8,6 @@
 #include "../BDSP/source/VoltPerOct.h"
 #include "typedefs.h"
 
-// Value of time constant found by trial and error
-constexpr float SMOOTHING_TIME_DEFAULT = 0.0001f;
-
 // Threshold for volume slider mute
 constexpr float OFF_THRESHOLD = -66.0f;
 
@@ -31,8 +28,6 @@ class PluginParameters
 {
 public:
     explicit PluginParameters(juce::AudioProcessor &processor);
-
-    void reset(double _sample_rate);
 
     Apvts &get_apvts();
 
@@ -55,6 +50,7 @@ public:
     float phase_flip_l();
     float phase_flip_r();
     float pan();
+    bool dc_block();
 
     static float denormalise_param_for_ui(float val_norm, const juce::ParameterID &parameter_id);
 
@@ -71,11 +67,7 @@ private:
     std::atomic<float> *phase_flip_l_norm;
     std::atomic<float> *phase_flip_r_norm;
     std::atomic<float> *pan_norm;
-
-    double sample_rate;
-    SmoothLinear smooth_volume;
-    SmoothLinear smooth_width;
-    SmoothLinear smooth_bass_mono_freq;
+    std::atomic<float> *dc_block_norm;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginParameters)
 };

@@ -20,10 +20,6 @@ Sliders::Sliders(PluginParameters &p) : slider_width(p, "width"), slider_volume(
     slider_pan.label.getProperties().set("gui_class", "bold");
     slider_pan.slider.slider.getProperties().set("param", "pan");
     slider_pan.slider.slider.getProperties().set("gui_class", "slider_symmetric");
-
-    attachment_width = std::make_unique<SliderAttachment>(p.get_apvts(), "width", slider_width.slider.slider);
-    attachment_pan = std::make_unique<SliderAttachment>(p.get_apvts(), "pan", slider_pan.slider.slider);
-    attachment_volume = std::make_unique<SliderAttachment>(p.get_apvts(), "volume", slider_volume.slider.slider);
 }
 
 void Sliders::paint(juce::Graphics &g)

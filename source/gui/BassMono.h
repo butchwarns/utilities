@@ -20,7 +20,4 @@ private:
     LabelTitle bass_mono;
     CheckboxLabeled checkbox;
     SliderHorizontalLabeled slider;
-
-    std::unique_ptr<ButtonAttachment> attachment_checkbox;
-    std::unique_ptr<SliderAttachment> attachment_slider;
 };

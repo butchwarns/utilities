@@ -5,10 +5,6 @@ SmoothLinear::SmoothLinear()
 {
 }
 
-SmoothLinear::~SmoothLinear()
-{
-}
-
 void SmoothLinear::reset(double _sample_rate)
 {
     state = 0.0;
@@ -17,7 +13,7 @@ void SmoothLinear::reset(double _sample_rate)
 
 void SmoothLinear::set_time_constant(float time_constant)
 {
-    num_frames = time_constant * sample_rate;
+    num_frames = time_constant * (float)sample_rate;
 }
 
 void SmoothLinear::set_target_val(float _target_val)
@@ -39,7 +35,7 @@ float SmoothLinear::next()
     // Falling
     else
     {
-        if (state <= 0.0f)
+        if (state <= target_val)
         {
             delta = 0.0f;
         }

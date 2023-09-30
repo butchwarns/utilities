@@ -27,5 +27,7 @@ private:
     int num_decimal_places;
     juce::String value_suffix;
 
+    std::unique_ptr<SliderAttachment> attachment;
+
     void sliderValueChanged(Slider *slider) override;
 };

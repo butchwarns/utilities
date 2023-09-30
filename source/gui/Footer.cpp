@@ -4,13 +4,13 @@ Footer::Footer()
 {
     addAndMakeVisible(&version);
     version.setText("v0.1.0", dontSendNotification);
-    version.setJustificationType(juce::Justification::left);
+    version.setJustificationType(juce::Justification::centred);
     version.setColour(juce::Label::textColourId, juce::Colours::white);
     version.getProperties().set("gui_class", "label");
 
     addAndMakeVisible(&bw);
     bw.setText("->BW", dontSendNotification);
-    bw.setJustificationType(juce::Justification::right);
+    bw.setJustificationType(juce::Justification::centred);
     bw.setColour(juce::Label::textColourId, juce::Colours::white);
 
     addAndMakeVisible(&link);

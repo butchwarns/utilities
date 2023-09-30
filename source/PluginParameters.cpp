@@ -1,7 +1,7 @@
 #include "PluginParameters.h"
 
 PluginParameters::PluginParameters(juce::AudioProcessor &processor)
-    : apvts(processor, nullptr, "parameters", parameter_layout()), sample_rate(1.0)
+    : apvts(processor, nullptr, "parameters", parameter_layout())
 {
     channels_norm = apvts.getRawParameterValue("channels");
     volume_norm = apvts.getRawParameterValue("volume");
@@ -12,19 +12,7 @@ PluginParameters::PluginParameters(juce::AudioProcessor &processor)
     phase_flip_l_norm = apvts.getRawParameterValue("phase_flip_l");
     phase_flip_r_norm = apvts.getRawParameterValue("phase_flip_r");
     pan_norm = apvts.getRawParameterValue("pan");
-}
-
-void PluginParameters::reset(double _sample_rate)
-{
-    sample_rate = _sample_rate;
-
-    smooth_volume.reset(_sample_rate);
-    smooth_width.reset(_sample_rate);
-    smooth_bass_mono_freq.reset(_sample_rate);
-
-    smooth_volume.set_time_constant(SMOOTHING_TIME_DEFAULT);
-    smooth_width.set_time_constant(SMOOTHING_TIME_DEFAULT);
-    smooth_bass_mono_freq.set_time_constant(SMOOTHING_TIME_DEFAULT);
+    dc_block_norm = apvts.getRawParameterValue("dc_block");
 }
 
 Apvts &PluginParameters::get_apvts()
@@ -55,11 +43,7 @@ ChannelsChoice PluginParameters::channels()
 
 float PluginParameters::volume()
 {
-    smooth_volume.set_target_val(*volume_norm);
-    const float volume_smoothed_norm = smooth_volume.next();
-
-    const float gain = denormalise_volume(volume_smoothed_norm);
-
+    const float gain = denormalise_volume(*volume_norm);
     return gain;
 }
 
@@ -101,10 +85,7 @@ float PluginParameters::denormalise_volume_db(float val_norm)
 
 float PluginParameters::width()
 {
-    smooth_width.set_target_val(*width_norm);
-    const float width_smoothed = smooth_width.next();
-
-    return width_smoothed;
+    return *width_norm;
 }
 
 bool PluginParameters::mono()
@@ -119,10 +100,7 @@ bool PluginParameters::bass_mono()
 
 float PluginParameters::bass_mono_freq()
 {
-    smooth_bass_mono_freq.set_target_val(*bass_mono_freq_norm);
-    const float freq_smoothed_norm = smooth_bass_mono_freq.next();
-
-    const float freq = denormalise_bass_mono_freq(freq_smoothed_norm);
+    const float freq = denormalise_bass_mono_freq(*bass_mono_freq_norm);
 
     return freq;
 }
@@ -159,6 +137,10 @@ float PluginParameters::pan()
 {
     return *pan_norm;
 }
+bool PluginParameters::dc_block()
+{
+    return (bool)*dc_block_norm;
+}
 
 float PluginParameters::denormalise_param_for_ui(float val_norm, const juce::ParameterID &parameter_id)
 {
@@ -189,19 +171,27 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
 
     typedef juce::AudioProcessorParameterGroup ParameterGroup;
 
-    std::unique_ptr<ParameterGroup> utility_grp = std::make_unique<ParameterGroup>("utility", "UTILITY", "|");
-    utility_grp->addChild(std::make_unique<juce::AudioParameterChoice>("channels", "CHANNELS", CHANNELS_CHOICES, 0));
-    utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("volume", "VOLUME", 0.0f, 1.0f, normalise_volume(1.0f)));
-    utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", 0.0f, 1.0f, 1.0f));
-    utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("mono", "MONO", false));
-    utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("bass_mono", "BASS_MONO", false));
-    utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", 0.0f, 1.0f, normalise_bass_mono_freq(145.0f)));
-    utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_l", "PHASE_FLIP_L", false));
-    utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_r", "PHASE_FLIP_R", false));
-    utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("pan", "PAN", 0.0f, 1.0f, 0.5f));
-    utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("dc_block", "DC_BLOCK", false));
+    std::unique_ptr<ParameterGroup> phase_flip_grp = std::make_unique<ParameterGroup>("bass_mono", "BASS_MONO", "|");
+    phase_flip_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_l", "PHASE_FLIP_L", false));
+    phase_flip_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_r", "PHASE_FLIP_R", false));
 
-    layout.add(std::move(utility_grp));
+    std::unique_ptr<ParameterGroup> channels_grp = std::make_unique<ParameterGroup>("channels", "CHANNELS", "|");
+    channels_grp->addChild(std::make_unique<juce::AudioParameterChoice>("channels", "CHANNELS", CHANNELS_CHOICES, 0));
+    channels_grp->addChild(std::make_unique<juce::AudioParameterBool>("mono", "MONO", false));
+
+    std::unique_ptr<ParameterGroup> bass_mono_grp = std::make_unique<ParameterGroup>("bass_mono", "BASS_MONO", "|");
+    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterBool>("bass_mono", "BASS_MONO_ACTIVE", false));
+    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", 0.0f, 1.0f, normalise_bass_mono_freq(145.0f)));
+
+    std::unique_ptr<ParameterGroup> sliders_grp = std::make_unique<ParameterGroup>("sliders", "SLIDERS", "|");
+    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", 0.0f, 1.0f, 1.0f));
+    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("volume", "VOLUME", 0.0f, 1.0f, normalise_volume(1.0f)));
+    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("pan", "PAN", 0.0f, 1.0f, 0.5f));
+
+    std::unique_ptr<ParameterGroup> dc_block_group = std::make_unique<ParameterGroup>("dc_block", "DC_BLOCK", "|");
+    dc_block_group->addChild(std::make_unique<juce::AudioParameterBool>("dc_block", "DC_BLOCK", false));
+
+    layout.add(std::move(phase_flip_grp), std::move(channels_grp), std::move(bass_mono_grp), std::move(sliders_grp), std::move(dc_block_group));
 
     return layout;
 }

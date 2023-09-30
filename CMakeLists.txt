@@ -34,7 +34,8 @@ set(SRC_PLUGIN_BASE
         source/PluginParameters.cpp)
 
 set(SRC_DSP
-        source/dsp/SmoothLinear.cpp)
+        source/dsp/SmoothLinear.cpp
+        BDSP/source/filter/HP1_DCBlock.cpp)
 
 set(SRC_GUI_COMPONENTS
         source/gui/components/Spacer.cpp

@@ -6,7 +6,7 @@ class SmoothLinear
 {
 public:
     SmoothLinear();
-    ~SmoothLinear();
+    ~SmoothLinear() = default;
 
     void reset(double _sample_rate);
     void set_time_constant(float time_constant);
