@@ -3,9 +3,7 @@
 BassMono::BassMono(PluginParameters &p) : checkbox(p, "bass_mono_active"), slider(p, "bass_mono_freq")
 {
     addAndMakeVisible(&bass_mono);
-    bass_mono.setText("BASS MONO", dontSendNotification);
-    bass_mono.setJustificationType(Justification::centred);
-    bass_mono.setColour(Label::textColourId, Colours::black);
+    bass_mono.set_text("BASS MONO");
     bass_mono.getProperties().set("gui_class", "bold");
 
     addAndMakeVisible(&checkbox);

@@ -4,13 +4,14 @@
 #include "SliderRotary.h"
 #include "../sizes.h"
 #include "../../PluginParameters.h"
+#include "LabelTitle.h"
 
 class SliderRotaryLabeled : public Component
 {
 public:
     SliderRotaryLabeled(PluginParameters &p, ParameterID param_id);
 
-    Label label;
+    LabelTitle label;
     SliderRotary slider;
 
 private:

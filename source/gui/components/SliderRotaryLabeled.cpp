@@ -4,8 +4,6 @@ SliderRotaryLabeled::SliderRotaryLabeled(PluginParameters &p, ParameterID param_
     : slider(p, param_id)
 {
     addAndMakeVisible(&label);
-    label.setJustificationType(juce::Justification::centred);
-    label.setColour(Label::textColourId, Colours::black);
 
     addAndMakeVisible(&slider);
 }

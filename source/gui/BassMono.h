@@ -6,6 +6,7 @@
 #include "../PluginParameters.h"
 #include "components/SliderHorizontalLabeled.h"
 #include "components/CheckboxLabeled.h"
+#include "components/LabelTitle.h"
 
 class BassMono : public juce::Component
 {
@@ -16,7 +17,7 @@ private:
     void paint(juce::Graphics &g) override;
     void resized() override;
 
-    juce::Label bass_mono;
+    LabelTitle bass_mono;
     CheckboxLabeled checkbox;
     SliderHorizontalLabeled slider;
 

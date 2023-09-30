@@ -15,8 +15,8 @@ private:
     void paint(juce::Graphics &g) override;
     void resized() override;
 
-    SliderRotaryLabeled slider_volume;
     SliderRotaryLabeled slider_width;
+    SliderRotaryLabeled slider_volume;
     SliderRotaryLabeled slider_pan;
 
     std::unique_ptr<SliderAttachment> attachment_width;
