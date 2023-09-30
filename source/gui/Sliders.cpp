@@ -30,7 +30,6 @@ void Sliders::paint(juce::Graphics &g)
 void Sliders::resized()
 {
     auto bounds = getLocalBounds();
-    const float space = (bounds.getHeight() - 3 * SLIDER_HORIZONTAL_LABELED_HEIGHT) / 2.0f;
 
     slider_width.setBounds(bounds.removeFromTop(SLIDER_ROTARY_LABELED_HEIGHT));
     slider_pan.setBounds(bounds.removeFromBottom(SLIDER_ROTARY_LABELED_HEIGHT));
