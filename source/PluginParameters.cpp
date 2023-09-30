@@ -11,6 +11,7 @@ PluginParameters::PluginParameters(juce::AudioProcessor &processor)
     bass_mono_freq_norm = apvts.getRawParameterValue("bass_mono_freq");
     phase_flip_l_norm = apvts.getRawParameterValue("phase_flip_l");
     phase_flip_r_norm = apvts.getRawParameterValue("phase_flip_r");
+    pan_norm = apvts.getRawParameterValue("pan");
 }
 
 void PluginParameters::reset(double _sample_rate)
@@ -154,6 +155,11 @@ float PluginParameters::phase_flip_r()
     return flip;
 }
 
+float PluginParameters::pan()
+{
+    return *pan_norm;
+}
+
 float PluginParameters::denormalise_param_for_ui(float val_norm, const juce::ParameterID &parameter_id)
 {
     auto param = parameter_id.getParamID();
@@ -192,6 +198,8 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
     utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", 0.0f, 1.0f, normalise_bass_mono_freq(145.0f)));
     utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_l", "PHASE_FLIP_L", false));
     utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_r", "PHASE_FLIP_R", false));
+    utility_grp->addChild(std::make_unique<juce::AudioParameterFloat>("pan", "PAN", 0.0f, 1.0f, 0.5f));
+    utility_grp->addChild(std::make_unique<juce::AudioParameterBool>("dc_block", "DC_BLOCK", false));
 
     layout.add(std::move(utility_grp));
 

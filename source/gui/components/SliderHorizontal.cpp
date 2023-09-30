@@ -42,8 +42,9 @@ void SliderHorizontal::sliderValueChanged(Slider *slider)
 {
     const float val_denorm = p.denormalise_param_for_ui((float)(slider->getValue()), param_id);
 
-    // Format value string to the correct number of decimal places
+    // Format label text
     std::stringstream val_formatted;
+    // Format value string to the correct number of decimal places
     val_formatted << std::fixed << std::setprecision(num_decimal_places);
     val_formatted << val_denorm << value_suffix.toStdString();
 

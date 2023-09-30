@@ -3,7 +3,17 @@
 void Spacer::paint(juce::Graphics &g)
 {
     auto bounds = getLocalBounds();
-    bounds.reduce(0, 5);
+
+    if (bounds.getWidth() > bounds.getHeight())
+    {
+        // Horizontal spacer
+        bounds.reduce(0, 5);
+    }
+    else
+    {
+        // Vertical spacer
+        bounds.reduce(5, 0);
+    }
 
     g.setColour(Colours::black);
     g.fillRect(bounds);

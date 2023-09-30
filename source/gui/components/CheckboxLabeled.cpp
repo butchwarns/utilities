@@ -2,6 +2,8 @@
 
 CheckboxLabeled::CheckboxLabeled(PluginParameters &p, ParameterID param_id)
 {
+    ignoreUnused(param_id);
+
     addAndMakeVisible(&label);
     label.setJustificationType(Justification::centred);
     label.setColour(Label::textColourId, Colours::black);

@@ -163,6 +163,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     }
     const float phase_flip_l = p.phase_flip_l();
     const float phase_flip_r = p.phase_flip_r();
+    const float pan = p.pan();
 
     if (mono)
     {
@@ -233,6 +234,10 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         // Apply phase flip
         left[n] = phase_flip_l * left[n];
         right[n] = phase_flip_r * right[n];
+
+        // Apply pan
+        left[n] = (2.0f * (1.0f - pan)) * left[n];
+        right[n] = (2.0f * pan) * right[n];
     }
 }
 

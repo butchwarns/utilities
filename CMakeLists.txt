@@ -52,7 +52,8 @@ set(SRC_GUI
         source/gui/Channels.cpp
         source/gui/BassMono.cpp
         source/gui/Sliders.cpp
-        source/gui/PhaseFlip.cpp)
+        source/gui/PhaseFlip.cpp
+        source/gui/DCBlock.cpp)
 
 set(SRC_BDSP
         BDSP/source/VoltPerOct.cpp

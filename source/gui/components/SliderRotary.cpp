@@ -5,6 +5,8 @@ SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id) : p(_p),
     slider.addListener(this);
 
     addAndMakeVisible(&slider);
+    slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    slider.setColour(Slider::textBoxTextColourId, Colours::black);
     slider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
     slider.setRange(0.0f, 1.0f, 0.001f);
     slider.setSkewFactor(1.0f); // Don't skew!
@@ -31,7 +33,7 @@ void SliderRotary::paint(juce::Graphics &g)
 void SliderRotary::resized()
 {
     auto bounds = getLocalBounds();
-    slider.setBounds(bounds.removeFromTop(SLIDER_DIM));
+    slider.setBounds(bounds.removeFromTop(KNOB_DIM));
     label.setBounds(bounds);
 }
 
@@ -41,12 +43,31 @@ void SliderRotary::sliderValueChanged(Slider *slider)
 
     std::stringstream val_formatted;
     const bool is_slider_rotary_off = slider->getProperties()["gui_class"] == "slider_rotary_off";
-    if (val_denorm <= OFF_THRESHOLD && is_slider_rotary_off)
+    const bool is_param_pan = slider->getProperties()["param"] == "pan";
+    if (is_param_pan)
+    {
+        // Map to panning values
+        const float centre_range = 0.005f;
+        val_formatted << std::fixed << std::setprecision(0);
+        if (val_denorm < 0.5f - centre_range)
+        {
+            val_formatted << bdsp::mappings::map_linear(val_denorm, 0.0f, 0.5f, 50.0f, 0.0f) << "L";
+        }
+        else if (val_denorm > 0.5f + centre_range)
+        {
+            val_formatted << bdsp::mappings::map_linear(val_denorm, 0.5f, 1.0f, 0.0f, 50.0f) << "R";
+        }
+        else
+        {
+            val_formatted << "C";
+        }
+    }
+    else if (is_slider_rotary_off && (val_denorm <= OFF_THRESHOLD))
     {
         // Below threshold, turn off
         val_formatted << "OFF";
     }
-    else
+    else // Default
     {
         // Format value string to the correct number of decimal places
         val_formatted << std::fixed << std::setprecision(num_decimal_places);

@@ -43,18 +43,15 @@ void Look::drawLinearSlider(Graphics &g, int x, int y, int width, int height, fl
 
 void Look::drawRotarySlider(Graphics &g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, Slider &slider)
 {
-    ignoreUnused(slider);
+    ignoreUnused(x, y);
 
-    const auto centre_x = ((float)x + (float)width) / 2.0f;
-    const auto centre_y = ((float)y + (float)height) / 2.0f;
-
-    const auto half_outline = OUTLINE / 2.0f;
+    auto bounds = slider.getLocalBounds().reduced(PAD);
 
     // Knob
 
-    const auto knob_radius = KNOB_DIM / 2.0f;
+    const float knob_radius = KNOB_DIM / 2.0f;
     Path k;
-    k.addEllipse(centre_x - knob_radius, centre_y - knob_radius, KNOB_DIM - OUTLINE, KNOB_DIM - OUTLINE);
+    k.addEllipse(bounds.toFloat().reduced(OUTLINE));
 
     g.setColour(BEIGE);
     g.fillPath(k);
@@ -66,23 +63,22 @@ void Look::drawRotarySlider(Graphics &g, int x, int y, int width, int height, fl
 
     // Pointer
 
-    const auto pointer_radius = POINTER_DIM / 2.0f;
-    const auto knob_offset = ((float)width - (float)KNOB_DIM) / 2.0f;
+    const float pointer_radius = POINTER_DIM / 2.0f;
     Path p;
     p.addEllipse(Rectangle<float>(-pointer_radius, -pointer_radius, POINTER_DIM, POINTER_DIM).reduced(OUTLINE));
 
     AffineTransform pointer_transform;
     pointer_transform = pointer_transform
-                            .translated(0.0f, -(knob_radius + half_outline) + (pointer_radius + POINTER_OFFSET))
+                            .translated(0.0f, -knob_radius + POINTER_DIM + POINTER_OFFSET)
                             .rotated((sliderPos - 0.5f) * (rotaryEndAngle - rotaryStartAngle))
-                            .translated(knob_radius + knob_offset - half_outline, knob_radius + knob_offset - half_outline);
+                            .translated(knob_radius, knob_radius);
     p.applyTransform(pointer_transform);
 
     g.setColour(Colours::white);
     g.fillPath(p);
 
     g.setColour(Colours::black);
-    g.strokePath(p, PathStrokeType(2.0f));
+    g.strokePath(p, PathStrokeType(OUTLINE));
 }
 
 void Look::drawTickBox(Graphics &g, Component &component,
@@ -106,7 +102,7 @@ void Look::drawTickBox(Graphics &g, Component &component,
     if (ticked)
     {
         g.setColour(Colours::black);
-        g.setFont(Look::getFontInterBlack(FONT_SIZE));
+        g.setFont(Look::getFontInterRegular(FONT_SIZE));
         g.drawFittedText("X", bounds, juce::Justification::centred, 1, 1.0f);
     }
 }

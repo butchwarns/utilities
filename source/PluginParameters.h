@@ -54,6 +54,7 @@ public:
     static inline float denormalise_bass_mono_freq(float val_norm);
     float phase_flip_l();
     float phase_flip_r();
+    float pan();
 
     static float denormalise_param_for_ui(float val_norm, const juce::ParameterID &parameter_id);
 
@@ -69,6 +70,7 @@ private:
     std::atomic<float> *bass_mono_freq_norm;
     std::atomic<float> *phase_flip_l_norm;
     std::atomic<float> *phase_flip_r_norm;
+    std::atomic<float> *pan_norm;
 
     double sample_rate;
     SmoothLinear smooth_volume;

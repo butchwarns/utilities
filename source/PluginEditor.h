@@ -7,6 +7,7 @@
 #include "gui/BassMono.h"
 #include "gui/Sliders.h"
 #include "gui/PhaseFlip.h"
+#include "gui/DCBlock.h"
 #include "gui/components/Spacer.h"
 #include "gui/colours.h"
 #include "gui/Look.h"
@@ -30,13 +31,16 @@ private:
     Header header;
     Footer footer;
 
+    Spacer spacer_vertical;
+
     Sliders sliders;
     Spacer spacer1;
     Channels channels;
     Spacer spacer2;
     BassMono bass_mono;
-    PhaseFlip phase_flip;
     Spacer spacer3;
+    PhaseFlip phase_flip;
+    DCBlock dc_block;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };
