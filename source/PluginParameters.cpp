@@ -15,26 +15,6 @@ PluginParameters::PluginParameters(juce::AudioProcessor &processor)
     dc_block_norm = apvts.getRawParameterValue("dc_block");
 }
 
-Apvts &PluginParameters::get_apvts()
-{
-    return apvts;
-}
-
-juce::ValueTree PluginParameters::copy_state()
-{
-    return apvts.copyState();
-}
-
-juce::Identifier PluginParameters::state_type() const
-{
-    return apvts.state.getType();
-}
-
-void PluginParameters::replace_state(juce::ValueTree const &new_state)
-{
-    apvts.replaceState(new_state);
-}
-
 ChannelsChoice PluginParameters::channels()
 {
     const auto choice = static_cast<ChannelsChoice>((int)*channels_norm);
@@ -88,6 +68,12 @@ float PluginParameters::width()
     return *width_norm;
 }
 
+float PluginParameters::denormalise_width(float val_norm)
+{
+    // Convert to percent
+    return 100 * val_norm;
+}
+
 bool PluginParameters::mono()
 {
     return static_cast<bool>(*mono_norm);
@@ -107,7 +93,7 @@ float PluginParameters::bass_mono_freq()
 
 float PluginParameters::normalise_bass_mono_freq(float freq)
 {
-    const float cv = bdsp::cv::VoltPerOct::freq_to_volt(freq, ZERO_VOLT_FREQ_BASS_MONO);
+    const float cv = bdsp::cv::VoltPerOctave::freq_to_volt(freq, ZERO_VOLT_FREQ_BASS_MONO);
     const float cv_norm = bdsp::mappings::map_linear(cv, -5.0f, 5.0f, 0.0f, 1.0f);
 
     return cv_norm;
@@ -116,7 +102,7 @@ float PluginParameters::normalise_bass_mono_freq(float freq)
 float PluginParameters::denormalise_bass_mono_freq(float val_norm)
 {
     const float cv = bdsp::mappings::map_linear_norm(val_norm, -5.f, 5.0f);
-    const float freq = bdsp::cv::VoltPerOct::volt_to_freq(cv, ZERO_VOLT_FREQ_BASS_MONO);
+    const float freq = bdsp::cv::VoltPerOctave::volt_to_freq(cv, ZERO_VOLT_FREQ_BASS_MONO);
 
     return freq;
 }
@@ -155,12 +141,10 @@ float PluginParameters::denormalise_param_for_ui(float val_norm, const juce::Par
     }
     else if (param == "width")
     {
-        // TODO: Move to own denormalisation function
-        return 100 * val_norm; // Convert to percent
+        return denormalise_width(val_norm);
     }
     else
     {
-        jassert(false);
         return val_norm;
     }
 }

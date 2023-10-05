@@ -14,8 +14,8 @@ PhaseFlip::PhaseFlip(PluginParameters &p) : check_l(p, "phase_flip_l"), check_r(
     addAndMakeVisible(&check_r);
     check_r.label.setText("R", dontSendNotification);
 
-    attachment_check_l = std::make_unique<ButtonAttachment>(p.get_apvts(), "phase_flip_l", check_l.checkbox);
-    attachment_check_r = std::make_unique<ButtonAttachment>(p.get_apvts(), "phase_flip_r", check_r.checkbox);
+    attachment_check_l = std::make_unique<ButtonAttachment>(p.apvts, "phase_flip_l", check_l.checkbox);
+    attachment_check_r = std::make_unique<ButtonAttachment>(p.apvts, "phase_flip_r", check_r.checkbox);
 }
 
 void PhaseFlip::paint(Graphics &g)

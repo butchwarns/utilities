@@ -10,7 +10,7 @@ PluginProcessor::PluginProcessor()
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
                          ),
-      p(*this)
+      p(*this), window_width_saved(WIN_WIDTH), window_height_saved(WIN_HEIGHT)
 {
 }
 
@@ -276,7 +276,13 @@ juce::AudioProcessorEditor *PluginProcessor::createEditor()
 
 void PluginProcessor::getStateInformation(juce::MemoryBlock &destData)
 {
-    juce::ValueTree state = p.copy_state();
+    // Save window size to state
+    auto elem = p.apvts.state.getOrCreateChildWithName("window_size", nullptr);
+    elem.setProperty("window_width", window_width_saved, nullptr);
+    elem.setProperty("window_height", window_height_saved, nullptr);
+
+    auto state = p.apvts.copyState();
+
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
     copyXmlToBinary(*xml, destData);
 }
@@ -284,13 +290,36 @@ void PluginProcessor::getStateInformation(juce::MemoryBlock &destData)
 void PluginProcessor::setStateInformation(const void *data, int sizeInBytes)
 {
     std::unique_ptr<juce::XmlElement> xml = getXmlFromBinary(data, sizeInBytes);
-    if (xml.get() != nullptr)
+    if (xml != nullptr)
     {
-        if (xml->hasTagName(p.state_type()))
+        if (xml->hasTagName(p.apvts.state.getType()))
         {
-            p.replace_state(juce::ValueTree::fromXml(*xml));
+            auto state = juce::ValueTree::fromXml(*xml);
+            p.apvts.replaceState(state);
+
+            // Restore window size from state
+            auto elem = p.apvts.state.getChildWithName("window_size");
+            const float width = elem.getProperty("window_width");
+            const float height = elem.getProperty("window_height");
+            set_saved_window_size(width, height);
         }
     }
+}
+
+void PluginProcessor::set_saved_window_size(float _window_width_saved, float _window_height_saved)
+{
+    window_width_saved = _window_width_saved;
+    window_height_saved = _window_height_saved;
+}
+
+float PluginProcessor::get_saved_window_width() const
+{
+    return window_width_saved;
+}
+
+float PluginProcessor::get_saved_window_height() const
+{
+    return window_height_saved;
 }
 
 // This creates new instances of the plugin..

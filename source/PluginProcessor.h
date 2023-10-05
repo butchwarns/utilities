@@ -6,6 +6,7 @@
 #include "../BDSP/source/filter/HP1_RC_TPT.h"
 #include "../BDSP/source/filter/HP1_DCBlock.h"
 #include "dsp/SmoothLinear.h"
+#include "gui/sizes.h"
 
 constexpr int NUM_CHANNELS = 2; // Plugin works in stereo
 constexpr int NUM_CROSSOVER_POLES = 2;
@@ -44,6 +45,10 @@ public:
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
 
+    void set_saved_window_size(float _window_width_saved, float _window_height_saved);
+    float get_saved_window_width() const;
+    float get_saved_window_height() const;
+
 private:
     PluginParameters p;
 
@@ -58,6 +63,9 @@ private:
     bdsp::filter::HP1_RC_TPT hp_crossover[NUM_CHANNELS][NUM_CROSSOVER_POLES];
 
     bdsp::filter::HP1_DCBlock dc_block[NUM_CHANNELS];
+
+    float window_width_saved;
+    float window_height_saved;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };

@@ -16,8 +16,8 @@ Channels::Channels(PluginParameters &p) : checkbox(p, "mono")
     addAndMakeVisible(&checkbox);
     checkbox.label.setText("MONO", dontSendNotification);
 
-    attachment_selector = std::make_unique<ComboBoxAttachment>(p.get_apvts(), "channels", selector);
-    attachment_checkbox = std::make_unique<ButtonAttachment>(p.get_apvts(), "mono", checkbox.checkbox);
+    attachment_selector = std::make_unique<ComboBoxAttachment>(p.apvts, "channels", selector);
+    attachment_checkbox = std::make_unique<ButtonAttachment>(p.apvts, "mono", checkbox.checkbox);
 }
 
 void Channels::paint(juce::Graphics &g)

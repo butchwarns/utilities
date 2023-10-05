@@ -11,7 +11,7 @@ DCBlock::DCBlock(PluginParameters &p) : checkbox(p, "dc_block")
 
     addAndMakeVisible(&checkbox);
 
-    attachment = std::make_unique<ButtonAttachment>(p.get_apvts(), "dc_block", checkbox.checkbox);
+    attachment = std::make_unique<ButtonAttachment>(p.apvts, "dc_block", checkbox.checkbox);
 }
 
 void DCBlock::paint(Graphics &g)

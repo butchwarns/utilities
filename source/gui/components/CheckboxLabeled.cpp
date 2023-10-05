@@ -9,7 +9,7 @@ CheckboxLabeled::CheckboxLabeled(PluginParameters &p, ParameterID param_id)
 
     addAndMakeVisible(&checkbox);
 
-    attachment = std::make_unique<ButtonAttachment>(p.get_apvts(), param_id.getParamID(), checkbox);
+    attachment = std::make_unique<ButtonAttachment>(p.apvts, param_id.getParamID(), checkbox);
 }
 
 void CheckboxLabeled::paint(Graphics &g)

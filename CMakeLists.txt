@@ -34,8 +34,13 @@ set(SRC_PLUGIN_BASE
         source/PluginParameters.cpp)
 
 set(SRC_DSP
-        source/dsp/SmoothLinear.cpp
-        BDSP/source/filter/HP1_DCBlock.cpp)
+        source/dsp/SmoothLinear.cpp)
+
+set(SRC_BDSP
+        BDSP/source/filter/HP1_DCBlock.cpp
+        BDSP/source/cv/VoltPerOctave.cpp
+        BDSP/source/filter/LP1_RC_TPT.cpp
+        BDSP/source/filter/HP1_RC_TPT.cpp)
 
 set(SRC_GUI_COMPONENTS
         source/gui/components/Spacer.cpp
@@ -55,19 +60,15 @@ set(SRC_GUI
         source/gui/BassMono.cpp
         source/gui/Sliders.cpp
         source/gui/PhaseFlip.cpp
-        source/gui/DCBlock.cpp)
-
-set(SRC_BDSP
-        BDSP/source/VoltPerOct.cpp
-        BDSP/source/filter/LP1_RC_TPT.cpp
-        BDSP/source/filter/HP1_RC_TPT.cpp)
+        source/gui/DCBlock.cpp
+        source/gui/WindowContents.cpp)
 
 target_sources(BW_UTILITY
     PRIVATE
         ${SRC_PLUGIN_BASE}
         ${SRC_DSP}
-        ${SRC_GUI}
-        ${SRC_BDSP})
+        ${SRC_BDSP}
+        ${SRC_GUI})
 
 ###############################################################################
 

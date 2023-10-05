@@ -15,7 +15,7 @@ SliderHorizontal::SliderHorizontal(PluginParameters &_p, ParameterID _param_id) 
     label.setColour(Label::textColourId, Colours::black);
     label.setInterceptsMouseClicks(false, false); // Mouse should react to slider, label is overlayed
 
-    attachment = std::make_unique<SliderAttachment>(p.get_apvts(), param_id.getParamID(), slider);
+    attachment = std::make_unique<SliderAttachment>(p.apvts, param_id.getParamID(), slider);
 }
 
 void SliderHorizontal::set_decimal_places_to_display(int _num_decimal_places)

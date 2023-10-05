@@ -5,7 +5,7 @@
 #include "../BDSP/source/decibel.h"
 #include "dsp/SmoothLinear.h"
 #include "../BDSP/source/mappings.h"
-#include "../BDSP/source/VoltPerOct.h"
+#include "../BDSP/source/cv/VoltPerOctave.h"
 #include "typedefs.h"
 
 // Threshold for volume slider mute
@@ -29,11 +29,7 @@ class PluginParameters
 public:
     explicit PluginParameters(juce::AudioProcessor &processor);
 
-    Apvts &get_apvts();
-
-    juce::ValueTree copy_state();
-    juce::Identifier state_type() const;
-    void replace_state(juce::ValueTree const &new_state);
+    Apvts apvts;
 
     ChannelsChoice channels();
 
@@ -42,6 +38,7 @@ public:
     static inline float denormalise_volume(float val_norm);
     static inline float denormalise_volume_db(float val_norm);
     float width();
+    static inline float denormalise_width(float val_norm);
     bool mono();
     bool bass_mono();
     float bass_mono_freq();
@@ -55,7 +52,6 @@ public:
     static float denormalise_param_for_ui(float val_norm, const juce::ParameterID &parameter_id);
 
 private:
-    Apvts apvts;
     static Apvts::ParameterLayout parameter_layout();
 
     std::atomic<float> *channels_norm;
