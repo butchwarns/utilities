@@ -24,6 +24,11 @@ PluginEditor::PluginEditor(PluginProcessor &p, PluginParameters &params)
     addAndMakeVisible(&window_contents);
 }
 
+PluginEditor::~PluginEditor()
+{
+    setLookAndFeel(nullptr);
+}
+
 void PluginEditor::paint(juce::Graphics &g)
 {
     g.fillAll(BLUE);

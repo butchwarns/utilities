@@ -11,7 +11,7 @@ class PluginEditor : public AudioProcessorEditor, public ComponentBoundsConstrai
 {
 public:
     explicit PluginEditor(PluginProcessor &, PluginParameters &params);
-    ~PluginEditor() override = default;
+    ~PluginEditor() override;
 
     void paint(juce::Graphics &) override;
     void resized() override;
