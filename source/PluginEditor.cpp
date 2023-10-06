@@ -17,6 +17,7 @@ PluginEditor::PluginEditor(PluginProcessor &p, PluginParameters &params)
 
     // Constrain aspect ratio
     setFixedAspectRatio((float)WIN_WIDTH / (float)WIN_HEIGHT);
+    setMinimumSize(WIN_WIDTH / 2, WIN_HEIGHT / 2);
     setConstrainer(this);
 
     setLookAndFeel(&look);
