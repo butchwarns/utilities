@@ -4,21 +4,24 @@
 PluginEditor::PluginEditor(PluginProcessor &p, PluginParameters &params)
     : AudioProcessorEditor(&p), processor_ref(p), window_contents(params)
 {
-    juce::ignoreUnused(processor_ref);
-
-    // Get (usable) screen size
+    // // Get (usable) screen size, might be useful later..
     // const juce::Displays::Display *display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay();
     // juce::Rectangle<int> user_area = display->userArea;
 
-    setSize((int)processor_ref.get_saved_window_width(), (int)processor_ref.get_saved_window_height());
+    const auto width_saved = (int)processor_ref.get_saved_window_width();
+    const auto height_saved = (int)processor_ref.get_saved_window_height();
+    setSize(width_saved, height_saved);
+
+    // Make window resizable only with corner resizer, not by host
     setResizable(false, true);
 
-    addAndMakeVisible(&window_contents);
+    // Constrain aspect ratio
+    setFixedAspectRatio((float)WIN_WIDTH / (float)WIN_HEIGHT);
+    setConstrainer(this);
 
     setLookAndFeel(&look);
 
-    setFixedAspectRatio((float)WIN_WIDTH / (float)WIN_HEIGHT);
-    setConstrainer(this);
+    addAndMakeVisible(&window_contents);
 }
 
 void PluginEditor::paint(juce::Graphics &g)
