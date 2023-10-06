@@ -155,7 +155,7 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
 
     typedef juce::AudioProcessorParameterGroup ParameterGroup;
 
-    std::unique_ptr<ParameterGroup> phase_flip_grp = std::make_unique<ParameterGroup>("bass_mono", "BASS_MONO", "|");
+    std::unique_ptr<ParameterGroup> phase_flip_grp = std::make_unique<ParameterGroup>("phase_flip", "PHASE_FLIP", "|");
     phase_flip_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_l", "PHASE_FLIP_L", false));
     phase_flip_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_r", "PHASE_FLIP_R", false));
 
