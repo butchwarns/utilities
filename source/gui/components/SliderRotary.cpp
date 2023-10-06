@@ -9,7 +9,6 @@ SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id) : p(_p),
     slider.setColour(Slider::textBoxTextColourId, Colours::black);
     slider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
     slider.setRange(0.0f, 1.0f, 0.001f);
-    slider.setSkewFactor(1.0f); // Don't skew!
 
     addAndMakeVisible(&label);
     label.setJustificationType(Justification::centred);
