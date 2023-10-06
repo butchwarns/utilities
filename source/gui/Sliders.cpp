@@ -20,6 +20,9 @@ Sliders::Sliders(PluginParameters &p) : slider_width(p, "width"), slider_volume(
     slider_pan.label.getProperties().set("gui_class", "bold");
     slider_pan.slider.slider.getProperties().set("param", "pan");
     slider_pan.slider.slider.getProperties().set("gui_class", "slider_symmetric");
+
+    // "Touch" pan slider after initializing to draw label with correct formatting
+    slider_pan.slider.touch();
 }
 
 void Sliders::paint(juce::Graphics &g)

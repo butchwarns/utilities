@@ -40,15 +40,13 @@ float PluginParameters::normalise_volume(float gain)
         db = bdsp::decibel::raw_gain_to_db(gain);
     }
 
-    // Normalise
-    const auto val_norm = bdsp::mappings::map_linear<float>(db, -66.0, 35.0f, 0.0f, 1.0f);
+    const auto val_norm = bdsp::mappings::normalise(db, -66.1f, 35.0f);
 
     return val_norm;
 }
 
 float PluginParameters::denormalise_volume(float val_norm)
 {
-
     const auto db = denormalise_volume_db(val_norm);
     const float gain = bdsp::decibel::db_to_raw_gain_off(db, OFF_THRESHOLD);
 
@@ -57,7 +55,6 @@ float PluginParameters::denormalise_volume(float val_norm)
 
 float PluginParameters::denormalise_volume_db(float val_norm)
 {
-
     const auto db = bdsp::mappings::map_linear_norm<float>(val_norm, -66.1f, 35.0f);
 
     return db;
@@ -94,7 +91,7 @@ float PluginParameters::bass_mono_freq()
 float PluginParameters::normalise_bass_mono_freq(float freq)
 {
     const float cv = bdsp::cv::VoltPerOctave::freq_to_volt(freq, ZERO_VOLT_FREQ_BASS_MONO);
-    const float cv_norm = bdsp::mappings::map_linear(cv, -5.0f, 5.0f, 0.0f, 1.0f);
+    const float cv_norm = bdsp::mappings::normalise(cv, -5.0f, 5.0f);
 
     return cv_norm;
 }
@@ -165,11 +162,15 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
 
     std::unique_ptr<ParameterGroup> bass_mono_grp = std::make_unique<ParameterGroup>("bass_mono", "BASS_MONO", "|");
     bass_mono_grp->addChild(std::make_unique<juce::AudioParameterBool>("bass_mono", "BASS_MONO_ACTIVE", false));
-    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", 0.0f, 1.0f, normalise_bass_mono_freq(145.0f)));
+    const float bass_mono_freq_default = normalise_bass_mono_freq(145.0f);
+    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", 0.0f, 1.0f, bass_mono_freq_default));
 
     std::unique_ptr<ParameterGroup> sliders_grp = std::make_unique<ParameterGroup>("sliders", "SLIDERS", "|");
     sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", 0.0f, 1.0f, 1.0f));
-    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("volume", "VOLUME", 0.0f, 1.0f, normalise_volume(1.0f)));
+    // Tiny positive offset prevents default volume from showing minus sign (-0.0dB)
+    const float volume_default = normalise_volume(1.001f);
+    // Constructor with NormalisableRange allows for setting a finer slider interval
+    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("volume", "VOLUME", NormalisableRange<float>(0.0f, 1.0f, 0.0001f), volume_default));
     sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("pan", "PAN", 0.0f, 1.0f, 0.5f));
 
     std::unique_ptr<ParameterGroup> dc_block_group = std::make_unique<ParameterGroup>("dc_block", "DC_BLOCK", "|");

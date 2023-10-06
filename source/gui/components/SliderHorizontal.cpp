@@ -7,7 +7,7 @@ SliderHorizontal::SliderHorizontal(PluginParameters &_p, ParameterID _param_id) 
     addAndMakeVisible(&slider);
     slider.setSliderStyle(Slider::LinearBar);
     slider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
-    slider.setRange(0.0f, 1.0f, 0.001f);
+    slider.setRange(0.0f, 1.0f, 0.0001f);
     slider.setSkewFactor(1.0f); // Don't skew!
 
     addAndMakeVisible(&label);
@@ -21,11 +21,17 @@ SliderHorizontal::SliderHorizontal(PluginParameters &_p, ParameterID _param_id) 
 void SliderHorizontal::set_decimal_places_to_display(int _num_decimal_places)
 {
     num_decimal_places = _num_decimal_places;
+
+    // Notify slider of update to redraw correctly formatted label text
+    touch();
 }
 
 void SliderHorizontal::set_value_suffix(juce::String _value_suffix)
 {
     value_suffix = _value_suffix;
+
+    // Notify slider of update to redraw correctly formatted label text
+    touch();
 }
 
 void SliderHorizontal::paint(juce::Graphics &g)
@@ -51,4 +57,9 @@ void SliderHorizontal::sliderValueChanged(Slider *slider)
     val_formatted << val_denorm << value_suffix.toStdString();
 
     label.setText(val_formatted.str(), dontSendNotification);
+}
+
+void SliderHorizontal::touch()
+{
+    sliderValueChanged(&slider);
 }

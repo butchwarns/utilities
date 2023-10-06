@@ -17,6 +17,8 @@ public:
     void set_decimal_places_to_display(int _num_decimal_places);
     void set_value_suffix(juce::String suffix);
 
+    void touch();
+
 private:
     void paint(juce::Graphics &g) override;
     void resized() override;

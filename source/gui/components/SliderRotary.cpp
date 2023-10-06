@@ -1,17 +1,17 @@
 #include "SliderRotary.h"
 
-SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id) : p(_p), param_id(_param_id), num_decimal_places(2), value_suffix("")
+SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id) : p(_p), param_id(_param_id), num_decimal_places(1), value_suffix("")
 {
     slider.addListener(this);
+
+    addAndMakeVisible(&label);
+    label.setJustificationType(Justification::centred);
 
     addAndMakeVisible(&slider);
     slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     slider.setColour(Slider::textBoxTextColourId, Colours::black);
     slider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
-    slider.setRange(0.0f, 1.0f, 0.001f);
-
-    addAndMakeVisible(&label);
-    label.setJustificationType(Justification::centred);
+    slider.setRange(0.0f, 1.0f, 0.0f);
 
     attachment = std::make_unique<SliderAttachment>(p.apvts, param_id.getParamID(), slider);
 }
@@ -19,11 +19,17 @@ SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id) : p(_p),
 void SliderRotary::set_decimal_places_to_display(int _num_decimal_places)
 {
     num_decimal_places = _num_decimal_places;
+
+    // Notify slider of update to redraw correctly formatted label text
+    touch();
 }
 
 void SliderRotary::set_value_suffix(juce::String _value_suffix)
 {
     value_suffix = _value_suffix;
+
+    // Notify slider of update to redraw correctly formatted label text
+    touch();
 }
 
 void SliderRotary::paint(juce::Graphics &g)
@@ -40,7 +46,8 @@ void SliderRotary::resized()
 
 void SliderRotary::sliderValueChanged(Slider *slider)
 {
-    const float val_denorm = p.denormalise_param_for_ui((float)(slider->getValue()), param_id);
+    const double current_val = slider->getValue();
+    const float val_denorm = p.denormalise_param_for_ui((float)current_val, param_id);
 
     std::stringstream val_formatted;
     const bool is_slider_rotary_off = slider->getProperties()["gui_class"] == "slider_rotary_off";
@@ -76,4 +83,9 @@ void SliderRotary::sliderValueChanged(Slider *slider)
     }
 
     label.setText(val_formatted.str(), dontSendNotification);
+}
+
+void SliderRotary::touch()
+{
+    sliderValueChanged(&slider);
 }
