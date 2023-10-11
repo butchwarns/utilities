@@ -39,8 +39,7 @@ set(SRC_DSP
 set(SRC_BDSP
         BDSP/source/filter/HP1_DCBlock.cpp
         BDSP/source/cv/VoltPerOctave.cpp
-        BDSP/source/filter/LP1_RC_TPT.cpp
-        BDSP/source/filter/HP1_RC_TPT.cpp)
+        BDSP/source/filter/MM2_Butterworth_TPT.cpp)
 
 set(SRC_GUI_COMPONENTS
         source/gui/components/Spacer.cpp

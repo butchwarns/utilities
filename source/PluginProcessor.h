@@ -2,14 +2,13 @@
 
 #include "PluginParameters.h"
 #include <juce_audio_processors/juce_audio_processors.h>
-#include "../BDSP/source/filter/LP1_RC_TPT.h"
-#include "../BDSP/source/filter/HP1_RC_TPT.h"
+#include "../BDSP/source/filter/MM2_Butterworth_TPT.h"
 #include "../BDSP/source/filter/HP1_DCBlock.h"
 #include "dsp/SmoothLinear.h"
 #include "gui/sizes.h"
 
-constexpr int NUM_CHANNELS = 2; // Plugin works in stereo
-constexpr int NUM_CROSSOVER_POLES = 2;
+constexpr int NUM_CHANNELS = 2;          // Plugin works in stereo
+constexpr int NUM_CROSSOVER_FILTERS = 2; // 2 Butterworth filters per band
 constexpr float SMOOTHING_TIME_DEFAULT = 0.010f;
 
 class PluginProcessor : public juce::AudioProcessor
@@ -59,8 +58,8 @@ private:
     SmoothLinear smooth_flip_l;
     SmoothLinear smooth_flip_r;
 
-    bdsp::filter::LP1_RC_TPT lp_crossover[NUM_CHANNELS][NUM_CROSSOVER_POLES];
-    bdsp::filter::HP1_RC_TPT hp_crossover[NUM_CHANNELS][NUM_CROSSOVER_POLES];
+    bdsp::filter::MM2_Butterworth_TPT lp_crossover[NUM_CHANNELS][NUM_CROSSOVER_FILTERS];
+    bdsp::filter::MM2_Butterworth_TPT hp_crossover[NUM_CHANNELS][NUM_CROSSOVER_FILTERS];
 
     bdsp::filter::HP1_DCBlock dc_block[NUM_CHANNELS];
 

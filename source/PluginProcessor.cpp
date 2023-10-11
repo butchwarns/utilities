@@ -185,7 +185,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         // Set filter cutoff
         for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {
-            for (int i = 0; i < NUM_CROSSOVER_POLES; ++i)
+            for (int i = 0; i < NUM_CROSSOVER_FILTERS; ++i)
             {
                 lp_crossover[channel][i].set_cutoff(bass_mono_freq_smooth);
                 hp_crossover[channel][i].set_cutoff(bass_mono_freq_smooth);
@@ -207,12 +207,12 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         float hi_left = left[n];
         float hi_right = right[n];
 
-        for (int i = 0; i < NUM_CROSSOVER_POLES; ++i)
+        for (int i = 0; i < NUM_CROSSOVER_FILTERS; ++i)
         {
-            lo_left = (float)(lp_crossover[0][i].process(lo_left));
-            lo_right = (float)(lp_crossover[1][i].process(lo_right));
-            hi_left = (float)(hp_crossover[0][i].process(hi_left));
-            hi_right = (float)(hp_crossover[1][i].process(hi_right));
+            lo_left = (float)(lp_crossover[0][i].process(lo_left).lp);
+            lo_right = (float)(lp_crossover[1][i].process(lo_right).lp);
+            hi_left = (float)(hp_crossover[0][i].process(hi_left).hp);
+            hi_right = (float)(hp_crossover[1][i].process(hi_right).hp);
         }
 
         // Summ bass band to mono
