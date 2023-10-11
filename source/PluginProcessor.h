@@ -45,9 +45,9 @@ public:
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
 
-    void set_saved_window_size(float _window_width_saved, float _window_height_saved);
-    float get_saved_window_width() const;
-    float get_saved_window_height() const;
+    void set_saved_window_size(int _window_width_saved, int _window_height_saved);
+    int get_saved_window_width() const;
+    int get_saved_window_height() const;
 
 private:
     PluginParameters p;
@@ -64,8 +64,8 @@ private:
 
     bdsp::filter::HP1_DCBlock dc_block[NUM_CHANNELS];
 
-    float window_width_saved;
-    float window_height_saved;
+    int window_width_saved;
+    int window_height_saved;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };

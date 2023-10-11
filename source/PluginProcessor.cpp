@@ -299,25 +299,25 @@ void PluginProcessor::setStateInformation(const void *data, int sizeInBytes)
 
             // Restore window size from state
             auto elem = p.apvts.state.getChildWithName("window_size");
-            const float width = elem.getProperty("window_width");
-            const float height = elem.getProperty("window_height");
+            const int width = elem.getProperty("window_width");
+            const int height = elem.getProperty("window_height");
             set_saved_window_size(width, height);
         }
     }
 }
 
-void PluginProcessor::set_saved_window_size(float _window_width_saved, float _window_height_saved)
+void PluginProcessor::set_saved_window_size(int _window_width_saved, int _window_height_saved)
 {
     window_width_saved = _window_width_saved;
     window_height_saved = _window_height_saved;
 }
 
-float PluginProcessor::get_saved_window_width() const
+int PluginProcessor::get_saved_window_width() const
 {
     return window_width_saved;
 }
 
-float PluginProcessor::get_saved_window_height() const
+int PluginProcessor::get_saved_window_height() const
 {
     return window_height_saved;
 }
