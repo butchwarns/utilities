@@ -54,6 +54,7 @@ private:
     SmoothLinear smooth_width;
     SmoothLinear smooth_volume;
     SmoothLinear smooth_bass_mono_freq;
+    SmoothLinear smooth_bass_width;
     SmoothLinear smooth_pan;
     SmoothLinear smooth_flip_l;
     SmoothLinear smooth_flip_r;

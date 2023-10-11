@@ -75,20 +75,19 @@ void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     juce::ignoreUnused(samplesPerBlock);
 
     smooth_width.reset(sampleRate);
-    smooth_width.set_time_constant(SMOOTHING_TIME_DEFAULT);
-
     smooth_volume.reset(sampleRate);
-    smooth_volume.set_time_constant(SMOOTHING_TIME_DEFAULT);
-
     smooth_bass_mono_freq.reset(sampleRate);
-    smooth_bass_mono_freq.set_time_constant(SMOOTHING_TIME_DEFAULT);
-
+    smooth_bass_width.reset(sampleRate);
     smooth_pan.reset(sampleRate);
-    smooth_pan.set_time_constant(SMOOTHING_TIME_DEFAULT);
-
     smooth_flip_l.reset(sampleRate);
-    smooth_flip_l.set_time_constant(SMOOTHING_TIME_DEFAULT);
     smooth_flip_r.reset(sampleRate);
+
+    smooth_width.set_time_constant(SMOOTHING_TIME_DEFAULT);
+    smooth_volume.set_time_constant(SMOOTHING_TIME_DEFAULT);
+    smooth_bass_mono_freq.set_time_constant(SMOOTHING_TIME_DEFAULT);
+    smooth_bass_width.set_time_constant(SMOOTHING_TIME_DEFAULT);
+    smooth_pan.set_time_constant(SMOOTHING_TIME_DEFAULT);
+    smooth_flip_l.set_time_constant(SMOOTHING_TIME_DEFAULT);
     smooth_flip_r.set_time_constant(SMOOTHING_TIME_DEFAULT);
 
     for (int ch = 0; ch < 2; ++ch)
@@ -154,6 +153,12 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     smooth_width.set_target_val(width);
 
     const bool bass_mono = p.bass_mono();
+    float bass_width = 1.0;
+    if (bass_mono)
+    {
+        bass_width = 0.0f;
+    }
+    smooth_bass_width.set_target_val(bass_width);
     const float bass_mono_freq = p.bass_mono_freq();
     smooth_bass_mono_freq.set_target_val(bass_mono_freq);
 
@@ -175,12 +180,13 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     for (int n = 0; n < buffer.getNumSamples(); ++n)
     {
         // update smoothed parameters
-        float width_smooth = smooth_width.next();
-        float volume_smooth = smooth_volume.next();
-        float bass_mono_freq_smooth = smooth_bass_mono_freq.next();
-        float pan_smooth = smooth_pan.next();
-        float flip_l_smooth = smooth_flip_l.next();
-        float flip_r_smooth = smooth_flip_r.next();
+        const float width_smooth = smooth_width.next();
+        const float volume_smooth = smooth_volume.next();
+        const float bass_mono_freq_smooth = smooth_bass_mono_freq.next();
+        const float bass_width_smooth = smooth_bass_width.next();
+        const float pan_smooth = smooth_pan.next();
+        const float flip_l_smooth = smooth_flip_l.next();
+        const float flip_r_smooth = smooth_flip_r.next();
 
         // Set filter cutoff
         for (int channel = 0; channel < totalNumInputChannels; ++channel)
@@ -215,15 +221,12 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
             hi_right = (float)(hp_crossover[1][i].process(hi_right).hp);
         }
 
-        // Summ bass band to mono
-        if (width_smooth > 0.0f && bass_mono)
-        {
-            const float lo_mono_sum = (lo_left + lo_right) / 2.0f;
-
-            // Copy to output
-            left[n] = hi_left + lo_mono_sum;
-            right[n] = hi_right + lo_mono_sum;
-        }
+        // Apply bass width
+        const float lo_mono_sum = (lo_left + lo_right) / 2.0f;
+        lo_left = bass_width_smooth * lo_left + (1.0f - bass_width_smooth) * lo_mono_sum;
+        lo_right = bass_width_smooth * lo_right + (1.0f - bass_width_smooth) * lo_mono_sum;
+        left[n] = hi_left + lo_left;
+        right[n] = hi_right + lo_right;
 
         // Apply stereo width
         left[n] = width_smooth * left[n] + (1.0f - width_smooth) * mono_sum;
