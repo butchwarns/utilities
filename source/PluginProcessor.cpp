@@ -3,13 +3,8 @@
 
 PluginProcessor::PluginProcessor()
     : AudioProcessor(BusesProperties()
-#if !JucePlugin_IsMidiEffect
-#if !JucePlugin_IsSynth
                          .withInput("Input", juce::AudioChannelSet::stereo(), true)
-#endif
-                         .withOutput("Output", juce::AudioChannelSet::stereo(), true)
-#endif
-                         ),
+                         .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
       p(*this), window_width_saved(WIN_WIDTH), window_height_saved(WIN_HEIGHT)
 {
 }
@@ -129,14 +124,6 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // No need to keep this code if your algorithm always overwrites
-    // all the output channels.
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear(i, 0, buffer.getNumSamples());
-
     // UPDATE PARAMETER VALUES (once per block)
 
     const ChannelsChoice channels = p.channels();
@@ -189,7 +176,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         const float flip_r_smooth = smooth_flip_r.next();
 
         // Set filter cutoff
-        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        for (int channel = 0; channel < totalNumOutputChannels; ++channel)
         {
             for (int i = 0; i < NUM_CROSSOVER_FILTERS; ++i)
             {
