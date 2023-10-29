@@ -64,6 +64,17 @@ private:
 
     bdsp::filter::HP1_DCBlock dc_block[NUM_CHANNELS];
 
+    inline void update_crossover_cutoff(float frequency);
+    static inline void apply_phase_flip(float flip_l, float &left, float flip_r, float &right);
+    static inline float sum_to_mono(float left, float right);
+    inline void split_bands(float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r);
+    static inline void apply_bass_width(float bass_width, float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r);
+    static inline void apply_width(float width, float &left, float &right);
+    static inline void apply_channels(ChannelsChoice channels, float &left, float &right);
+    static inline void apply_volume(float volume, float &left, float &right);
+    static inline void apply_pan(float pan, float &left, float &right);
+    inline void apply_dc_block(float dc_block_active, float &left, float &right);
+
     int window_width_saved;
     int window_height_saved;
 
