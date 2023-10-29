@@ -4,7 +4,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "../BDSP/source/filter/MM2_Butterworth_TPT.h"
 #include "../BDSP/source/filter/HP1_DCBlock.h"
-#include "dsp/SmoothLinear.h"
+#include "../BDSP/source/smoother/SmootherLinear.h"
 #include "gui/sizes.h"
 
 constexpr int NUM_CHANNELS = 2;          // Plugin works in stereo
@@ -51,13 +51,13 @@ public:
 private:
     PluginParameters p;
 
-    SmoothLinear smooth_width;
-    SmoothLinear smooth_volume;
-    SmoothLinear smooth_bass_mono_freq;
-    SmoothLinear smooth_bass_width;
-    SmoothLinear smooth_pan;
-    SmoothLinear smooth_flip_l;
-    SmoothLinear smooth_flip_r;
+    bdsp::smoother::SmootherLinear smooth_width;
+    bdsp::smoother::SmootherLinear smooth_volume;
+    bdsp::smoother::SmootherLinear smooth_bass_mono_freq;
+    bdsp::smoother::SmootherLinear smooth_bass_width;
+    bdsp::smoother::SmootherLinear smooth_pan;
+    bdsp::smoother::SmootherLinear smooth_flip_l;
+    bdsp::smoother::SmootherLinear smooth_flip_r;
 
     bdsp::filter::MM2_Butterworth_TPT lp_crossover[NUM_CHANNELS][NUM_CROSSOVER_FILTERS];
     bdsp::filter::MM2_Butterworth_TPT hp_crossover[NUM_CHANNELS][NUM_CROSSOVER_FILTERS];
