@@ -121,8 +121,6 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     juce::ignoreUnused(midiMessages);
     juce::ScopedNoDenormals noDenormals;
 
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-
     // UPDATE PARAMETER VALUES (once per block)
 
     const ChannelsChoice channels = p.channels();
@@ -165,6 +163,10 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
     for (int n = 0; n < buffer.getNumSamples(); ++n)
     {
+        // Rename current input samples for brevity
+        float &l = left[n];
+        float &r = right[n];
+
         // update smoothed parameters
         const float width_smooth = smooth_width.next();
         const float volume_smooth = smooth_volume.next();
@@ -174,82 +176,28 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         const float flip_l_smooth = smooth_flip_l.next();
         const float flip_r_smooth = smooth_flip_r.next();
 
-        // Set filter cutoff
-        for (int channel = 0; channel < totalNumOutputChannels; ++channel)
-        {
-            for (int i = 0; i < NUM_CROSSOVER_FILTERS; ++i)
-            {
-                lp_crossover[channel][i].set_cutoff(bass_mono_freq_smooth);
-                hp_crossover[channel][i].set_cutoff(bass_mono_freq_smooth);
-            }
-        }
+        update_crossover_cutoff(bass_mono_freq_smooth);
 
-        // Apply phase flip
-        left[n] = flip_l_smooth * left[n];
-        right[n] = flip_r_smooth * right[n];
+        apply_phase_flip(flip_l_smooth, l, flip_r_smooth, r);
 
-        // create mono sum
-        const float mono_sum = (left[n] + right[n]) / 2.0f;
+        // Split bands
+        float lo_l = 0.0f;
+        float lo_r = 0.0f;
+        float hi_l = 0.0f;
+        float hi_r = 0.0f;
+        split_bands(l, r, lo_l, hi_l, lo_r, hi_r);
 
-        // Apply bass mono
+        apply_bass_width(bass_width_smooth, l, r, lo_l, hi_l, lo_r, hi_r);
 
-        // Split both channels into bands
-        float lo_left = left[n];
-        float lo_right = right[n];
-        float hi_left = left[n];
-        float hi_right = right[n];
+        apply_width(width_smooth, l, r);
 
-        for (int i = 0; i < NUM_CROSSOVER_FILTERS; ++i)
-        {
-            lo_left = (float)(lp_crossover[0][i].process(lo_left).lp);
-            lo_right = (float)(lp_crossover[1][i].process(lo_right).lp);
-            hi_left = (float)(hp_crossover[0][i].process(hi_left).hp);
-            hi_right = (float)(hp_crossover[1][i].process(hi_right).hp);
-        }
+        apply_channels(channels, l, r);
 
-        // Apply bass width
-        const float lo_mono_sum = (lo_left + lo_right) / 2.0f;
-        lo_left = bass_width_smooth * lo_left + (1.0f - bass_width_smooth) * lo_mono_sum;
-        lo_right = bass_width_smooth * lo_right + (1.0f - bass_width_smooth) * lo_mono_sum;
-        left[n] = hi_left + lo_left;
-        right[n] = hi_right + lo_right;
+        apply_volume(volume_smooth, l, r);
 
-        // Apply stereo width
-        left[n] = width_smooth * left[n] + (1.0f - width_smooth) * mono_sum;
-        right[n] = width_smooth * right[n] + (1.0f - width_smooth) * mono_sum;
+        apply_pan(pan_smooth, l, r);
 
-        // Apply channels param
-        if (channels == LEFT)
-        {
-            right[n] = left[n];
-        }
-        else if (channels == RIGHT)
-        {
-            left[n] = right[n];
-        }
-        else if (channels == SWAPPED)
-        {
-            const float temp = left[n];
-            left[n] = right[n];
-            right[n] = temp;
-        }
-
-        // Apply output volume
-        left[n] = volume_smooth * left[n];
-        right[n] = volume_smooth * right[n];
-
-        // Apply pan
-        left[n] = (2.0f * (1.0f - pan_smooth)) * left[n];
-        right[n] = (2.0f * pan_smooth) * right[n];
-
-        // Apply DC blocking filter
-        const auto left_no_dc = (float)(dc_block[0].process(left[n]));
-        const auto right_no_dc = (float)(dc_block[1].process(right[n]));
-        if (dc_block_active)
-        {
-            left[n] = left_no_dc;
-            right[n] = right_no_dc;
-        }
+        apply_dc_block(dc_block_active, l, r);
     }
 }
 
@@ -315,4 +263,99 @@ int PluginProcessor::get_saved_window_height() const
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
 {
     return new PluginProcessor();
+}
+
+void PluginProcessor::update_crossover_cutoff(float frequency)
+{
+    for (int channel = 0; channel < getTotalNumInputChannels(); ++channel)
+    {
+        for (int i = 0; i < NUM_CROSSOVER_FILTERS; ++i)
+        {
+            lp_crossover[channel][i].set_cutoff(frequency);
+            hp_crossover[channel][i].set_cutoff(frequency);
+        }
+    }
+}
+
+void PluginProcessor::apply_phase_flip(float flip_l, float &left, float flip_r, float &right)
+{
+    left *= flip_l;
+    right *= flip_r;
+}
+
+float PluginProcessor::sum_to_mono(float left, float right)
+{
+    return (left + right) / 2.0f;
+}
+
+void PluginProcessor::split_bands(float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r)
+{
+    lo_l = left;
+    lo_r = right;
+    hi_l = left;
+    hi_r = right;
+
+    for (int i = 0; i < NUM_CROSSOVER_FILTERS; ++i)
+    {
+        lo_l = (float)(lp_crossover[0][i].process(lo_l).lp);
+        lo_r = (float)(lp_crossover[1][i].process(lo_r).lp);
+        hi_l = (float)(hp_crossover[0][i].process(hi_l).hp);
+        hi_r = (float)(hp_crossover[1][i].process(hi_r).hp);
+    }
+}
+
+void PluginProcessor::apply_bass_width(float bass_width, float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r)
+{
+    const float lo_mono_sum = sum_to_mono(lo_l, lo_r);
+    lo_l = bass_width * lo_l + (1.0f - bass_width) * lo_mono_sum;
+    lo_r = bass_width * lo_r + (1.0f - bass_width) * lo_mono_sum;
+    left = hi_l + lo_l;
+    right = hi_r + lo_r;
+}
+void PluginProcessor::apply_width(float width, float &left, float &right)
+{
+    const float mono_sum = sum_to_mono(left, right);
+    left = width * left + (1.0f - width) * mono_sum;
+    right = width * right + (1.0f - width) * mono_sum;
+}
+
+void PluginProcessor::apply_channels(ChannelsChoice channels, float &left, float &right)
+{
+    if (channels == LEFT)
+    {
+        right = left;
+    }
+    else if (channels == RIGHT)
+    {
+        left = right;
+    }
+    else if (channels == SWAPPED)
+    {
+        const float temp = left;
+        left = right;
+        right = temp;
+    }
+}
+
+void PluginProcessor::apply_volume(float volume, float &left, float &right)
+{
+    left *= volume;
+    right *= volume;
+}
+
+void PluginProcessor::apply_pan(float pan, float &left, float &right)
+{
+    left = (2.0f * (1.0f - pan)) * left;
+    right = (2.0f * pan) * right;
+}
+
+void PluginProcessor::apply_dc_block(float dc_block_active, float &left, float &right)
+{
+    const auto left_no_dc = (float)(dc_block[0].process(left));
+    const auto right_no_dc = (float)(dc_block[1].process(right));
+    if (dc_block_active)
+    {
+        left = left_no_dc;
+        right = right_no_dc;
+    }
 }
