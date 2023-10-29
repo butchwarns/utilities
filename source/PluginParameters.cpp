@@ -21,6 +21,18 @@ ChannelsChoice PluginParameters::channels()
     return choice;
 }
 
+String PluginParameters::channels_string_from_index(int value, int max_string_len)
+{
+    String choice = CHANNELS_CHOICES[value];
+
+    // Restrict string length
+    const int len_string = choice.length();
+
+    constrain_string_length(choice, max_string_len);
+
+    return choice;
+}
+
 float PluginParameters::volume()
 {
     const float gain = denormalise_volume(*volume_norm);
@@ -60,6 +72,32 @@ float PluginParameters::denormalise_volume_db(float val_norm)
     return db;
 }
 
+String PluginParameters::volume_string_from_value(float value, int max_string_len)
+{
+    const float val_denorm = denormalise_volume_db(value);
+
+    std::stringstream val_formatted;
+    if (val_denorm <= OFF_THRESHOLD)
+    {
+        // Below threshold, turn off
+        val_formatted << "OFF";
+    }
+    else // Default
+    {
+        // Format value string to the correct number of decimal places
+        const int num_decimal_places = 1;
+        const String value_suffix = "dB";
+        val_formatted << std::fixed << std::setprecision(num_decimal_places);
+        val_formatted << val_denorm << value_suffix;
+    }
+
+    String val_formatted_str = val_formatted.str();
+
+    constrain_string_length(val_formatted_str, max_string_len);
+
+    return val_formatted_str;
+}
+
 float PluginParameters::width()
 {
     return *width_norm;
@@ -71,14 +109,51 @@ float PluginParameters::denormalise_width(float val_norm)
     return 100 * val_norm;
 }
 
+String PluginParameters::width_string_from_value(float value, int max_string_len)
+{
+    const float val_denorm = denormalise_width(value);
+
+    std::stringstream val_formatted;
+    const int num_decimal_places = 0;
+    const String value_suffix = "%";
+    val_formatted << std::fixed << std::setprecision(num_decimal_places);
+    val_formatted << val_denorm << value_suffix;
+
+    String val_formatted_str = val_formatted.str();
+
+    constrain_string_length(val_formatted_str, max_string_len);
+
+    return val_formatted_str;
+}
+
 bool PluginParameters::mono()
 {
     return static_cast<bool>(*mono_norm);
 }
 
+String PluginParameters::mono_string_from_bool(bool value, int max_string_len)
+{
+    if (value)
+    {
+        return "MONO";
+    }
+
+    return "STEREO";
+}
+
 bool PluginParameters::bass_mono()
 {
     return static_cast<bool>(*bass_mono_norm);
+}
+
+String PluginParameters::bass_mono_string_from_bool(bool value, int max_string_len)
+{
+    if (value)
+    {
+        return "BASS MONO";
+    }
+
+    return "BASS STEREO";
 }
 
 float PluginParameters::bass_mono_freq()
@@ -104,10 +179,37 @@ float PluginParameters::denormalise_bass_mono_freq(float val_norm)
     return freq;
 }
 
+String PluginParameters::bass_mono_freq_string_from_value(float value, int max_string_len)
+{
+    const float val_denorm = denormalise_bass_mono_freq(value);
+
+    std::stringstream val_formatted;
+    const int num_decimal_places = 0;
+    const String value_suffix = "Hz";
+    val_formatted << std::fixed << std::setprecision(num_decimal_places);
+    val_formatted << val_denorm << value_suffix.toStdString();
+
+    String val_formatted_str = val_formatted.str();
+
+    constrain_string_length(val_formatted_str, max_string_len);
+
+    return val_formatted_str;
+}
+
 float PluginParameters::phase_flip_l()
 {
     const float flip = bdsp::mappings::unipolar_to_bipolar((float)(*phase_flip_l_norm));
     return flip;
+}
+
+String PluginParameters::phase_flip_l_string_from_bool(bool value, int max_string_len)
+{
+    if (value)
+    {
+        return "L FLIPPED";
+    }
+
+    return "L NOT FLIPPED";
 }
 
 float PluginParameters::phase_flip_r()
@@ -116,34 +218,59 @@ float PluginParameters::phase_flip_r()
     return flip;
 }
 
+String PluginParameters::phase_flip_r_string_from_bool(bool value, int max_string_len)
+{
+    if (value)
+    {
+        return "R FLIPPED";
+    }
+
+    return "R NOT FLIPPED";
+}
+
 float PluginParameters::pan()
 {
     return *pan_norm;
 }
+
+String PluginParameters::pan_string_from_value(float value, int max_string_len)
+{
+    std::stringstream val_formatted;
+    const float centre_range = 0.005f;
+    val_formatted << std::fixed << std::setprecision(0);
+    if (value < 0.5f - centre_range)
+    {
+        val_formatted << bdsp::mappings::map_linear(value, 0.0f, 0.5f, 50.0f, 0.0f) << "L";
+    }
+    else if (value > 0.5f + centre_range)
+    {
+        val_formatted << bdsp::mappings::map_linear(value, 0.5f, 1.0f, 0.0f, 50.0f) << "R";
+    }
+    else
+    {
+        val_formatted << "C";
+    }
+
+    String val_formatted_str = val_formatted.str();
+
+    constrain_string_length(val_formatted_str, max_string_len);
+
+    return val_formatted_str;
+}
+
 bool PluginParameters::dc_block()
 {
     return (bool)*dc_block_norm;
 }
 
-float PluginParameters::denormalise_param_for_ui(float val_norm, const juce::ParameterID &parameter_id)
+String PluginParameters::dc_block_string_from_bool(bool value, int max_string_len)
 {
-    auto param = parameter_id.getParamID();
-    if (param == "volume")
+    if (value)
     {
-        return denormalise_volume_db(val_norm);
+        return "DC BLOCKED";
     }
-    else if (param == "bass_mono_freq")
-    {
-        return denormalise_bass_mono_freq(val_norm);
-    }
-    else if (param == "width")
-    {
-        return denormalise_width(val_norm);
-    }
-    else
-    {
-        return val_norm;
-    }
+
+    return "DC NOT BLOCKED";
 }
 
 Apvts::ParameterLayout PluginParameters::parameter_layout()
@@ -153,30 +280,39 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
     typedef juce::AudioProcessorParameterGroup ParameterGroup;
 
     std::unique_ptr<ParameterGroup> phase_flip_grp = std::make_unique<ParameterGroup>("phase_flip", "PHASE_FLIP", "|");
-    phase_flip_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_l", "PHASE_FLIP_L", false));
-    phase_flip_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_r", "PHASE_FLIP_R", false));
+    phase_flip_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_l", "PHASE_FLIP_L", false, "", phase_flip_l_string_from_bool));
+    phase_flip_grp->addChild(std::make_unique<juce::AudioParameterBool>("phase_flip_r", "PHASE_FLIP_R", false, "", phase_flip_r_string_from_bool));
 
     std::unique_ptr<ParameterGroup> channels_grp = std::make_unique<ParameterGroup>("channels", "CHANNELS", "|");
-    channels_grp->addChild(std::make_unique<juce::AudioParameterChoice>("channels", "CHANNELS", CHANNELS_CHOICES, 0));
-    channels_grp->addChild(std::make_unique<juce::AudioParameterBool>("mono", "MONO", false));
+    channels_grp->addChild(std::make_unique<juce::AudioParameterChoice>("channels", "CHANNELS", CHANNELS_CHOICES, 0, "", channels_string_from_index));
+    channels_grp->addChild(std::make_unique<juce::AudioParameterBool>("mono", "MONO", false, "", mono_string_from_bool));
 
     std::unique_ptr<ParameterGroup> bass_mono_grp = std::make_unique<ParameterGroup>("bass_mono", "BASS_MONO", "|");
-    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterBool>("bass_mono", "BASS_MONO_ACTIVE", false));
+    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterBool>("bass_mono", "BASS_MONO_ACTIVE", false, "", bass_mono_string_from_bool));
     const float bass_mono_freq_default = normalise_bass_mono_freq(120.0f);
-    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", NormalisableRange<float>(0.0f, 1.0f, 0.0001f), bass_mono_freq_default));
+    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", NormalisableRange<float>(0.0f, 1.0f, 0.0001f), bass_mono_freq_default, "", AudioProcessorParameter::genericParameter, bass_mono_freq_string_from_value));
 
     std::unique_ptr<ParameterGroup> sliders_grp = std::make_unique<ParameterGroup>("sliders", "SLIDERS", "|");
-    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", 0.0f, 1.0f, 1.0f));
+    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", NormalisableRange<float>(0.0f, 1.0f, 0.01f), 1.0f, "", AudioProcessorParameter::genericParameter, width_string_from_value));
     // Tiny positive offset prevents default volume from showing minus sign (-0.0dB)
     const float volume_default = normalise_volume(1.001f);
     // Constructor with NormalisableRange allows for setting a finer slider interval
-    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("volume", "VOLUME", NormalisableRange<float>(0.0f, 1.0f, 0.0001f), volume_default));
-    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("pan", "PAN", 0.0f, 1.0f, 0.5f));
+    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("volume", "VOLUME", NormalisableRange<float>(0.0f, 1.0f, 0.0001f), volume_default, "", AudioProcessorParameter::genericParameter, volume_string_from_value));
+    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("pan", "PAN", NormalisableRange<float>(0.0f, 1.0f, 0.001f), 0.5f, "", AudioProcessorParameter::genericParameter, pan_string_from_value));
 
     std::unique_ptr<ParameterGroup> dc_block_group = std::make_unique<ParameterGroup>("dc_block", "DC_BLOCK", "|");
-    dc_block_group->addChild(std::make_unique<juce::AudioParameterBool>("dc_block", "DC_BLOCK", false));
+    dc_block_group->addChild(std::make_unique<juce::AudioParameterBool>("dc_block", "DC_BLOCK", false, "", dc_block_string_from_bool));
 
     layout.add(std::move(phase_flip_grp), std::move(channels_grp), std::move(bass_mono_grp), std::move(sliders_grp), std::move(dc_block_group));
 
     return layout;
+}
+
+void PluginParameters::constrain_string_length(String &s, int max_len)
+{
+    const int len = s.length();
+    if (len > max_len)
+    {
+        s = s.dropLastCharacters(len - max_len);
+    }
 }

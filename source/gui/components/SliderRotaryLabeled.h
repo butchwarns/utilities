@@ -9,7 +9,7 @@
 class SliderRotaryLabeled : public Component
 {
 public:
-    SliderRotaryLabeled(PluginParameters &p, ParameterID param_id);
+    SliderRotaryLabeled(PluginParameters &p, String param_id, std::function<String(float value, int maximumStringLength)> string_from_value);
 
     LabelTitle label;
     SliderRotary slider;

@@ -1,7 +1,7 @@
 #include "SliderHorizontalLabeled.h"
 
-SliderHorizontalLabeled::SliderHorizontalLabeled(PluginParameters &p, ParameterID param_id)
-    : slider(p, param_id)
+SliderHorizontalLabeled::SliderHorizontalLabeled(PluginParameters &p, String param_id, std::function<String(float value, int maximumStringLength)> string_from_value)
+    : slider(p, param_id, string_from_value)
 {
     addAndMakeVisible(&label);
     label.setJustificationType(Justification::centred);

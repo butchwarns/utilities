@@ -1,6 +1,7 @@
 #include "BassMono.h"
 
-BassMono::BassMono(PluginParameters &p) : checkbox(p, "bass_mono"), slider(p, "bass_mono_freq")
+BassMono::BassMono(PluginParameters &p)
+    : checkbox(p, "bass_mono"), slider(p, "bass_mono_freq", p.bass_mono_freq_string_from_value)
 {
     addAndMakeVisible(&bass_mono);
     bass_mono.set_text("BASS MONO");
@@ -11,8 +12,6 @@ BassMono::BassMono(PluginParameters &p) : checkbox(p, "bass_mono"), slider(p, "b
 
     addAndMakeVisible(&slider);
     slider.label.setText("FREQUENCY", dontSendNotification);
-    slider.slider.set_decimal_places_to_display(0);
-    slider.slider.set_value_suffix("Hz");
 }
 
 void BassMono::paint(juce::Graphics &g)

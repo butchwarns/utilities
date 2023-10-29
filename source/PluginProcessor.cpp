@@ -119,9 +119,8 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
                                    juce::MidiBuffer &midiMessages)
 {
     juce::ignoreUnused(midiMessages);
-
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels = getTotalNumInputChannels();
+
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     // UPDATE PARAMETER VALUES (once per block)
