@@ -1,6 +1,7 @@
 #include "SliderHorizontal.h"
 
-SliderHorizontal::SliderHorizontal(PluginParameters &_p, ParameterID _param_id) : p(_p), param_id(_param_id), num_decimal_places(2), value_suffix("")
+SliderHorizontal::SliderHorizontal(PluginParameters &_p, ParameterID _param_id, std::function<String(float value, int maximumStringLength)> _string_from_value)
+    : p(_p), param_id(_param_id), string_from_value(_string_from_value)
 {
     slider.addListener(this);
 
@@ -18,22 +19,6 @@ SliderHorizontal::SliderHorizontal(PluginParameters &_p, ParameterID _param_id) 
     attachment = std::make_unique<SliderAttachment>(p.apvts, param_id.getParamID(), slider);
 }
 
-void SliderHorizontal::set_decimal_places_to_display(int _num_decimal_places)
-{
-    num_decimal_places = _num_decimal_places;
-
-    // Notify slider of update to redraw correctly formatted label text
-    touch();
-}
-
-void SliderHorizontal::set_value_suffix(juce::String _value_suffix)
-{
-    value_suffix = _value_suffix;
-
-    // Notify slider of update to redraw correctly formatted label text
-    touch();
-}
-
 void SliderHorizontal::paint(juce::Graphics &g)
 {
     ignoreUnused(g);
@@ -48,18 +33,8 @@ void SliderHorizontal::resized()
 
 void SliderHorizontal::sliderValueChanged(Slider *slider)
 {
-    const float val_denorm = p.denormalise_param_for_ui((float)(slider->getValue()), param_id);
+    const float val_norm = slider->getValue();
+    const String val_formatted = string_from_value(val_norm, 9);
 
-    // Format label text
-    std::stringstream val_formatted;
-    // Format value string to the correct number of decimal places
-    val_formatted << std::fixed << std::setprecision(num_decimal_places);
-    val_formatted << val_denorm << value_suffix.toStdString();
-
-    label.setText(val_formatted.str(), dontSendNotification);
-}
-
-void SliderHorizontal::touch()
-{
-    sliderValueChanged(&slider);
+    label.setText(val_formatted, dontSendNotification);
 }

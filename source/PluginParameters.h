@@ -32,24 +32,31 @@ public:
     Apvts apvts;
 
     ChannelsChoice channels();
-
+    static String channels_string_from_index(int value, int max_string_len);
     float volume();
     static inline float normalise_volume(float gain);
     static inline float denormalise_volume(float val_norm);
     static inline float denormalise_volume_db(float val_norm);
+    static String volume_string_from_value(float value, int max_string_len);
     float width();
     static inline float denormalise_width(float val_norm);
+    static String width_string_from_value(float value, int max_string_len);
     bool mono();
+    static String mono_string_from_bool(bool value, int max_string_len);
     bool bass_mono();
+    static String bass_mono_string_from_bool(bool value, int max_string_len);
     float bass_mono_freq();
     static inline float normalise_bass_mono_freq(float freq);
     static inline float denormalise_bass_mono_freq(float val_norm);
+    static String bass_mono_freq_string_from_value(float value, int max_string_len);
     float phase_flip_l();
+    static String phase_flip_l_string_from_bool(bool value, int max_string_len);
     float phase_flip_r();
+    static String phase_flip_r_string_from_bool(bool value, int max_string_len);
     float pan();
+    static String pan_string_from_value(float value, int max_string_len);
     bool dc_block();
-
-    static float denormalise_param_for_ui(float val_norm, const juce::ParameterID &parameter_id);
+    static String dc_block_string_from_bool(bool value, int max_string_len);
 
 private:
     static Apvts::ParameterLayout parameter_layout();
@@ -64,6 +71,8 @@ private:
     std::atomic<float> *phase_flip_r_norm;
     std::atomic<float> *pan_norm;
     std::atomic<float> *dc_block_norm;
+
+    static void constrain_string_length(String &s, int max_len);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginParameters)
 };

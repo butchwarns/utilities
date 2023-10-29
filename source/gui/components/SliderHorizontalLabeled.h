@@ -8,7 +8,7 @@
 class SliderHorizontalLabeled : public Component
 {
 public:
-    SliderHorizontalLabeled(PluginParameters &p, ParameterID param_id);
+    SliderHorizontalLabeled(PluginParameters &p, ParameterID param_id, std::function< String(float value, int maximumStringLength)> string_from_value);
 
     Label label;
     SliderHorizontal slider;

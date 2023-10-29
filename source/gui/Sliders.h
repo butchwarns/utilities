@@ -9,7 +9,7 @@
 class Sliders : public juce::Component
 {
 public:
-    Sliders(PluginParameters &p);
+    explicit Sliders(PluginParameters &p);
 
 private:
     void paint(juce::Graphics &g) override;

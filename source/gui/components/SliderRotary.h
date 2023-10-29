@@ -9,13 +9,10 @@
 class SliderRotary : public juce::Component, public juce::Slider::Listener
 {
 public:
-    SliderRotary(PluginParameters &p, ParameterID param_id);
+    SliderRotary(PluginParameters &p, ParameterID param_id, std::function<String(float value, int maximumStringLength)> _string_from_value);
 
     juce::Slider slider;
     juce::Label label;
-
-    void set_decimal_places_to_display(int _num_decimal_places);
-    void set_value_suffix(juce::String suffix);
 
     void touch();
 
@@ -29,8 +26,7 @@ protected:
     PluginParameters &p;
     juce::ParameterID param_id;
 
-    int num_decimal_places;
-    juce::String value_suffix;
+    std::function<String(float value, int maximumStringLength)> string_from_value;
 
     std::unique_ptr<SliderAttachment> attachment;
 };

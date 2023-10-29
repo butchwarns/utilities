@@ -1,6 +1,7 @@
 #include "SliderRotary.h"
 
-SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id) : p(_p), param_id(_param_id), num_decimal_places(1), value_suffix("")
+SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id, std::function<String(float value, int maximumStringLength)> _string_from_value)
+    : p(_p), param_id(_param_id), string_from_value(_string_from_value)
 {
     slider.addListener(this);
 
@@ -14,22 +15,6 @@ SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id) : p(_p),
     slider.setRange(0.0f, 1.0f, 0.0f);
 
     attachment = std::make_unique<SliderAttachment>(p.apvts, param_id.getParamID(), slider);
-}
-
-void SliderRotary::set_decimal_places_to_display(int _num_decimal_places)
-{
-    num_decimal_places = _num_decimal_places;
-
-    // Notify slider of update to redraw correctly formatted label text
-    touch();
-}
-
-void SliderRotary::set_value_suffix(juce::String _value_suffix)
-{
-    value_suffix = _value_suffix;
-
-    // Notify slider of update to redraw correctly formatted label text
-    touch();
 }
 
 void SliderRotary::paint(juce::Graphics &g)
@@ -46,46 +31,9 @@ void SliderRotary::resized()
 
 void SliderRotary::sliderValueChanged(Slider *slider)
 {
-    const double current_val = slider->getValue();
-    const float val_denorm = p.denormalise_param_for_ui((float)current_val, param_id);
+    const double val_norm = slider->getValue();
 
-    std::stringstream val_formatted;
-    const bool is_slider_rotary_off = slider->getProperties()["gui_class"] == "slider_rotary_off";
-    const bool is_param_pan = slider->getProperties()["param"] == "pan";
-    if (is_param_pan)
-    {
-        // Map to panning values
-        const float centre_range = 0.005f;
-        val_formatted << std::fixed << std::setprecision(0);
-        if (val_denorm < 0.5f - centre_range)
-        {
-            val_formatted << bdsp::mappings::map_linear(val_denorm, 0.0f, 0.5f, 50.0f, 0.0f) << "L";
-        }
-        else if (val_denorm > 0.5f + centre_range)
-        {
-            val_formatted << bdsp::mappings::map_linear(val_denorm, 0.5f, 1.0f, 0.0f, 50.0f) << "R";
-        }
-        else
-        {
-            val_formatted << "C";
-        }
-    }
-    else if (is_slider_rotary_off && (val_denorm <= OFF_THRESHOLD))
-    {
-        // Below threshold, turn off
-        val_formatted << "OFF";
-    }
-    else // Default
-    {
-        // Format value string to the correct number of decimal places
-        val_formatted << std::fixed << std::setprecision(num_decimal_places);
-        val_formatted << val_denorm << value_suffix.toStdString();
-    }
+    const String val_formatted = string_from_value((float)val_norm, 9);
 
-    label.setText(val_formatted.str(), dontSendNotification);
-}
-
-void SliderRotary::touch()
-{
-    sliderValueChanged(&slider);
+    label.setText(val_formatted, dontSendNotification);
 }
