@@ -1,9 +1,8 @@
-#ifndef __PLUGIN_PARAMETERS_H__
-#define __PLUGIN_PARAMETERS_H__
+#ifndef PLUGIN_PARAMETERS_H
+#define PLUGIN_PARAMETERS_H
 
 #include <JuceHeader.h>
 #include "../BDSP/source/decibel.h"
-#include "dsp/SmoothLinear.h"
 #include "../BDSP/source/mappings.h"
 #include "../BDSP/source/cv/VoltPerOctave.h"
 #include "typedefs.h"
@@ -77,4 +76,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginParameters)
 };
 
-#endif // __PLUGIN_PARAMETERS_H__
+#endif // PLUGIN_PARAMETERS_H
