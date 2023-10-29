@@ -9,12 +9,10 @@
 class SliderRotary : public juce::Component, public juce::Slider::Listener
 {
 public:
-    SliderRotary(PluginParameters &p, ParameterID param_id, std::function<String(float value, int maximumStringLength)> _string_from_value);
+    SliderRotary(PluginParameters &p, String param_id, std::function<String(float value, int maximumStringLength)> _string_from_value);
 
     juce::Slider slider;
     juce::Label label;
-
-    void touch();
 
 private:
     void paint(juce::Graphics &g) override;
@@ -24,7 +22,6 @@ private:
 
 protected:
     PluginParameters &p;
-    juce::ParameterID param_id;
 
     std::function<String(float value, int maximumStringLength)> string_from_value;
 

@@ -1,7 +1,7 @@
 #include "SliderRotary.h"
 
-SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id, std::function<String(float value, int maximumStringLength)> _string_from_value)
-    : p(_p), param_id(_param_id), string_from_value(_string_from_value)
+SliderRotary::SliderRotary(PluginParameters &_p, String param_id, std::function<String(float value, int maximumStringLength)> _string_from_value)
+    : p(_p), string_from_value(_string_from_value)
 {
     slider.addListener(this);
 
@@ -14,7 +14,7 @@ SliderRotary::SliderRotary(PluginParameters &_p, ParameterID _param_id, std::fun
     slider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
     slider.setRange(0.0f, 1.0f, 0.0f);
 
-    attachment = std::make_unique<SliderAttachment>(p.apvts, param_id.getParamID(), slider);
+    attachment = std::make_unique<SliderAttachment>(p.apvts, param_id, slider);
 }
 
 void SliderRotary::paint(juce::Graphics &g)

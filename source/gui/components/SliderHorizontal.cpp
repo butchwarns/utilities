@@ -1,7 +1,7 @@
 #include "SliderHorizontal.h"
 
-SliderHorizontal::SliderHorizontal(PluginParameters &_p, ParameterID _param_id, std::function<String(float value, int maximumStringLength)> _string_from_value)
-    : p(_p), param_id(_param_id), string_from_value(_string_from_value)
+SliderHorizontal::SliderHorizontal(PluginParameters &_p, String param_id, std::function<String(float value, int maximumStringLength)> _string_from_value)
+    : p(_p), string_from_value(_string_from_value)
 {
     slider.addListener(this);
 
@@ -16,7 +16,7 @@ SliderHorizontal::SliderHorizontal(PluginParameters &_p, ParameterID _param_id, 
     label.setColour(Label::textColourId, Colours::black);
     label.setInterceptsMouseClicks(false, false); // Mouse should react to slider, label is overlayed
 
-    attachment = std::make_unique<SliderAttachment>(p.apvts, param_id.getParamID(), slider);
+    attachment = std::make_unique<SliderAttachment>(p.apvts, param_id, slider);
 }
 
 void SliderHorizontal::paint(juce::Graphics &g)

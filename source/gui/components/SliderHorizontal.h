@@ -9,7 +9,7 @@
 class SliderHorizontal : public juce::Component, public juce::Slider::Listener
 {
 public:
-    SliderHorizontal(PluginParameters &_p, ParameterID _param_id, std::function<String(float value, int maximumStringLength)> _string_from_value);
+    SliderHorizontal(PluginParameters &_p, String param_id, std::function<String(float value, int maximumStringLength)> _string_from_value);
 
     juce::Slider slider;
     juce::Label label;
@@ -19,7 +19,6 @@ private:
     void resized() override;
 
     PluginParameters &p;
-    juce::ParameterID param_id;
 
     std::unique_ptr<SliderAttachment> attachment;
 
