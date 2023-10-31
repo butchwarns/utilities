@@ -25,9 +25,6 @@ String PluginParameters::channels_string_from_index(int value, int max_string_le
 {
     String choice = CHANNELS_CHOICES[value];
 
-    // Restrict string length
-    const int len_string = choice.length();
-
     constrain_string_length(choice, max_string_len);
 
     return choice;
@@ -133,12 +130,19 @@ bool PluginParameters::mono()
 
 String PluginParameters::mono_string_from_bool(bool value, int max_string_len)
 {
+    String s;
     if (value)
     {
-        return "MONO";
+        s = "MONO";
+    }
+    else
+    {
+        s = "STEREO";
     }
 
-    return "STEREO";
+    constrain_string_length(s, max_string_len);
+
+    return s;
 }
 
 bool PluginParameters::bass_mono()
@@ -148,12 +152,19 @@ bool PluginParameters::bass_mono()
 
 String PluginParameters::bass_mono_string_from_bool(bool value, int max_string_len)
 {
+    String s;
     if (value)
     {
-        return "BASS MONO";
+        s = "BASS MONO";
+    }
+    else
+    {
+        s = "BASS STEREO";
     }
 
-    return "BASS STEREO";
+    constrain_string_length(s, max_string_len);
+
+    return s;
 }
 
 float PluginParameters::bass_mono_freq()
@@ -204,12 +215,19 @@ float PluginParameters::phase_flip_l()
 
 String PluginParameters::phase_flip_l_string_from_bool(bool value, int max_string_len)
 {
+    String s;
     if (value)
     {
-        return "L FLIPPED";
+        s = "L FLIPPED";
+    }
+    else
+    {
+        s = "L NOT FLIPPED";
     }
 
-    return "L NOT FLIPPED";
+    constrain_string_length(s, max_string_len);
+
+    return s;
 }
 
 float PluginParameters::phase_flip_r()
@@ -220,12 +238,19 @@ float PluginParameters::phase_flip_r()
 
 String PluginParameters::phase_flip_r_string_from_bool(bool value, int max_string_len)
 {
+    String s;
     if (value)
     {
-        return "R FLIPPED";
+        s = "R FLIPPED";
+    }
+    else
+    {
+        s = "R NOT FLIPPED";
     }
 
-    return "R NOT FLIPPED";
+    constrain_string_length(s, max_string_len);
+
+    return s;
 }
 
 float PluginParameters::pan()
@@ -265,12 +290,19 @@ bool PluginParameters::dc_block()
 
 String PluginParameters::dc_block_string_from_bool(bool value, int max_string_len)
 {
+    String s;
     if (value)
     {
-        return "DC BLOCKED";
+        s = "DC BLOCKED";
+    }
+    else
+    {
+        s = "DC NOT BLOCKED";
     }
 
-    return "DC NOT BLOCKED";
+    constrain_string_length(s, max_string_len);
+
+    return s;
 }
 
 Apvts::ParameterLayout PluginParameters::parameter_layout()
