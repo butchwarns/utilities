@@ -180,7 +180,6 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
         apply_phase_flip(flip_l_smooth, l, flip_r_smooth, r);
 
-        // Split bands
         float lo_l = 0.0f;
         float lo_r = 0.0f;
         float hi_l = 0.0f;
@@ -193,7 +192,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
         apply_channels(channels, l, r);
 
-        apply_volume(volume_smooth, l, r);
+        // apply_volume(volume_smooth, l, r);
 
         apply_pan(pan_smooth, l, r);
 
@@ -353,7 +352,7 @@ void PluginProcessor::apply_dc_block(float dc_block_active, float &left, float &
 {
     const auto left_no_dc = (float)(dc_block[0].process(left));
     const auto right_no_dc = (float)(dc_block[1].process(right));
-    if (dc_block_active)
+    if ((bool)dc_block_active)
     {
         left = left_no_dc;
         right = right_no_dc;
