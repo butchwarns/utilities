@@ -38,6 +38,7 @@ public:
     static inline float denormalise_volume_db(float val_norm);
     static String volume_string_from_value(float value, int max_string_len);
     float width();
+    static inline float normalise_width(float width_percent);
     static inline float denormalise_width(float val_norm);
     static String width_string_from_value(float value, int max_string_len);
     bool mono();

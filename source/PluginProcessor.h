@@ -67,6 +67,7 @@ private:
     inline void update_crossover_cutoff(float frequency);
     static inline void apply_phase_flip(float flip_l, float &left, float flip_r, float &right);
     static inline float sum_to_mono(float left, float right);
+    static inline float difference_stereo(float channel, float mono_sum);
     inline void split_bands(float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r);
     static inline void apply_bass_width(float bass_width, float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r);
     static inline void apply_width(float width, float &left, float &right);

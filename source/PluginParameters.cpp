@@ -97,13 +97,19 @@ String PluginParameters::volume_string_from_value(float value, int max_string_le
 
 float PluginParameters::width()
 {
-    return *width_norm;
+    return 2.0f * *width_norm;
+}
+
+float PluginParameters::normalise_width(float width)
+{
+    // Convert from percent (0 to 200)
+    return width /= 200.0f;
 }
 
 float PluginParameters::denormalise_width(float val_norm)
 {
-    // Convert to percent
-    return 100 * val_norm;
+    // Convert to percent (0 to 200)
+    return 200.0f * val_norm;
 }
 
 String PluginParameters::width_string_from_value(float value, int max_string_len)
@@ -325,7 +331,8 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
     bass_mono_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", NormalisableRange<float>(0.0f, 1.0f, 0.0001f), bass_mono_freq_default, "", AudioProcessorParameter::genericParameter, bass_mono_freq_string_from_value));
 
     std::unique_ptr<ParameterGroup> sliders_grp = std::make_unique<ParameterGroup>("sliders", "SLIDERS", "|");
-    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", NormalisableRange<float>(0.0f, 1.0f, 0.01f), 1.0f, "", AudioProcessorParameter::genericParameter, width_string_from_value));
+    const float width_default = normalise_width(100);
+    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", NormalisableRange<float>(0.0f, 1.0f, 0.01f), width_default, "", AudioProcessorParameter::genericParameter, width_string_from_value));
     // Tiny positive offset prevents default volume from showing minus sign (-0.0dB)
     const float volume_default = normalise_volume(1.001f);
     // Constructor with NormalisableRange allows for setting a finer slider interval

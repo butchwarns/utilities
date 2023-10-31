@@ -192,7 +192,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
         apply_channels(channels, l, r);
 
-        // apply_volume(volume_smooth, l, r);
+        apply_volume(volume_smooth, l, r);
 
         apply_pan(pan_smooth, l, r);
 
@@ -287,6 +287,11 @@ float PluginProcessor::sum_to_mono(float left, float right)
     return (left + right) / 2.0f;
 }
 
+float PluginProcessor::difference_stereo(float channel, float mono_sum)
+{
+    return (channel - mono_sum) / 2.0f;
+}
+
 void PluginProcessor::split_bands(float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r)
 {
     lo_l = left;
@@ -311,11 +316,26 @@ void PluginProcessor::apply_bass_width(float bass_width, float &left, float &rig
     left = hi_l + lo_l;
     right = hi_r + lo_r;
 }
+
 void PluginProcessor::apply_width(float width, float &left, float &right)
 {
     const float mono_sum = sum_to_mono(left, right);
-    left = width * left + (1.0f - width) * mono_sum;
-    right = width * right + (1.0f - width) * mono_sum;
+
+    if (width <= 1.0f)
+    {
+        left = bdsp::mappings::map_linear_norm(width, mono_sum, left);
+        right = bdsp::mappings::map_linear_norm(width, mono_sum, right);
+    }
+    else
+    {
+        width -= 1.0f; // -> 0.0f to 1.0f
+
+        const float left_diff = difference_stereo(left, mono_sum);
+        const float right_diff = difference_stereo(right, mono_sum);
+
+        left = bdsp::mappings::map_linear_norm(width, left, left_diff);
+        right = bdsp::mappings::map_linear_norm(width, right, right_diff);
+    }
 }
 
 void PluginProcessor::apply_channels(ChannelsChoice channels, float &left, float &right)
