@@ -320,7 +320,7 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
     channels_grp->addChild(std::make_unique<juce::AudioParameterBool>("mono", "MONO", false, "", mono_string_from_bool));
 
     std::unique_ptr<ParameterGroup> bass_mono_grp = std::make_unique<ParameterGroup>("bass_mono", "BASS_MONO", "|");
-    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterBool>("bass_mono", "BASS_MONO_ACTIVE", false, "", bass_mono_string_from_bool));
+    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterBool>("bass_mono", "BASS_MONO", false, "", bass_mono_string_from_bool));
     const float bass_mono_freq_default = normalise_bass_mono_freq(120.0f);
     bass_mono_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", NormalisableRange<float>(0.0f, 1.0f, 0.0001f), bass_mono_freq_default, "", AudioProcessorParameter::genericParameter, bass_mono_freq_string_from_value));
 
