@@ -17,6 +17,13 @@ SliderHorizontal::SliderHorizontal(PluginParameters &_p, String param_id, std::f
     label.setInterceptsMouseClicks(false, false); // Mouse should react to slider, label is overlayed
 
     attachment = std::make_unique<SliderAttachment>(p.apvts, param_id, slider);
+
+    touch();
+}
+
+void SliderHorizontal::touch()
+{
+    sliderValueChanged(&slider);
 }
 
 void SliderHorizontal::paint(juce::Graphics &g)

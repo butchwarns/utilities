@@ -15,6 +15,13 @@ SliderRotary::SliderRotary(PluginParameters &_p, String param_id, std::function<
     slider.setRange(0.0f, 1.0f, 0.0f);
 
     attachment = std::make_unique<SliderAttachment>(p.apvts, param_id, slider);
+
+    touch();
+}
+
+void SliderRotary::touch()
+{
+    sliderValueChanged(&slider);
 }
 
 void SliderRotary::paint(juce::Graphics &g)

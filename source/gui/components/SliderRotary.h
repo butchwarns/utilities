@@ -14,6 +14,8 @@ public:
     juce::Slider slider;
     juce::Label label;
 
+    void touch();
+
 private:
     void paint(juce::Graphics &g) override;
     void resized() override;
