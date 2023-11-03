@@ -5,22 +5,14 @@
             "name": "REAPER",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/Applications/REAPER.app",
+            "program": "/Applications/REAPER.app/contents/MacOS/REAPER",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "/Applications/REAPER.app/contents/MacOS",
             "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
+            "externalConsole": true,
+            "MIMode": "lldb",
             "preLaunchTask": "build debug",
-            "miDebuggerPath": "/usr/bin/gdb"
         }
     ]
 }
