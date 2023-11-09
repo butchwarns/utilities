@@ -87,13 +87,10 @@ void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 
     for (int ch = 0; ch < 2; ++ch)
     {
-        for (int i = 0; i < 2; ++i)
-        {
-            lp_crossover[i][ch].reset(sampleRate);
-            hp_crossover[i][ch].reset(sampleRate);
-        }
+        crossover[ch].reset(sampleRate);
 
-        dc_block[ch].reset(sampleRate);
+        dc_filter[ch].reset(sampleRate);
+        dc_filter[ch].set_cutoff(10.0);
     }
 }
 
@@ -124,12 +121,12 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     // UPDATE PARAMETER VALUES (once per block)
 
     const ChannelsChoice channels = p.channels();
-    const float volume = p.volume();
+    const double volume = p.volume();
 
     smooth_volume.set_target_val(volume);
 
     const bool mono = p.mono();
-    float width = p.width();
+    double width = p.width();
     if (mono)
     {
         width = 0.0f;
@@ -137,24 +134,24 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     smooth_width.set_target_val(width);
 
     const bool bass_mono = p.bass_mono();
-    float bass_width = 1.0;
+    double bass_width = 1.0;
     if (bass_mono)
     {
         bass_width = 0.0f;
     }
     smooth_bass_width.set_target_val(bass_width);
-    const float bass_mono_freq = p.bass_mono_freq();
+    const double bass_mono_freq = p.bass_mono_freq();
     smooth_bass_mono_freq.set_target_val(bass_mono_freq);
 
-    const float phase_flip_l = p.phase_flip_l();
+    const double phase_flip_l = p.phase_flip_l();
     smooth_flip_l.set_target_val(phase_flip_l);
-    const float phase_flip_r = p.phase_flip_r();
+    const double phase_flip_r = p.phase_flip_r();
     smooth_flip_r.set_target_val(phase_flip_r);
 
-    const float pan = p.pan();
+    const double pan = p.pan();
     smooth_pan.set_target_val(pan);
 
-    const bool dc_block_active = p.dc_block();
+    const bool dc_block = p.dc_block();
 
     // PROCESS AUDIO SAMPLES
 
@@ -163,30 +160,29 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
     for (int n = 0; n < buffer.getNumSamples(); ++n)
     {
-        // Rename current input samples for brevity
-        float &l = left[n];
-        float &r = right[n];
+        auto l = (double)left[n];
+        auto r = (double)right[n];
 
         // update smoothed parameters
-        const float width_smooth = smooth_width.next();
-        const float volume_smooth = smooth_volume.next();
-        const float bass_mono_freq_smooth = smooth_bass_mono_freq.next();
-        const float bass_width_smooth = smooth_bass_width.next();
-        const float pan_smooth = smooth_pan.next();
-        const float flip_l_smooth = smooth_flip_l.next();
-        const float flip_r_smooth = smooth_flip_r.next();
+        const double width_smooth = smooth_width.next();
+        const double volume_smooth = smooth_volume.next();
+        const double bass_mono_freq_smooth = smooth_bass_mono_freq.next();
+        const double bass_width_smooth = smooth_bass_width.next();
+        const double pan_smooth = smooth_pan.next();
+        const double flip_l_smooth = smooth_flip_l.next();
+        const double flip_r_smooth = smooth_flip_r.next();
 
         update_crossover_cutoff(bass_mono_freq_smooth);
 
         apply_phase_flip(flip_l_smooth, l, flip_r_smooth, r);
 
-        float lo_l = 0.0f;
-        float lo_r = 0.0f;
-        float hi_l = 0.0f;
-        float hi_r = 0.0f;
+        double lo_l = 0.0f;
+        double lo_r = 0.0f;
+        double hi_l = 0.0f;
+        double hi_r = 0.0f;
         split_bands(l, r, lo_l, hi_l, lo_r, hi_r);
 
-        apply_bass_width(bass_width_smooth, l, r, lo_l, hi_l, lo_r, hi_r);
+        apply_bass_width(bass_mono, bass_width_smooth, l, r, lo_l, hi_l, lo_r, hi_r);
 
         apply_width(width_smooth, l, r);
 
@@ -196,7 +192,10 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
         apply_pan(pan_smooth, l, r);
 
-        apply_dc_block(dc_block_active, l, r);
+        apply_dc_block(dc_block, l, r);
+
+        left[n] = (float)l;
+        right[n] = (float)r;
     }
 }
 
@@ -264,81 +263,74 @@ juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
     return new PluginProcessor();
 }
 
-void PluginProcessor::update_crossover_cutoff(float frequency)
+void PluginProcessor::update_crossover_cutoff(double frequency)
 {
     for (int channel = 0; channel < getTotalNumInputChannels(); ++channel)
     {
-        for (int i = 0; i < NUM_CROSSOVER_FILTERS; ++i)
-        {
-            lp_crossover[channel][i].set_cutoff(frequency);
-            hp_crossover[channel][i].set_cutoff(frequency);
-        }
+        crossover[channel].set_cutoff(frequency);
     }
 }
 
-void PluginProcessor::apply_phase_flip(float flip_l, float &left, float flip_r, float &right)
+void PluginProcessor::apply_phase_flip(double flip_l, double &left, double flip_r, double &right)
 {
     left *= flip_l;
     right *= flip_r;
 }
 
-float PluginProcessor::sum_to_mono(float left, float right)
+void PluginProcessor::encode_mid_side(double left, double right, double &mid, double &side)
 {
-    return (left + right) / 2.0f;
+    mid = (left + right) / sqrt(2.0);
+    side = (left - right) / sqrt(2.0);
 }
 
-float PluginProcessor::difference_stereo(float channel, float mono_sum)
+void PluginProcessor::decode_mid_side(double mid, double side, double &left, double &right)
 {
-    return (channel - mono_sum) / 2.0f;
+    left = (mid + side) / sqrt(2.0);
+    right = (mid - side) / sqrt(2.0);
 }
 
-void PluginProcessor::split_bands(float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r)
+void PluginProcessor::split_bands(double &left, double &right, double &lo_l, double &hi_l, double &lo_r, double &hi_r)
 {
-    lo_l = left;
-    lo_r = right;
-    hi_l = left;
-    hi_r = right;
+    CrossoverFilterOutput bands_left = crossover[0].process(left);
+    CrossoverFilterOutput bands_right = crossover[1].process(right);
 
-    for (int i = 0; i < NUM_CROSSOVER_FILTERS; ++i)
+    lo_l = bands_left.lo;
+    hi_l = bands_left.hi;
+    lo_r = bands_right.lo;
+    hi_r = bands_right.hi;
+}
+
+void PluginProcessor::apply_bass_width(bool bass_mono_active, double bass_width, double &left, double &right, double &lo_left, double &hi_left, double &lo_right, double &hi_right)
+{
+    if (bass_mono_active)
     {
-        lo_l = (float)(lp_crossover[0][i].process(lo_l).lp);
-        lo_r = (float)(lp_crossover[1][i].process(lo_r).lp);
-        hi_l = (float)(hp_crossover[0][i].process(hi_l).hp);
-        hi_r = (float)(hp_crossover[1][i].process(hi_r).hp);
+        double lo_mid = 0.0;
+        double lo_side = 0.0;
+
+        encode_mid_side(lo_left, lo_right, lo_mid, lo_side);
+
+        lo_side *= bass_width;
+
+        decode_mid_side(lo_mid, lo_side, lo_left, lo_right);
+
+        left = hi_left + lo_left;
+        right = hi_right + lo_right;
     }
 }
 
-void PluginProcessor::apply_bass_width(float bass_width, float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r)
+void PluginProcessor::apply_width(double width, double &left, double &right)
 {
-    const float lo_mono_sum = sum_to_mono(lo_l, lo_r);
-    lo_l = bass_width * lo_l + (1.0f - bass_width) * lo_mono_sum;
-    lo_r = bass_width * lo_r + (1.0f - bass_width) * lo_mono_sum;
-    left = hi_l + lo_l;
-    right = hi_r + lo_r;
+    double mid = 0.0;
+    double side = 0.0;
+
+    encode_mid_side(left, right, mid, side);
+
+    side *= width;
+
+    decode_mid_side(mid, side, left, right);
 }
 
-void PluginProcessor::apply_width(float width, float &left, float &right)
-{
-    const float mono_sum = sum_to_mono(left, right);
-
-    if (width <= 1.0f)
-    {
-        left = bdsp::mappings::map_linear_norm(width, mono_sum, left);
-        right = bdsp::mappings::map_linear_norm(width, mono_sum, right);
-    }
-    else
-    {
-        width -= 1.0f; // -> 0.0f to 1.0f
-
-        const float left_diff = difference_stereo(left, mono_sum);
-        const float right_diff = difference_stereo(right, mono_sum);
-
-        left = bdsp::mappings::map_linear_norm(width, left, left_diff);
-        right = bdsp::mappings::map_linear_norm(width, right, right_diff);
-    }
-}
-
-void PluginProcessor::apply_channels(ChannelsChoice channels, float &left, float &right)
+void PluginProcessor::apply_channels(ChannelsChoice channels, double &left, double &right)
 {
     if (channels == LEFT)
     {
@@ -350,28 +342,35 @@ void PluginProcessor::apply_channels(ChannelsChoice channels, float &left, float
     }
     else if (channels == SWAPPED)
     {
-        const float temp = left;
+        const double temp = left;
         left = right;
         right = temp;
     }
 }
 
-void PluginProcessor::apply_volume(float volume, float &left, float &right)
+void PluginProcessor::apply_volume(double volume, double &left, double &right)
 {
     left *= volume;
     right *= volume;
 }
 
-void PluginProcessor::apply_pan(float pan, float &left, float &right)
+void PluginProcessor::apply_pan(double pan, double &left, double &right)
 {
-    left = (2.0f * (1.0f - pan)) * left;
-    right = (2.0f * pan) * right;
+    // Use constant power panning
+    left *= dsp::FastMathApproximations::cos<double>(pan);
+    right *= dsp::FastMathApproximations::sin<double>(pan);
+
+    // Scale to 0dB at center position
+    // (Scale down by tiny amount to peak at close to 0dB!)
+    left *= sqrt(2.0);
+    right *= sqrt(2.0);
 }
 
-void PluginProcessor::apply_dc_block(float dc_block_active, float &left, float &right)
+void PluginProcessor::apply_dc_block(double dc_block_active, double &left, double &right)
 {
-    const auto left_no_dc = (float)(dc_block[0].process(left));
-    const auto right_no_dc = (float)(dc_block[1].process(right));
+    const auto left_no_dc = dc_filter[0].process(left);
+    const auto right_no_dc = dc_filter[1].process(right);
+
     if ((bool)dc_block_active)
     {
         left = left_no_dc;

@@ -2,13 +2,12 @@
 
 #include "PluginParameters.h"
 #include <juce_audio_processors/juce_audio_processors.h>
-#include "../BDSP/source/filter/MM2_Butterworth_TPT.h"
 #include "../BDSP/source/filter/HP1_DCBlock.h"
+#include "dsp/CrossoverFilter.h"
 #include "../BDSP/source/smoother/SmootherLinear.h"
 #include "gui/sizes.h"
 
-constexpr int NUM_CHANNELS = 2;          // Plugin works in stereo
-constexpr int NUM_CROSSOVER_FILTERS = 2; // 2 Butterworth filters per band
+constexpr int NUM_CHANNELS = 2; // Plugin works in stereo
 constexpr float SMOOTHING_TIME_DEFAULT = 0.010f;
 
 class PluginProcessor : public juce::AudioProcessor
@@ -51,30 +50,29 @@ public:
 private:
     PluginParameters p;
 
-    bdsp::smoother::SmootherLinear smooth_width;
-    bdsp::smoother::SmootherLinear smooth_volume;
-    bdsp::smoother::SmootherLinear smooth_bass_mono_freq;
-    bdsp::smoother::SmootherLinear smooth_bass_width;
-    bdsp::smoother::SmootherLinear smooth_pan;
-    bdsp::smoother::SmootherLinear smooth_flip_l;
-    bdsp::smoother::SmootherLinear smooth_flip_r;
+    bdsp::smoother::SmootherLinear<double> smooth_width;
+    bdsp::smoother::SmootherLinear<double> smooth_volume;
+    bdsp::smoother::SmootherLinear<double> smooth_bass_mono_freq;
+    bdsp::smoother::SmootherLinear<double> smooth_bass_width;
+    bdsp::smoother::SmootherLinear<double> smooth_pan;
+    bdsp::smoother::SmootherLinear<double> smooth_flip_l;
+    bdsp::smoother::SmootherLinear<double> smooth_flip_r;
 
-    bdsp::filter::MM2_Butterworth_TPT lp_crossover[NUM_CHANNELS][NUM_CROSSOVER_FILTERS];
-    bdsp::filter::MM2_Butterworth_TPT hp_crossover[NUM_CHANNELS][NUM_CROSSOVER_FILTERS];
+    CrossoverFilter crossover[NUM_CHANNELS];
 
-    bdsp::filter::HP1_DCBlock dc_block[NUM_CHANNELS];
+    bdsp::filter::HP1_DCBlock dc_filter[NUM_CHANNELS];
 
-    inline void update_crossover_cutoff(float frequency);
-    static inline void apply_phase_flip(float flip_l, float &left, float flip_r, float &right);
-    static inline float sum_to_mono(float left, float right);
-    static inline float difference_stereo(float channel, float mono_sum);
-    inline void split_bands(float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r);
-    static inline void apply_bass_width(float bass_width, float &left, float &right, float &lo_l, float &hi_l, float &lo_r, float &hi_r);
-    static inline void apply_width(float width, float &left, float &right);
-    static inline void apply_channels(ChannelsChoice channels, float &left, float &right);
-    static inline void apply_volume(float volume, float &left, float &right);
-    static inline void apply_pan(float pan, float &left, float &right);
-    inline void apply_dc_block(float dc_block_active, float &left, float &right);
+    inline void update_crossover_cutoff(double frequency);
+    static inline void apply_phase_flip(double flip_l, double &left, double flip_r, double &right);
+    static inline void encode_mid_side(double left, double right, double &mid, double &side);
+    static inline void decode_mid_side(double mid, double side, double &left, double &right);
+    inline void split_bands(double &left, double &right, double &lo_l, double &hi_l, double &lo_r, double &hi_r);
+    static inline void apply_bass_width(bool bass_mono_active, double bass_width, double &left, double &right, double &lo_left, double &hi_left, double &lo_right, double &hi_right);
+    static inline void apply_width(double width, double &left, double &right);
+    static inline void apply_channels(ChannelsChoice channels, double &left, double &right);
+    static inline void apply_volume(double volume, double &left, double &right);
+    static inline void apply_pan(double pan, double &left, double &right);
+    inline void apply_dc_block(double dc_block_active, double &left, double &right);
 
     int window_width_saved;
     int window_height_saved;
