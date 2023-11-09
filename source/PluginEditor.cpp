@@ -42,5 +42,5 @@ void PluginEditor::resized()
     window_contents.setBounds(0, 0, WIN_WIDTH, WIN_HEIGHT);
     window_contents.setTransform(AffineTransform::scale(window_scale));
 
-    processor_ref.set_saved_window_size((float)getWidth(), (float)getHeight());
+    processor_ref.set_saved_window_size(getWidth(), getHeight());
 }

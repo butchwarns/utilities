@@ -26,5 +26,5 @@ private:
 
     std::function<String(float value, int maximumStringLength)> string_from_value;
 
-    void sliderValueChanged(Slider *slider) override;
+    void sliderValueChanged(Slider *s) override;
 };

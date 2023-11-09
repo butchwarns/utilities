@@ -20,12 +20,14 @@ private:
     void paint(juce::Graphics &g) override;
     void resized() override;
 
-    void sliderValueChanged(Slider *slider) override;
+    void sliderValueChanged(Slider *s) override;
 
-protected:
     PluginParameters &p;
 
     std::function<String(float value, int maximumStringLength)> string_from_value;
 
     std::unique_ptr<SliderAttachment> attachment;
+
+    DropShadow shadow;
+    DropShadower shadower;
 };

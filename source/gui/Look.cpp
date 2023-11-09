@@ -47,6 +47,20 @@ void Look::drawRotarySlider(Graphics &g, int x, int y, int width, int height, fl
 
     auto bounds = slider.getLocalBounds().reduced(PAD);
 
+    // Reduce bounds to square if rectangular
+    width = bounds.getWidth();
+    height = bounds.getHeight();
+    if (width > height)
+    {
+        bounds.setWidth(height);
+        bounds.setX((int)((float)(bounds.getX()) + (float)(width - height) / 2.0f));
+    }
+    else
+    {
+        bounds.setHeight(width);
+        bounds.setY((int)((float)(bounds.getY()) + (float)(height - width) / 2.0f));
+    }
+
     // Knob
 
     const float knob_radius = KNOB_DIM / 2.0f;
@@ -71,7 +85,8 @@ void Look::drawRotarySlider(Graphics &g, int x, int y, int width, int height, fl
     pointer_transform = pointer_transform
                             .translated(0.0f, -knob_radius + POINTER_DIM + POINTER_OFFSET)
                             .rotated((sliderPos - 0.5f) * (rotaryEndAngle - rotaryStartAngle))
-                            .translated(knob_radius, knob_radius);
+                            .translated(knob_radius, knob_radius)
+                            .translated((float)(width - height) / 2.0f, 0.0f);
     p.applyTransform(pointer_transform);
 
     g.setColour(Colours::white);

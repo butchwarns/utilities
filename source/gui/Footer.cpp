@@ -29,7 +29,7 @@ void Footer::resized()
     bounds.removeFromLeft(PAD);
     bounds.removeFromRight(PAD);
 
-    version.setBounds(bounds.removeFromLeft(bounds.getWidth() / 2.0f));
+    version.setBounds(bounds.removeFromLeft((int)((float)(bounds.getWidth()) / 2.0f)));
     bw.setBounds(bounds);
     link.setBounds(bounds);
 }

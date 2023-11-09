@@ -38,9 +38,9 @@ void SliderHorizontal::resized()
     label.setBounds(bounds);
 }
 
-void SliderHorizontal::sliderValueChanged(Slider *slider)
+void SliderHorizontal::sliderValueChanged(Slider *s)
 {
-    const float val_norm = slider->getValue();
+    const auto val_norm = (float)(s->getValue());
     const String val_formatted = string_from_value(val_norm, 9);
 
     label.setText(val_formatted, dontSendNotification);

@@ -14,7 +14,7 @@ constexpr int COMBOBOX_HEIGHT = LABEL_HEIGHT;
 
 // SliderRotary
 constexpr int KNOB_DIM = 50;
-constexpr int POINTER_DIM = 8;
+constexpr int POINTER_DIM = 9;
 constexpr int POINTER_OFFSET = PAD;
 
 // SliderRotaryLabeled
@@ -56,7 +56,7 @@ constexpr int DC_BLOCK_HEIGHT = LABEL_HEIGHT + PAD + CHECKBOX_LABELED_HEIGHT;
 
 // Plugin window
 constexpr int COLUMN1_WIDTH = 105;
-constexpr int COLUMN2_WIDTH = 50;
+constexpr int COLUMN2_WIDTH = 65;
 constexpr int COLUMN1_HEIGHT = 3 * SPACER_DIM + PHASE_FLIP_HEIGHT + CHANNELS_HEIGHT + BASS_MONO_HEIGHT + DC_BLOCK_HEIGHT;
 constexpr int COLUMN2_HEIGHT = SLIDERS_HEIGHT;
 constexpr int WIN_HEIGHT = HEADER_HEIGHT + FOOTER_HEIGHT + 2 * PAD + COLUMN1_HEIGHT;
