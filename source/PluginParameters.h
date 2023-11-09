@@ -8,7 +8,7 @@
 #include "typedefs.h"
 
 // Threshold for volume slider mute
-constexpr float OFF_THRESHOLD = -66.0f;
+constexpr double OFF_THRESHOLD = -66.0;
 
 const juce::StringArray CHANNELS_CHOICES{"STEREO", "LEFT", "RIGHT", "SWAPPED"};
 enum ChannelsChoice
@@ -21,7 +21,7 @@ enum ChannelsChoice
 
 // Tune control voltage conversion to 20Hz lowest freq (at -5V)
 // With 10 octaves above (+-5V), the highest freq will be 20Hz * 2^10 = 20480Hz (at +5V)
-const float ZERO_VOLT_FREQ_BASS_MONO = 20.0f * std::powf(2.0f, 5.0f);
+const double ZERO_VOLT_FREQ_BASS_MONO = 20.0 * std::pow(2.0, 5.0);
 
 class PluginParameters
 {
@@ -32,29 +32,34 @@ public:
 
     ChannelsChoice channels();
     static String channels_string_from_index(int value, int max_string_len);
-    float volume();
-    static inline float normalise_volume(float gain);
-    static inline float denormalise_volume(float val_norm);
-    static inline float denormalise_volume_db(float val_norm);
-    static String volume_string_from_value(float value, int max_string_len);
-    float width();
-    static inline float normalise_width(float width_percent);
-    static inline float denormalise_width(float val_norm);
-    static String width_string_from_value(float value, int max_string_len);
+    double volume();
+    static inline double normalise_volume(double gain);
+    static inline double normalise_volume_db(double db);
+    static inline double denormalise_volume(double val_norm);
+    static inline double denormalise_volume_db(double val_norm);
+    static String volume_string_from_value(double value, int max_string_len);
+    double width();
+    static inline double normalise_width(double width);
+    static inline double normalise_width_percent(double width_percent);
+    static inline double denormalise_width(double val_norm);
+    static inline double denormalise_width_percent(double val_norm);
+    static String width_string_from_value(double value, int max_string_len);
     bool mono();
     static String mono_string_from_bool(bool value, int max_string_len);
     bool bass_mono();
     static String bass_mono_string_from_bool(bool value, int max_string_len);
-    float bass_mono_freq();
-    static inline float normalise_bass_mono_freq(float freq);
-    static inline float denormalise_bass_mono_freq(float val_norm);
-    static String bass_mono_freq_string_from_value(float value, int max_string_len);
-    float phase_flip_l();
+    double bass_mono_freq();
+    static inline double normalise_bass_mono_freq(double freq);
+    static inline double denormalise_bass_mono_freq(double val_norm);
+    static String bass_mono_freq_string_from_value(double value, int max_string_len);
+    double phase_flip_l();
+    double phase_flip_r();
+    static inline double denormalise_phase_flip(double val_norm);
     static String phase_flip_l_string_from_bool(bool value, int max_string_len);
-    float phase_flip_r();
     static String phase_flip_r_string_from_bool(bool value, int max_string_len);
-    float pan();
-    static String pan_string_from_value(float value, int max_string_len);
+    double pan();
+    static inline double denormalise_pan(double val_norm);
+    static String pan_string_from_value(double value, int max_string_len);
     bool dc_block();
     static String dc_block_string_from_bool(bool value, int max_string_len);
 
