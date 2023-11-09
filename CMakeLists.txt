@@ -33,13 +33,15 @@ set(SRC_PLUGIN_BASE
         source/PluginProcessor.cpp
         source/PluginParameters.cpp)
 
-set(SRC_DSP)
+set(SRC_DSP
+        source/dsp/CrossoverFilter.cpp)
 
 set(SRC_BDSP
         BDSP/source/filter/HP1_DCBlock.cpp
         BDSP/source/smoother/SmootherLinear.cpp
         BDSP/source/cv/VoltPerOctave.cpp
-        BDSP/source/filter/MM2_Butterworth_TPT.cpp)
+        BDSP/source/filter/LP1_RC_TPT.cpp
+        BDSP/source/filter/HP1_RC_TPT.cpp)
 
 set(SRC_GUI_COMPONENTS
         source/gui/components/Spacer.cpp
@@ -92,6 +94,7 @@ target_link_libraries(BW_UTILITY
     PRIVATE
         BWUtilityBinaryData
         juce::juce_audio_utils
+        juce::juce_dsp
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
