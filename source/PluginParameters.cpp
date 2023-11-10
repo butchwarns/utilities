@@ -1,4 +1,9 @@
 #include "PluginParameters.h"
+#include "../BDSP/source/utility.h"
+
+constexpr double VOLUME_MIN = -66.1;
+constexpr double VOLUME_MAX = 35.0;
+constexpr double VOLUME_OFF_THRESHOLD = VOLUME_MIN + 0.1;
 
 PluginParameters::PluginParameters(juce::AudioProcessor &processor)
     : apvts(processor, nullptr, "parameters", parameter_layout())
@@ -46,7 +51,7 @@ double PluginParameters::normalise_volume(double gain)
 }
 double PluginParameters::normalise_volume_db(double db)
 {
-    const auto val_norm = bdsp::mappings::normalise<double>(db, -66.1, 35.0);
+    const auto val_norm = bdsp::mappings::normalise<double>(db, VOLUME_MIN, VOLUME_MAX);
 
     return val_norm;
 }
@@ -54,14 +59,15 @@ double PluginParameters::normalise_volume_db(double db)
 double PluginParameters::denormalise_volume(double val_norm)
 {
     const auto db = denormalise_volume_db(val_norm);
-    const double gain = bdsp::decibel::db_to_raw_gain_off(db, OFF_THRESHOLD);
+
+    const double gain = bdsp::decibel::db_to_raw_gain_off(db, VOLUME_MIN + VOLUME_OFF_THRESHOLD);
 
     return gain;
 }
 
 double PluginParameters::denormalise_volume_db(double val_norm)
 {
-    const auto db = bdsp::mappings::map_linear_norm<double>(val_norm, -66.1, 35.0);
+    const auto db = bdsp::mappings::map_linear_norm<double>(val_norm, VOLUME_MIN, VOLUME_MAX);
 
     return db;
 }
@@ -71,7 +77,7 @@ String PluginParameters::volume_string_from_value(double value, int max_string_l
     const double val_denorm = denormalise_volume_db(value);
 
     std::stringstream val_formatted;
-    if (val_denorm <= OFF_THRESHOLD)
+    if (val_denorm <= VOLUME_OFF_THRESHOLD)
     {
         // Below threshold, turn off
         val_formatted << "OFF";
@@ -90,6 +96,37 @@ String PluginParameters::volume_string_from_value(double value, int max_string_l
     constrain_string_length(val_formatted_str, max_string_len);
 
     return val_formatted_str;
+}
+
+std::optional<double> PluginParameters::volume_value_from_string(const String &string)
+{
+    if (string.toLowerCase() == "off")
+    {
+        return 0.0;
+    }
+    else
+    {
+        if (string.endsWithIgnoreCase("dB"))
+        {
+            string.dropLastCharacters(2);
+        }
+
+        try
+        {
+            double value = 0.0;
+            value = std::stod(string.toStdString());
+            value = normalise_volume_db(value);
+            return value;
+        }
+        catch (const std::invalid_argument &e)
+        {
+        }
+        catch (const std::out_of_range &e)
+        {
+        }
+    }
+
+    return std::nullopt;
 }
 
 double PluginParameters::width()
@@ -133,6 +170,30 @@ String PluginParameters::width_string_from_value(double value, int max_string_le
     constrain_string_length(val_formatted_str, max_string_len);
 
     return val_formatted_str;
+}
+
+std::optional<double> PluginParameters::width_value_from_string(const String &string)
+{
+    if (string.endsWithIgnoreCase("%"))
+    {
+        string.dropLastCharacters(1);
+    }
+
+    try
+    {
+        double value = 0.0;
+        value = std::stod(string.toStdString());
+        value = normalise_width_percent(value);
+        return value;
+    }
+    catch (const std::invalid_argument &e)
+    {
+    }
+    catch (const std::out_of_range &e)
+    {
+    }
+
+    return std::nullopt;
 }
 
 bool PluginParameters::mono()
@@ -281,7 +342,7 @@ double PluginParameters::denormalise_pan(double val_norm)
 String PluginParameters::pan_string_from_value(double value, int max_string_len)
 {
     std::stringstream val_formatted;
-    const float centre_range = 0.005;
+    const double centre_range = 0.005;
     val_formatted << std::fixed << std::setprecision(0);
     if (value < 0.5 - centre_range)
     {
@@ -301,6 +362,68 @@ String PluginParameters::pan_string_from_value(double value, int max_string_len)
     constrain_string_length(val_formatted_str, max_string_len);
 
     return val_formatted_str;
+}
+
+std::optional<double> PluginParameters::pan_value_from_string(const String &string)
+{
+    if (string.toLowerCase() == "c")
+    {
+        return 0.5;
+    }
+    else if (string.endsWithIgnoreCase("L"))
+    {
+        try
+        {
+            string.dropLastCharacters(1);
+            double value = 0.0;
+            value = std::stod(string.toStdString());
+            value = bdsp::mappings::map_linear<double>(value, 0, 50, 0.5, 0.0);
+            return value;
+        }
+        catch (const std::invalid_argument &e)
+        {
+        }
+        catch (const std::out_of_range &e)
+        {
+        }
+    }
+    else if (string.endsWithIgnoreCase("R"))
+    {
+        try
+        {
+            string.dropLastCharacters(1);
+            double value = 0.0;
+            value = std::stod(string.toStdString());
+            value = bdsp::mappings::map_linear<double>(value, 0, 50, 0.5, 1.0);
+            return value;
+        }
+        catch (const std::invalid_argument &e)
+        {
+        }
+        catch (const std::out_of_range &e)
+        {
+        }
+    }
+    else
+    {
+        try
+        {
+            double value = 0.0;
+            value = std::stod(string.toStdString());
+            if (value == 0.0)
+            {
+                return 0.5;
+            }
+        }
+        catch (const std::invalid_argument &e)
+        {
+        }
+        catch (const std::out_of_range &e)
+        {
+        }
+    }
+
+    return std::nullopt;
 }
 
 bool PluginParameters::dc_block()
@@ -346,10 +469,8 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
 
     std::unique_ptr<ParameterGroup> sliders_grp = std::make_unique<ParameterGroup>("sliders", "SLIDERS", "|");
     const auto width_default = (float)normalise_width_percent(100);
-    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", NormalisableRange<float>(0.0f, 1.0f, 0.01f), width_default, "", AudioProcessorParameter::genericParameter, width_string_from_value));
-    // Tiny positive offset prevents default volume from showing minus sign (-0.0dB)
+    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("width", "WIDTH", NormalisableRange<float>(0.0f, 1.0f, 0.0025f), width_default, "", AudioProcessorParameter::genericParameter, width_string_from_value));
     const auto volume_default = (float)normalise_volume_db(0.0);
-    // Constructor with NormalisableRange allows for setting a finer slider interval
     sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("volume", "VOLUME", NormalisableRange<float>(0.0f, 1.0f, 0.0000001f), volume_default, "", AudioProcessorParameter::genericParameter, volume_string_from_value));
     sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("pan", "PAN", NormalisableRange<float>(0.0f, 1.0f, 0.001f), 0.5f, "", AudioProcessorParameter::genericParameter, pan_string_from_value));
 

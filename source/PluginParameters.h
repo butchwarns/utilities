@@ -7,9 +7,6 @@
 #include "../BDSP/source/cv/VoltPerOctave.h"
 #include "typedefs.h"
 
-// Threshold for volume slider mute
-constexpr double OFF_THRESHOLD = -66.0;
-
 const juce::StringArray CHANNELS_CHOICES{"STEREO", "LEFT", "RIGHT", "SWAPPED"};
 enum ChannelsChoice
 {
@@ -38,12 +35,14 @@ public:
     static inline double denormalise_volume(double val_norm);
     static inline double denormalise_volume_db(double val_norm);
     static String volume_string_from_value(double value, int max_string_len);
+    static std::optional<double> volume_value_from_string(const String &string);
     double width();
     static inline double normalise_width(double width);
     static inline double normalise_width_percent(double width_percent);
     static inline double denormalise_width(double val_norm);
     static inline double denormalise_width_percent(double val_norm);
     static String width_string_from_value(double value, int max_string_len);
+    static std::optional<double> width_value_from_string(const String &string);
     bool mono();
     static String mono_string_from_bool(bool value, int max_string_len);
     bool bass_mono();
@@ -60,6 +59,7 @@ public:
     double pan();
     static inline double denormalise_pan(double val_norm);
     static String pan_string_from_value(double value, int max_string_len);
+    static std::optional<double> pan_value_from_string(const String &string);
     bool dc_block();
     static String dc_block_string_from_bool(bool value, int max_string_len);
 
