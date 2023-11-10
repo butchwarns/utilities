@@ -36,6 +36,8 @@ public:
     static inline double denormalise_volume_db(double val_norm);
     static String volume_string_from_value(double value, int max_string_len);
     static std::optional<double> volume_value_from_string(const String &string);
+    static inline double skew_volume(double val_norm);
+    static inline double unskew_volume(double val_norm);
     double width();
     static inline double normalise_width(double width);
     static inline double normalise_width_percent(double width_percent);
@@ -43,6 +45,8 @@ public:
     static inline double denormalise_width_percent(double val_norm);
     static String width_string_from_value(double value, int max_string_len);
     static std::optional<double> width_value_from_string(const String &string);
+    static inline double skew_width(double val_norm);
+    static inline double unskew_width(double val_norm);
     bool mono();
     static String mono_string_from_bool(bool value, int max_string_len);
     bool bass_mono();

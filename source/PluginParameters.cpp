@@ -51,7 +51,8 @@ double PluginParameters::normalise_volume(double gain)
 }
 double PluginParameters::normalise_volume_db(double db)
 {
-    const auto val_norm = bdsp::mappings::normalise<double>(db, VOLUME_MIN, VOLUME_MAX);
+    double val_norm = bdsp::mappings::normalise<double>(db, VOLUME_MIN, VOLUME_MAX);
+    val_norm = skew_volume(val_norm);
 
     return val_norm;
 }
@@ -67,6 +68,7 @@ double PluginParameters::denormalise_volume(double val_norm)
 
 double PluginParameters::denormalise_volume_db(double val_norm)
 {
+    val_norm = unskew_volume(val_norm);
     const auto db = bdsp::mappings::map_linear_norm<double>(val_norm, VOLUME_MIN, VOLUME_MAX);
 
     return db;
@@ -129,6 +131,30 @@ std::optional<double> PluginParameters::volume_value_from_string(const String &s
     return std::nullopt;
 }
 
+double PluginParameters::skew_volume(double val_norm)
+{
+    const double zero_norm = bdsp::mappings::normalise(0.0, VOLUME_MIN, VOLUME_MAX);
+
+    if (val_norm <= zero_norm)
+    {
+        return bdsp::mappings::map_linear(val_norm, 0.0, zero_norm, 0.0, 0.5);
+    }
+
+    return bdsp::mappings::map_linear(val_norm, zero_norm, 1.0, 0.5, 1.0);
+}
+
+double PluginParameters::unskew_volume(double val_norm)
+{
+    const double zero_norm = bdsp::mappings::normalise(0.0, VOLUME_MIN, VOLUME_MAX);
+
+    if (val_norm <= 0.5)
+    {
+        return bdsp::mappings::map_linear(val_norm, 0.0, 0.5, 0.0, zero_norm);
+    }
+
+    return bdsp::mappings::map_linear(val_norm, 0.5, 1.0, zero_norm, 1.0);
+}
+
 double PluginParameters::width()
 {
     return denormalise_width((double)*width_norm);
@@ -141,16 +167,19 @@ double PluginParameters::normalise_width(double width)
 
 double PluginParameters::normalise_width_percent(double width_percent)
 {
-    return width_percent / 400.0;
+    const double val_norm = width_percent / 400.0;
+    return skew_width(val_norm);
 }
 
 double PluginParameters::denormalise_width(double val_norm)
 {
+    val_norm = unskew_width(val_norm);
     return 4.0 * val_norm;
 }
 
 double PluginParameters::denormalise_width_percent(double val_norm)
 {
+    val_norm = unskew_width(val_norm);
     return 400.0 * val_norm;
 }
 
@@ -194,6 +223,26 @@ std::optional<double> PluginParameters::width_value_from_string(const String &st
     }
 
     return std::nullopt;
+}
+
+double PluginParameters::skew_width(double val_norm)
+{
+    if (val_norm <= 0.5)
+    {
+        return bdsp::mappings::map_linear(val_norm, 0.0, 0.25, 0.0, 0.5);
+    }
+
+    return bdsp::mappings::map_linear(val_norm, 0.25, 1.0, 0.5, 1.0);
+}
+
+double PluginParameters::unskew_width(double val_norm)
+{
+    if (val_norm <= 0.5)
+    {
+        return bdsp::mappings::map_linear(val_norm, 0.0, 0.5, 0.0, 0.25);
+    }
+
+    return bdsp::mappings::map_linear(val_norm, 0.5, 1.0, 0.25, 1.0);
 }
 
 bool PluginParameters::mono()
