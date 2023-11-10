@@ -61,39 +61,46 @@ void Look::drawRotarySlider(Graphics &g, int x, int y, int width, int height, fl
         bounds.setY((int)((float)(bounds.getY()) + (float)(height - width) / 2.0f));
     }
 
-    // Knob
+    // Knob (fill and offset outline)
 
     const float knob_radius = KNOB_DIM / 2.0f;
     Path k;
     k.addEllipse(bounds.toFloat().reduced(OUTLINE));
+
+    // Knob (outline offset)
+    Path k_offset = k;
+    auto outline_offset = AffineTransform::translation(1.0f, 1.0f);
+    k_offset.applyTransform(outline_offset);
+    g.setColour(Colours::black);
+    g.strokePath(k_offset, PathStrokeType(OUTLINE));
 
     g.setColour(BEIGE);
     g.fillPath(k);
     g.setColour(GREY_TRANSPARENT);
     g.fillPath(k);
 
-    g.setColour(Colours::black);
-    g.strokePath(k, PathStrokeType(OUTLINE));
-
     // Pointer
 
-    const float pointer_radius = POINTER_DIM / 2.0f;
     Path p;
-    p.addEllipse(Rectangle<float>(-pointer_radius, -pointer_radius, POINTER_DIM, POINTER_DIM).reduced(OUTLINE));
+    const auto pointer_line = Line<float>(0.0f, 0.0f, 0.0f, (float)(POINTER_LENGTH));
+    p.addLineSegment(pointer_line, OUTLINE / 2.0f);
 
     AffineTransform pointer_transform;
     pointer_transform = pointer_transform
-                            .translated(0.0f, -knob_radius + POINTER_DIM + POINTER_OFFSET)
+                            .translated(0.0f, PAD + OUTLINE + 0.5f)
+                            .translated(0.0f, -knob_radius)
                             .rotated((sliderPos - 0.5f) * (rotaryEndAngle - rotaryStartAngle))
                             .translated(knob_radius, knob_radius)
                             .translated((float)(width - height) / 2.0f, 0.0f);
     p.applyTransform(pointer_transform);
 
     g.setColour(Colours::white);
-    g.fillPath(p);
+    g.strokePath(p, PathStrokeType(OUTLINE));
+
+    // Knob (outline)
 
     g.setColour(Colours::black);
-    g.strokePath(p, PathStrokeType(OUTLINE));
+    g.strokePath(k, PathStrokeType(OUTLINE));
 }
 
 void Look::drawTickBox(Graphics &g, Component &component,
@@ -163,6 +170,29 @@ Font Look::getLabelFont(Label &label)
     {
         return getFontInterRegular(FONT_SIZE);
     }
+}
+
+void Look::fillTextEditorBackground(Graphics &g, int width, int height, TextEditor &editor)
+{
+    ignoreUnused(width, height, editor);
+
+    g.fillAll(GREY_TRANSPARENT);
+}
+
+void Look::drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &editor)
+{
+    ignoreUnused(width, height);
+
+    g.setColour(Colours::black);
+    g.drawRect(editor.getLocalBounds(), (int)OUTLINE);
+}
+
+CaretComponent *Look::createCaretComponent(Component *keyFocusOwner)
+{
+    auto caret = new CaretComponent(keyFocusOwner);
+    caret->setColour(CaretComponent::caretColourId, Colours::darkred);
+
+    return caret;
 }
 
 void Look::drawComboBox(Graphics &g, int width, int height, bool, int, int, int, int, ComboBox &box)

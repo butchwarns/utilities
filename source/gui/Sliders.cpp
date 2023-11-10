@@ -1,7 +1,8 @@
 #include "Sliders.h"
 
 Sliders::Sliders(PluginParameters &p)
-    : slider_width(p, "width", p.width_string_from_value), slider_volume(p, "volume", p.volume_string_from_value), slider_pan(p, "pan", p.pan_string_from_value)
+    : slider_width(p, "width", p.width_string_from_value, p.width_value_from_string),
+      slider_volume(p, "volume", p.volume_string_from_value, p.volume_value_from_string), slider_pan(p, "pan", p.pan_string_from_value, p.pan_value_from_string)
 {
     addAndMakeVisible(&slider_width);
     slider_width.label.set_text("WIDTH");

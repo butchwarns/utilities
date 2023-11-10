@@ -29,6 +29,10 @@ private:
     void drawLabel(Graphics &g, Label &label) override;
     Font getLabelFont(Label &label) override;
 
+    void fillTextEditorBackground(Graphics &g, int width, int height, TextEditor &editor) override;
+    void drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &editor) override;
+    CaretComponent *createCaretComponent(Component *keyFocusOwner) override;
+
     void drawComboBox(Graphics &g, int width, int height, bool, int, int, int, int, ComboBox &box) override;
     void positionComboBoxText(ComboBox &box, Label &label) override;
     void drawPopupMenuItem(Graphics &g, const Rectangle<int> &area,

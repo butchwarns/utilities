@@ -14,8 +14,7 @@ constexpr int COMBOBOX_HEIGHT = LABEL_HEIGHT;
 
 // SliderRotary
 constexpr int KNOB_DIM = 50;
-constexpr int POINTER_DIM = 9;
-constexpr int POINTER_OFFSET = PAD;
+constexpr int POINTER_LENGTH = 12;
 
 // SliderRotaryLabeled
 constexpr int SLIDER_ROTARY_HEIGHT = KNOB_DIM + LABEL_HEIGHT;
