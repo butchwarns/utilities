@@ -190,7 +190,7 @@ void Look::drawTextEditorOutline(Graphics &g, int width, int height, TextEditor 
 CaretComponent *Look::createCaretComponent(Component *keyFocusOwner)
 {
     auto caret = new CaretComponent(keyFocusOwner);
-    caret->setColour(CaretComponent::caretColourId, Colours::darkred);
+    caret->setColour(CaretComponent::caretColourId, Colours::black);
 
     return caret;
 }

@@ -1,4 +1,5 @@
 #include "SliderRotary.h"
+#include "../colours.h"
 
 SliderRotary::SliderRotary(PluginParameters &_p,
                            String param_id,
@@ -16,6 +17,7 @@ SliderRotary::SliderRotary(PluginParameters &_p,
     label.setJustificationType(Justification::centred);
     label.setEditable(true);
     label.addListener(this);
+    label.setColour(TextEditor::highlightColourId, RED_TRANSPARENT);
 
     addAndMakeVisible(&slider);
     slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
