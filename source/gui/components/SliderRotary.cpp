@@ -22,9 +22,8 @@ SliderRotary::SliderRotary(PluginParameters &_p,
 
     addAndMakeVisible(&slider);
     slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-    slider.setColour(Slider::textBoxTextColourId, Colours::black);
     slider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
-    slider.setRange(0.0f, 1.0f, 0.0f);
+    slider.setRange(0.0f, 1.0f, 0.0001f);
 
     attachment = std::make_unique<SliderAttachment>(p.apvts, param_id, slider);
 
