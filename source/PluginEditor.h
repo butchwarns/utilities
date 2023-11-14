@@ -7,7 +7,10 @@
 #include "PluginParameters.h"
 #include "gui/WindowContents.h"
 
-class PluginEditor : public AudioProcessorEditor, public ComponentBoundsConstrainer
+class PluginEditor
+    : public AudioProcessorEditor,
+      public ComponentBoundsConstrainer,
+      private Timer
 {
 public:
     explicit PluginEditor(PluginProcessor &, PluginParameters &params);
@@ -22,6 +25,8 @@ private:
     Look look;
 
     WindowContents window_contents;
+
+    void timerCallback() override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };

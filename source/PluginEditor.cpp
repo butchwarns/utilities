@@ -23,6 +23,8 @@ PluginEditor::PluginEditor(PluginProcessor &p, PluginParameters &params)
     setLookAndFeel(&look);
 
     addAndMakeVisible(&window_contents);
+
+    startTimer(200); // Start tooltip update timer
 }
 
 PluginEditor::~PluginEditor()
@@ -43,4 +45,18 @@ void PluginEditor::resized()
     window_contents.setTransform(AffineTransform::scale(window_scale));
 
     processor_ref.set_saved_window_size(getWidth(), getHeight());
+}
+
+void PluginEditor::timerCallback()
+{
+    Component *const component_under_mouse = Desktop::getInstance().getMainMouseSource().getComponentUnderMouse();
+    auto *const tooltip_client = dynamic_cast<TooltipClient *>(component_under_mouse);
+
+    String tooltip_msg;
+    if ((tooltip_client != nullptr) && !(component_under_mouse->isMouseButtonDown() || component_under_mouse->isCurrentlyBlockedByAnotherModalComponent()))
+    {
+        tooltip_msg = tooltip_client->getTooltip();
+    }
+
+    window_contents.set_tooltip(tooltip_msg);
 }

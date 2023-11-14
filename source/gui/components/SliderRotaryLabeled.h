@@ -6,7 +6,8 @@
 #include "../../PluginParameters.h"
 #include "LabelTitle.h"
 
-class SliderRotaryLabeled : public Component
+class SliderRotaryLabeled
+    : public Component
 {
 public:
     SliderRotaryLabeled(PluginParameters &p,
@@ -16,6 +17,8 @@ public:
 
     LabelTitle label;
     SliderRotary slider;
+
+    void setTooltip(String msg);
 
 private:
     void paint(Graphics &g) override;

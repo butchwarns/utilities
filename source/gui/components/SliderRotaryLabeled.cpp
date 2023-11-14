@@ -10,6 +10,11 @@ SliderRotaryLabeled::SliderRotaryLabeled(PluginParameters &p,
     addAndMakeVisible(&slider);
 }
 
+void SliderRotaryLabeled::setTooltip(String msg)
+{
+    slider.slider.setTooltip(msg);
+}
+
 void SliderRotaryLabeled::paint(Graphics &g)
 {
     ignoreUnused(g);

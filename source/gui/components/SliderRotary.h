@@ -6,7 +6,10 @@
 #include <sstream>
 #include <iomanip>
 
-class SliderRotary : public Component, public Slider::Listener, public Label::Listener
+class SliderRotary
+    : public Component,
+      public Slider::Listener,
+      public Label::Listener
 {
 public:
     SliderRotary(PluginParameters &p,
