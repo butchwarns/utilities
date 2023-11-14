@@ -1,7 +1,8 @@
 #include "BassMono.h"
 
 BassMono::BassMono(PluginParameters &p)
-    : checkbox(p, "bass_mono"), slider(p, "bass_mono_freq", p.bass_mono_freq_string_from_value)
+    : checkbox(p, "bass_mono"),
+      slider(p, "bass_mono_freq", p.bass_mono_freq_string_from_value, p.bass_mono_freq_value_from_string)
 {
     addAndMakeVisible(&bass_mono);
     bass_mono.set_text("BASS MONO");
@@ -24,10 +25,13 @@ void BassMono::resized()
     auto bounds = getLocalBounds();
 
     bass_mono.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
+
     bounds.removeFromTop(PAD);
 
     auto active_check_bounds = bounds.removeFromTop(LABEL_HEIGHT);
     checkbox.setBounds(active_check_bounds.removeFromTop(CHECKBOX_DIM));
+
+    bounds.removeFromTop(2 * PAD);
 
     slider.setBounds(bounds);
 }

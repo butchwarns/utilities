@@ -1,8 +1,6 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "colours.h"
-#include "sizes.h"
 
 class Look : public juce::LookAndFeel_V4
 {

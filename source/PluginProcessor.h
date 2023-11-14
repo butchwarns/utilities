@@ -7,7 +7,13 @@
 #include "../BDSP/source/smoother/SmootherLinear.h"
 #include "gui/sizes.h"
 
-constexpr int NUM_CHANNELS = 2; // Plugin works in stereo
+enum Channel
+{
+    L = 0,
+    R = 1,
+    NUM_CHANNELS
+};
+
 constexpr float SMOOTHING_TIME_DEFAULT = 0.010f;
 
 class PluginProcessor : public juce::AudioProcessor
@@ -43,9 +49,9 @@ public:
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
 
-    void set_saved_window_size(int _window_width_saved, int _window_height_saved);
-    int get_saved_window_width() const;
-    int get_saved_window_height() const;
+    static void set_saved_window_size(int _window_width_saved, int _window_height_saved);
+    static int get_saved_window_width();
+    static int get_saved_window_height();
 
 private:
     PluginParameters p;
@@ -58,24 +64,24 @@ private:
     bdsp::smoother::SmootherLinear<double> smooth_flip_l;
     bdsp::smoother::SmootherLinear<double> smooth_flip_r;
 
-    CrossoverFilter crossover[NUM_CHANNELS];
+    CrossoverFilter crossover[Channel::NUM_CHANNELS];
 
-    bdsp::filter::HP1_DCBlock dc_filter[NUM_CHANNELS];
+    bdsp::filter::HP1_DCBlock dc_filter[Channel::NUM_CHANNELS];
 
     inline void update_crossover_cutoff(double frequency);
     static inline void apply_phase_flip(double flip_l, double &left, double flip_r, double &right);
     static inline void encode_mid_side(double left, double right, double &mid, double &side);
     static inline void decode_mid_side(double mid, double side, double &left, double &right);
-    inline void split_bands(double &left, double &right, double &lo_l, double &hi_l, double &lo_r, double &hi_r);
-    static inline void apply_bass_width(bool bass_mono_active, double bass_width, double &left, double &right, double &lo_left, double &hi_left, double &lo_right, double &hi_right);
+    inline void split_bands(double left, double right, double &lo_l, double &hi_l, double &lo_r, double &hi_r);
+    static inline void apply_bass_width(double bass_width, double &left, double &right, double &lo_left, double &hi_left, double &lo_right, double &hi_right);
     static inline void apply_width(double width, double &left, double &right);
     static inline void apply_channels(ChannelsChoice channels, double &left, double &right);
     static inline void apply_volume(double volume, double &left, double &right);
     static inline void apply_pan(double pan, double &left, double &right);
     inline void apply_dc_block(double dc_block_active, double &left, double &right);
 
-    int window_width_saved;
-    int window_height_saved;
+    static int window_width_saved;
+    static int window_height_saved;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };

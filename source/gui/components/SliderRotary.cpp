@@ -9,6 +9,7 @@ SliderRotary::SliderRotary(PluginParameters &_p,
       string_from_value(_string_from_value),
       value_from_string(_value_from_string),
       attachment(nullptr),
+      shadow(),
       shadower(shadow)
 {
     slider.addListener(this);
@@ -39,7 +40,7 @@ void SliderRotary::touch()
 
 void SliderRotary::paint(juce::Graphics &g)
 {
-    auto bounds = getLocalBounds().removeFromTop(50);
+    auto bounds = getLocalBounds().removeFromTop(KNOB_DIM);
     bounds.reduce((COLUMN2_WIDTH - KNOB_DIM) / 2, 0);
     bounds.reduce(PAD, PAD);
 

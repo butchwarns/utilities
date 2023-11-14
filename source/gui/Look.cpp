@@ -1,4 +1,6 @@
 #include "Look.h"
+#include "colours.h"
+#include "sizes.h"
 
 Font Look::getFontInterRegular(float height)
 {
@@ -38,7 +40,7 @@ void Look::drawLinearSlider(Graphics &g, int x, int y, int width, int height, fl
 
     // Outline
     g.setColour(juce::Colours::black);
-    g.drawRect(slider.getLocalBounds(), 2);
+    g.drawRect(slider.getLocalBounds(), (int)OUTLINE);
 }
 
 void Look::drawRotarySlider(Graphics &g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, Slider &slider)
@@ -72,6 +74,8 @@ void Look::drawRotarySlider(Graphics &g, int x, int y, int width, int height, fl
     auto outline_offset = AffineTransform::translation(1.0f, 1.0f);
     k_offset.applyTransform(outline_offset);
     g.setColour(Colours::black);
+    g.strokePath(k_offset, PathStrokeType(OUTLINE));
+    k_offset.applyTransform(outline_offset);
     g.strokePath(k_offset, PathStrokeType(OUTLINE));
 
     g.setColour(BEIGE);
@@ -195,22 +199,46 @@ CaretComponent *Look::createCaretComponent(Component *keyFocusOwner)
     return caret;
 }
 
-void Look::drawComboBox(Graphics &g, int width, int height, bool, int, int, int, int, ComboBox &box)
+void Look::drawComboBox(Graphics &g, int width, int height, bool isButtonDown, int buttonX, int buttonY, int buttonW, int buttonH, ComboBox &box)
 {
-    ignoreUnused(width, height);
+    ignoreUnused(width, height, buttonX, buttonY, buttonW, buttonH);
 
     auto bounds = box.getLocalBounds();
 
+    // Background
     g.setColour(BEIGE);
     g.fillRect(bounds);
 
+    // Outline
     g.setColour(Colours::black);
-    g.drawRect(bounds, 2.0f);
+    g.drawRect(bounds, (int)OUTLINE);
+
+    // Pointer
+
+    auto bounds_button = bounds.removeFromLeft(CHECKBOX_DIM);
+
+    g.setColour(GREY_TRANSPARENT);
+    g.fillRect(bounds_button);
+    if (isButtonDown)
+    {
+        g.fillRect(bounds_button);
+    }
+
+    g.setColour(Colours::black);
+    auto font = getFontInterRegular((float)(bounds.getHeight()));
+    g.setFont(font);
+    g.drawFittedText("->", bounds_button, Justification::centred, 1, 1.0f);
+
+    // Outline
+    g.setColour(Colours::black);
+    g.drawRect(bounds_button, (int)OUTLINE);
 }
 
 void Look::positionComboBoxText(ComboBox &box, Label &label)
 {
-    label.setBounds(box.getLocalBounds());
+    auto bounds = box.getLocalBounds();
+    bounds.removeFromLeft(CHECKBOX_DIM);
+    label.setBounds(bounds);
 }
 
 void Look::drawPopupMenuItem(Graphics &g, const Rectangle<int> &area,
@@ -222,20 +250,22 @@ void Look::drawPopupMenuItem(Graphics &g, const Rectangle<int> &area,
 {
     ignoreUnused(isSeparator, isActive, isTicked, hasSubMenu, shortcutKeyText, icon, textColourToUse);
 
-    g.setColour(BEIGE);
-    g.fillRect(area);
+    // Background
+    g.fillAll(BEIGE);
     if (isHighlighted)
     {
-        g.setColour(GREY_TRANSPARENT);
-        g.fillRect(area);
+        g.fillAll(GREY_TRANSPARENT);
     }
-    g.setColour(Colours::black);
-    g.drawRect(area, (int)OUTLINE);
 
+    // Text
     auto font = Look::getFontInterRegular(FONT_SIZE);
     g.setFont(font);
     g.setColour(Colours::black);
     g.drawFittedText(text, area, Justification::centred, 1.0f);
+
+    // Outline
+    g.setColour(Colours::black);
+    g.drawRect(area, 1.0f);
 }
 
 void Look::drawPopupMenuBackground(Graphics &g, int width, int height)
