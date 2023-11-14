@@ -3,6 +3,11 @@
 CrossoverFilter::CrossoverFilter()
     : sample_rate(0.0)
 {
+    for (int i = 0; i < 2; ++i)
+    {
+        lp[i].set_q(0.0);
+        hp[i].set_q(0.0);
+    }
 }
 
 void CrossoverFilter::reset(double _sample_rate)
@@ -12,15 +17,18 @@ void CrossoverFilter::reset(double _sample_rate)
     for (int i = 0; i < 2; ++i)
     {
         lp[i].reset(_sample_rate);
+        hp[i].reset(_sample_rate);
     }
 }
 
 void CrossoverFilter::set_cutoff(double cutoff)
 {
+    const double cutoff_prewarped = bdsp::mappings::prewarp(cutoff, sample_rate);
     for (int i = 0; i < 2; ++i)
     {
         // Set equal cutoff for -6dB attenuation at crossover point
-        lp[i].set_cutoff(cutoff);
+        lp[i].set_cutoff(cutoff_prewarped);
+        hp[i].set_cutoff(cutoff_prewarped);
     }
 }
 

@@ -185,7 +185,6 @@ double PluginParameters::denormalise_width_percent(double val_norm)
 
 String PluginParameters::width_string_from_value(double value, int max_string_len)
 {
-    // Convert to percent (0 to 400)
     const double val_denorm = denormalise_width_percent(value);
 
     std::stringstream val_formatted;
@@ -327,6 +326,30 @@ String PluginParameters::bass_mono_freq_string_from_value(double value, int max_
     constrain_string_length(val_formatted_str, max_string_len);
 
     return val_formatted_str;
+}
+
+std::optional<double> PluginParameters::bass_mono_freq_value_from_string(const String &string)
+{
+    if (string.endsWithIgnoreCase("Hz"))
+    {
+        string.dropLastCharacters(2);
+    }
+
+    try
+    {
+        double value = 0.0;
+        value = std::stod(string.toStdString());
+        value = normalise_bass_mono_freq(value);
+        return value;
+    }
+    catch (const std::invalid_argument &e)
+    {
+    }
+    catch (const std::out_of_range &e)
+    {
+    }
+
+    return std::nullopt;
 }
 
 double PluginParameters::phase_flip_l()

@@ -55,6 +55,7 @@ public:
     static inline double normalise_bass_mono_freq(double freq);
     static inline double denormalise_bass_mono_freq(double val_norm);
     static String bass_mono_freq_string_from_value(double value, int max_string_len);
+    static std::optional<double> bass_mono_freq_value_from_string(const String &string);
     double phase_flip_l();
     double phase_flip_r();
     static inline double denormalise_phase_flip(double val_norm);

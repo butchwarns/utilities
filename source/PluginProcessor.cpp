@@ -308,14 +308,14 @@ void PluginProcessor::split_bands(double left, double right, double &lo_l, doubl
 
 void PluginProcessor::apply_bass_width(double bass_width, double &left, double &right, double &lo_left, double &hi_left, double &lo_right, double &hi_right)
 {
-    // double lo_mid = 0.0;
-    // double lo_side = 0.0;
+    double lo_mid = 0.0;
+    double lo_side = 0.0;
 
-    // encode_mid_side(lo_left, lo_right, lo_mid, lo_side);
+    encode_mid_side(lo_left, lo_right, lo_mid, lo_side);
 
-    // lo_side *= bass_width;
+    lo_side *= bass_width;
 
-    // decode_mid_side(lo_mid, lo_side, lo_left, lo_right);
+    decode_mid_side(lo_mid, lo_side, lo_left, lo_right);
 
     left = hi_left + lo_left;
     right = hi_right + lo_right;
