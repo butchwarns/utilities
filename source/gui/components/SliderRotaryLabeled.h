@@ -18,8 +18,6 @@ public:
     LabelTitle label;
     SliderRotary slider;
 
-    void setTooltip(String msg);
-
 private:
     void paint(Graphics &g) override;
     void resized() override;

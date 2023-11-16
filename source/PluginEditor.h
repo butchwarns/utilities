@@ -9,8 +9,7 @@
 
 class PluginEditor
     : public AudioProcessorEditor,
-      public ComponentBoundsConstrainer,
-      private Timer
+      public ComponentBoundsConstrainer
 {
 public:
     explicit PluginEditor(PluginProcessor &, PluginParameters &params);
@@ -25,8 +24,6 @@ private:
     Look look;
 
     WindowContents window_contents;
-
-    void timerCallback() override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };

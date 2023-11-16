@@ -13,15 +13,10 @@ WindowContents::WindowContents(PluginParameters &params)
     addAndMakeVisible(&bass_mono);
     addAndMakeVisible(&spacer3);
     addAndMakeVisible(&dc_block);
-    addAndMakeVisible(&tooltip);
     addAndMakeVisible(&footer);
     addAndMakeVisible(&sliders);
 }
 
-void WindowContents::set_tooltip(String msg)
-{
-    tooltip.set_tooltip(msg);
-}
 
 void WindowContents::paint(Graphics &g)
 {
@@ -36,10 +31,6 @@ void WindowContents::resized()
     footer.setBounds(bounds.removeFromBottom(FOOTER_HEIGHT));
 
     bounds.reduce(PAD, PAD);
-
-    tooltip.setBounds(bounds.removeFromBottom(TOOLTIP_HEIGHT));
-
-    bounds.removeFromBottom(PAD);
 
     auto col1_bounds = bounds.removeFromLeft(COLUMN1_WIDTH);
     col1_bounds.reduce(0, (col1_bounds.getHeight() - COLUMN1_HEIGHT) / 2);

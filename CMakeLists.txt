@@ -64,7 +64,6 @@ set(SRC_GUI
         source/gui/Sliders.cpp
         source/gui/PhaseFlip.cpp
         source/gui/DCBlock.cpp
-        source/gui/Tooltip.cpp
         source/gui/WindowContents.cpp)
 
 target_sources(BW_UTILITY

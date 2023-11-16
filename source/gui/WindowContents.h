@@ -9,15 +9,12 @@
 #include "Sliders.h"
 #include "PhaseFlip.h"
 #include "DCBlock.h"
-#include "Tooltip.h"
 #include "components/Spacer.h"
 
 class WindowContents : public Component
 {
 public:
     WindowContents(PluginParameters &params);
-
-    void set_tooltip(String msg);
 
 private:
     void paint(Graphics &g) override;
@@ -36,5 +33,4 @@ private:
     Spacer spacer3;
     PhaseFlip phase_flip;
     DCBlock dc_block;
-    Tooltip tooltip;
 };
