@@ -1,6 +1,6 @@
 
-#include "../../BDSP/source/filter/HP2_SallenKey_TPT.h"
-#include "../../BDSP/source/filter/LP2_SallenKey_TPT.h"
+#include "../../BDSP/source/filter/HP1_RC_TPT.h"
+#include "../../BDSP/source/filter/LP1_RC_TPT.h"
 
 struct CrossoverFilterOutput
 {
@@ -23,6 +23,6 @@ public:
 private:
     double sample_rate;
 
-    bdsp::filter::LP2_SallenKey_TPT lp[2];
-    bdsp::filter::HP2_SallenKey_TPT hp[2];
+    bdsp::filter::LP1_RC_TPT lp[2];
+    bdsp::filter::HP1_RC_TPT hp[2];
 };
