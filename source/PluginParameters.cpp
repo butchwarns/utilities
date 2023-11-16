@@ -4,6 +4,7 @@
 constexpr double VOLUME_MIN = -66.1;
 constexpr double VOLUME_MAX = 35.0;
 constexpr double VOLUME_OFF_THRESHOLD = VOLUME_MIN + 0.1;
+constexpr double WIDTH_MAX = 4.0;
 
 PluginParameters::PluginParameters(juce::AudioProcessor &processor)
     : apvts(processor, nullptr, "parameters", parameter_layout())
@@ -162,25 +163,25 @@ double PluginParameters::width()
 
 double PluginParameters::normalise_width(double width)
 {
-    return width / 4.0;
+    return width / WIDTH_MAX;
 }
 
 double PluginParameters::normalise_width_percent(double width_percent)
 {
-    const double val_norm = width_percent / 400.0;
+    const double val_norm = width_percent / (100.0 * WIDTH_MAX);
     return skew_width(val_norm);
 }
 
 double PluginParameters::denormalise_width(double val_norm)
 {
     val_norm = unskew_width(val_norm);
-    return 4.0 * val_norm;
+    return WIDTH_MAX * val_norm;
 }
 
 double PluginParameters::denormalise_width_percent(double val_norm)
 {
     val_norm = unskew_width(val_norm);
-    return 400.0 * val_norm;
+    return 100.0 * WIDTH_MAX * val_norm;
 }
 
 String PluginParameters::width_string_from_value(double value, int max_string_len)
@@ -342,10 +343,7 @@ std::optional<double> PluginParameters::bass_mono_freq_value_from_string(const S
         value = normalise_bass_mono_freq(value);
         return value;
     }
-    catch (const std::invalid_argument &e)
-    {
-    }
-    catch (const std::out_of_range &e)
+    catch (...)
     {
     }
 
