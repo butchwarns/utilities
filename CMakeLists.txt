@@ -85,6 +85,7 @@ juce_add_binary_data(BWUtilityBinaryData
     NAMESPACE 
         BinaryData
     SOURCES
+        version.json
         resources/fonts/Inter-Regular.otf
         resources/fonts/Inter-Italic.otf
         resources/fonts/Inter-Bold.otf

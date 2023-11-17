@@ -2,8 +2,13 @@
 
 Footer::Footer()
 {
+    // Parse current version number
+    auto version_json = String::fromUTF8(BinaryData::version_json, BinaryData::version_jsonSize);
+    auto version_var = JSON::parse(version_json);
+    const auto &v = version_var["version"];
+
     addAndMakeVisible(&version);
-    version.setText("v0.1.0", dontSendNotification);
+    version.setText(v, dontSendNotification);
     version.setJustificationType(juce::Justification::centred);
     version.setColour(juce::Label::textColourId, juce::Colours::white);
     version.getProperties().set("gui_class", "label");
