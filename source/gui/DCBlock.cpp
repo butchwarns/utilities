@@ -1,0 +1,47 @@
+/*
+DCBlock.cpp
+Copyright (C) 2023 Butch Warns
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#include "DCBlock.h"
+
+DCBlock::DCBlock(PluginParameters &p) : checkbox(p, "dc_block")
+{
+    addAndMakeVisible(&label);
+    label.setText("DC BLOCK", dontSendNotification);
+    label.setJustificationType(Justification::centred);
+    label.setColour(Label::textColourId, Colours::black);
+    label.getProperties().set("gui_class", "bold");
+    checkbox.label.setText("CUT", dontSendNotification);
+
+    addAndMakeVisible(&checkbox);
+
+    attachment = std::make_unique<ButtonAttachment>(p.apvts, "dc_block", checkbox.checkbox);
+}
+
+void DCBlock::paint(Graphics &g)
+{
+    ignoreUnused(g);
+}
+
+void DCBlock::resized()
+{
+    auto bounds = getLocalBounds();
+
+    label.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
+    bounds.removeFromTop(PAD);
+    checkbox.setBounds(bounds);
+}
