@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef CHANNELS_H
+#define CHANNELS_H
 
 #include <JuceHeader.h>
 #include "sizes.h"
@@ -40,3 +41,5 @@ private:
     std::unique_ptr<ComboBoxAttachment> attachment_selector;
     std::unique_ptr<ButtonAttachment> attachment_checkbox;
 };
+
+#endif // CHANNELS_H

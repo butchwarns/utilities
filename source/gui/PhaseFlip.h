@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef PHASE_FLIP_H
+#define PHASE_FLIP_H
 
 #include <JuceHeader.h>
 #include "../PluginParameters.h"
@@ -39,3 +40,5 @@ private:
     std::unique_ptr<ButtonAttachment> attachment_check_l;
     std::unique_ptr<ButtonAttachment> attachment_check_r;
 };
+
+#endif // PHASE_FLIP_H

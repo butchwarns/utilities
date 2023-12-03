@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef HEADER_H
+#define HEADER_H
 
 #include <JuceHeader.h>
 #include "sizes.h"
@@ -33,3 +34,5 @@ private:
 
     juce::Label title;
 };
+
+#endif // HEADER_H

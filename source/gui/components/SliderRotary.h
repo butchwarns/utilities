@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef SLIDER_ROTARY_H
+#define SLIDER_ROTARY_H
 
 #include <JuceHeader.h>
 #include "../sizes.h"
@@ -59,3 +60,5 @@ private:
     DropShadow shadow;
     DropShadower shadower;
 };
+
+#endif // SLIDER_ROTARY_H

@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef PLUGIN_PROCESSOR_H
+#define PLUGIN_PROCESSOR_H
 
 #include "PluginParameters.h"
 #include <juce_audio_processors/juce_audio_processors.h>
@@ -103,3 +104,5 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };
+
+#endif // PLUGIN_PROCESSOR_H

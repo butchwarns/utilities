@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef LABEL_TITLE_H
+#define LABEL_TITLE_H
 
 #include <JuceHeader.h>
 
@@ -33,3 +34,5 @@ private:
     void paint(Graphics &g) override;
     void resized() override;
 };
+
+#endif // LABEL_TITLE_H

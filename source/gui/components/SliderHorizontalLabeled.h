@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef SLIDER_HORIZONTAL_LABELED_H
+#define SLIDER_HORIZONTAL_LABELED_H
 
 #include <JuceHeader.h>
 #include "SliderHorizontal.h"
@@ -38,3 +39,5 @@ private:
     void paint(Graphics &g) override;
     void resized() override;
 };
+
+#endif // SLIDER_HORIZONTAL_LABELED_H

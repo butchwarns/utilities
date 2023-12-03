@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef SLIDER_HORIZONTAL_H
+#define SLIDER_HORIZONTAL_H
 
 #include <JuceHeader.h>
 #include "../sizes.h"
@@ -55,3 +56,5 @@ private:
     std::function<String(float value, int maximumStringLength)> string_from_value;
     std::function<std::optional<double>(String string)> value_from_string;
 };
+
+#endif // SLIDER_HORIZONTAL_H

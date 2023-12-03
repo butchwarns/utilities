@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef COLOURS_H
+#define COLOURS_H
 
 #include <JuceHeader.h>
 
@@ -25,3 +26,5 @@ const auto RED_TRANSPARENT = Colour((uint8)0xB3, (uint8)0x00, (uint8)0x00, (uint
 const auto BLUE = Colour(0x73, 0x9D, 0xC3);
 const auto BEIGE = Colour(0xD9, 0xD9, 0xD9);
 const auto GREY_TRANSPARENT = Colour((uint8)0x00, (uint8)0x00, (uint8)0x00, (uint8)0x44);
+
+#endif // COLOURS_H

@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef CHECKBOX_LABELED_H
+#define CHECKBOX_LABELED_H
 
 #include <JuceHeader.h>
 #include "../../PluginParameters.h"
@@ -36,3 +37,5 @@ private:
 
     std::unique_ptr<ButtonAttachment> attachment;
 };
+
+#endif // CHECKBOX_LABELED_H

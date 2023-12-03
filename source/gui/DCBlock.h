@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef DC_BLOCK_H
+#define DC_BLOCK_H
 
 #include <JuceHeader.h>
 #include "../PluginParameters.h"
@@ -37,3 +38,5 @@ private:
 
     std::unique_ptr<ButtonAttachment> attachment;
 };
+
+#endif // DC_BLOCK_H

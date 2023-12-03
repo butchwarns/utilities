@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef SPACER_H
+#define SPACER_H
 
 #include <JuceHeader.h>
 #include "../sizes.h"
@@ -30,3 +31,5 @@ private:
     void paint(juce::Graphics &g) override;
     void resized() override;
 };
+
+#endif // SPACER_H

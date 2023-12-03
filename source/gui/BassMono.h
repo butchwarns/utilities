@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef BASS_MONO_H
+#define BASS_MONO_H
 
 #include <JuceHeader.h>
 #include "sizes.h"
@@ -39,3 +40,5 @@ private:
     CheckboxLabeled checkbox;
     SliderHorizontalLabeled slider;
 };
+
+#endif // BASS_MONO_H

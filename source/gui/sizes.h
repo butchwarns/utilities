@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef SIZES_H
+#define SIZES_H
 
 constexpr float OUTLINE = 2.0f;
 
@@ -79,3 +80,5 @@ constexpr int COLUMN1_HEIGHT = 3 * SPACER_DIM + PHASE_FLIP_HEIGHT + CHANNELS_HEI
 constexpr int COLUMN2_HEIGHT = SLIDERS_HEIGHT;
 constexpr int WIN_HEIGHT = HEADER_HEIGHT + FOOTER_HEIGHT + 2 * PAD + COLUMN1_HEIGHT;
 constexpr int WIN_WIDTH = COLUMN1_WIDTH + SPACER_DIM + COLUMN2_WIDTH + 2 * PAD;
+
+#endif // SIZES_H

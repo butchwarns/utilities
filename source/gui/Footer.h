@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef FOOTER_H
+#define FOOTER_H
 
 #include <JuceHeader.h>
 #include "sizes.h"
@@ -35,3 +36,5 @@ private:
     juce::Label bw;
     juce::HyperlinkButton link;
 };
+
+#endif // FOOTER_H

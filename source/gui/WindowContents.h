@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef WINDOW_CONTENTS_H
+#define WINDOW_CONTENTS_H
 
 #include <JuceHeader.h>
 #include "../PluginParameters.h"
@@ -52,3 +53,5 @@ private:
     PhaseFlip phase_flip;
     DCBlock dc_block;
 };
+
+#endif // WINDOW_CONTENTS_H

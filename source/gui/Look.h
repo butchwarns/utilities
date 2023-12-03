@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef LOOK_H
+#define LOOK_H
 
 #include <JuceHeader.h>
 
@@ -59,3 +60,5 @@ private:
                            const Drawable *icon, const Colour *const textColourToUse) override;
     void drawPopupMenuBackground(Graphics &g, int width, int height) override;
 };
+
+#endif // LOOK_H

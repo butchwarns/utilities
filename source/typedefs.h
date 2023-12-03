@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#ifndef TYPEDEFS_H
+#define TYPEDEFS_H
 
 #include <JuceHeader.h>
 
@@ -24,3 +25,5 @@ typedef AudioProcessorValueTreeState Apvts;
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
 typedef AudioProcessorValueTreeState::ComboBoxAttachment ComboBoxAttachment;
+
+#endif // TYPEDEFS_H

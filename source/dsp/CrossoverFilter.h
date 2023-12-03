@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifndef CROSSOVER_FILTER_H
+#define CROSSOVER_FILTER_H
+
 #include "../../BDSP/source/filter/HP1_RC_TPT.h"
 #include "../../BDSP/source/filter/LP1_RC_TPT.h"
 
@@ -43,3 +46,5 @@ private:
     bdsp::filter::LP1_RC_TPT lp[2];
     bdsp::filter::HP1_RC_TPT hp[2];
 };
+
+#endif // CROSSOVER_FILTER_H
