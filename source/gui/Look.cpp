@@ -56,6 +56,10 @@ void Look::drawLinearSlider(Graphics &g, int x, int y, int width, int height, fl
     g.setColour(GREY_TRANSPARENT);
     g.fillRect(bounds.getX(), bounds.getY(), (int)(sliderPos), bounds.getHeight());
 
+    // Thumb
+    g.setColour(Colours::black);
+    g.drawLine(sliderPos, 0.0f, sliderPos, (float)(slider.getLocalBounds().getHeight()), OUTLINE * 2.5f);
+
     // Outline
     g.setColour(juce::Colours::black);
     g.drawRect(slider.getLocalBounds(), (int)OUTLINE);
@@ -146,7 +150,7 @@ void Look::drawTickBox(Graphics &g, Component &component,
     if (ticked)
     {
         g.setColour(Colours::black);
-        g.setFont(Look::getFontInterRegular(FONT_SIZE));
+        g.setFont(Look::getFontInterBlack(FONT_SIZE));
         g.drawFittedText("X", bounds, juce::Justification::centred, 1, 1.0f);
     }
 }
