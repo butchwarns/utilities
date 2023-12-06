@@ -20,7 +20,7 @@ juce_add_plugin(bw_utility
     PLUGIN_MANUFACTURER_CODE Buwa       # A four-character manufacturer id with at least one upper-case character
     PLUGIN_CODE Util                    # A unique four-character plugin id with exactly one upper-case character
                                         # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
-    FORMATS VST3 AUv3                   # The formats to build. Valid formats are: VST3 AAX Unity VST AU AUv3 Standalone
+    FORMATS VST3 AU                     # The formats to build. Valid formats are: VST3 AAX Unity VST AU AUv3 Standalone
     PRODUCT_NAME "bw_utility")          # The name of the final executable, which can differ from the target name
 
 ###############################################################################
