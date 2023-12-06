@@ -17,7 +17,7 @@ jobs:
           submodules: recursive
       - name: "Run script"
         run: |
-          ./ci/build.sh
+          ./ci_cd/build_mac.sh
         shell: bash
         env:
           MACOS_CERTIFICATE: ${{ secrets.PROD_MACOS_CERTIFICATE }}
