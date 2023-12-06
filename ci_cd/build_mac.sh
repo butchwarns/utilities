@@ -18,7 +18,7 @@ echo "$ROOT"
 BRANCH=${GITHUB_REF##*/}
 echo "$BRANCH"
 
-# Clean up space for built plugins
+# Make folder for built plugins
 cd "$ROOT/ci"
 rm -Rf bin
 mkdir bin
@@ -51,17 +51,6 @@ cd "$ROOT/ci/bin"
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.vst3 -v
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.component -v
 
-# if [[ -n "$APPLE_USER" ]]; then
-#   zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst3 $PLUGIN.component
-#   xcrun notarytool submit --verbose --apple-id "$APPLE_USER" --password "$APPLE_PASS" --team-id "3FS7DJDG38" --wait --timeout 30m ${PLUGIN}_Mac.zip
-
-#   rm ${PLUGIN}_Mac.zip
-#   xcrun stapler staple $PLUGIN.vst3
-#   xcrun stapler staple $PLUGIN.component
-# else
-#   echo "Not notarizing"
-# fi
-
 # Notarize
 
 cd "$ROOT/ci/bin"
@@ -82,12 +71,13 @@ zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst3 $PLUGIN.component
 # characteristics. Visit the Notarization docs for more information and strategies on how to optimize it if
 # you're curious
 echo "Notarize app"
-xcrun notarytool submit "$PLUGIN.zip" --keychain-profile "notarytool-profile" --wait
+xcrun notarytool submit --verbose "$PLUGIN.zip" --keychain-profile "notarytool-profile" --wait --timeout 30m
 
 # Finally, we need to "attach the staple" to our executable, which will allow our app to be
 # validated by macOS even when an internet connection is not available.
 echo "Attach staple"
-xcrun stapler staple "${PLUGIN}_Mac.zip"
+xcrun stapler staple $PLUGIN.vst3
+xcrun stapler staple $PLUGIN.component
 
-# -> Release
-
+# Create zip archive
+zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst3 $PLUGIN.component
