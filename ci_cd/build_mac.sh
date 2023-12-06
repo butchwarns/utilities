@@ -19,7 +19,7 @@ BRANCH=${GITHUB_REF##*/}
 echo "$BRANCH"
 
 # Make folder for built plugins
-cd "$ROOT/ci"
+cd "$ROOT/ci_cd"
 rm -Rf bin
 mkdir bin
 
@@ -29,8 +29,8 @@ cmake --preset xcode
 cmake --build --preset xcode --config Release
 
 # Copy plugin builds to dedicated folder
-cp -R "$ROOT/Builds/xcode/${PLUGIN}_artefacts/Release/AU/$PLUGIN.component" "$ROOT/ci/bin"
-cp -R "$ROOT/Builds/xcode/${PLUGIN}_artefacts/Release/VST3/$PLUGIN.vst3" "$ROOT/ci/bin"
+cp -R "$ROOT/Builds/xcode/${PLUGIN}_artefacts/Release/AU/$PLUGIN.component" "$ROOT/ci_cd/bin"
+cp -R "$ROOT/Builds/xcode/${PLUGIN}_artefacts/Release/VST3/$PLUGIN.vst3" "$ROOT/ci_cd/bin"
 
 # Turn our base64-encoded certificate back to a regular .p12 file
 echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
@@ -47,13 +47,13 @@ security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI
 # Codesign
 
 # We finally codesign our app bundle, specifying the Hardened runtime option
-cd "$ROOT/ci/bin"
+cd "$ROOT/ci_cd/bin"
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.vst3 -v
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.component -v
 
 # Notarize
 
-cd "$ROOT/ci/bin"
+cd "$ROOT/ci_cd/bin"
 
 # Store the notarization credentials so that we can prevent a UI password dialog
 # from blocking the CI
