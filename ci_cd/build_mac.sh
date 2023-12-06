@@ -10,10 +10,6 @@ ROOT=$(cd "$(dirname "$0")/.."; pwd)
 cd "$ROOT"
 echo "$ROOT"
 
-# Get name of current git branch
-BRANCH=${GITHUB_REF##*/}
-echo "$BRANCH"
-
 # Make folder for built plugins
 cd "$ROOT/ci_cd"
 rm -Rf bin
@@ -24,8 +20,8 @@ cd "$ROOT/build"
 ./build_release.sh
 
 # Copy plugin builds to dedicated folder
-cp -R "$ROOT/Builds/xcode/${PLUGIN}_artefacts/Release/AU/$PLUGIN.component" "$ROOT/ci_cd/bin"
-cp -R "$ROOT/Builds/xcode/${PLUGIN}_artefacts/Release/VST3/$PLUGIN.vst3" "$ROOT/ci_cd/bin"
+cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/AU/$PLUGIN.component" "$ROOT/ci_cd/bin"
+cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/VST3/$PLUGIN.vst3" "$ROOT/ci_cd/bin"
 
 # Turn our base64-encoded certificate back to a regular .p12 file
 echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
