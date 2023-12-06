@@ -20,9 +20,8 @@ rm -Rf bin
 mkdir bin
 
 # Build in release mode
-cd "$ROOT"
-cmake --preset xcode
-cmake --build --preset xcode --config Release
+cd "$ROOT/build"
+./build_release.sh
 
 # Copy plugin builds to dedicated folder
 cp -R "$ROOT/Builds/xcode/${PLUGIN}_artefacts/Release/AU/$PLUGIN.component" "$ROOT/ci_cd/bin"
