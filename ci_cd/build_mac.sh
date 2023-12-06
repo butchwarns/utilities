@@ -45,8 +45,6 @@ security import certificate.p12 -k build.keychain -P "$MACOS_CERTIFICATE_PWD" -T
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI_KEYCHAIN_PWD" build.keychain
 
 # Codesign
-
-# We finally codesign our app bundle, specifying the Hardened runtime option
 cd "$ROOT/ci_cd/bin"
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.vst3 -v
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.component -v
