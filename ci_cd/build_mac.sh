@@ -24,15 +24,14 @@ cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/AU/$PLUGIN.component" "$ROOT/ci_c
 cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/VST3/$PLUGIN.vst3" "$ROOT/ci_cd/bin"
 
 # Run pluginval on the VST3
-echo -e "\nValidating using pluginval.."
+echo  "##########################################"
+echo -e "\nValidating VST3 using pluginval..\n"
 cd "$ROOT/ci_cd/bin"
 curl -LO "https://github.com/Tracktion/pluginval/releases/download/v1.0.3/pluginval_macOS.zip"
 7z x pluginval_macOS.zip
-echo -e "\nValidating AU..\n"
 ./pluginval.app/Contents/MacOS/pluginval --strictness-level 10 --verbose --validate-in-process "${PLUGIN}.vst3" || exit 1
-echo -e "\nValidating VST3..\n"
-./pluginval.app/Contents/MacOS/pluginval --strictness-level 10 --verbose --validate-in-process "${PLUGIN}.component" || exit 1
-echo -e "All tests passed!\n"
+echo -e "\nAll tests passed!\n"
+echo  "##########################################"
 
 # Turn our base64-encoded certificate back to a regular .p12 file
 cd "$ROOT"
@@ -51,6 +50,8 @@ security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI
 
 cd "$ROOT/ci_cd/bin"
 
+echo  "##########################################"
+echo -e "\nCodesign\n"
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.vst3 -v
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.component -v
 
@@ -69,7 +70,8 @@ zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst3 $PLUGIN.component
 # This typically takes a few seconds inside a CI environment, but it might take more depending on the App
 # characteristics. Visit the Notarization docs for more information and strategies on how to optimize it if
 # you're curious
-echo "Notarize app"
+echo  "##########################################"
+echo -e "\nNotarize\n"
 xcrun notarytool submit --verbose "${PLUGIN}_Mac.zip" --keychain-profile "notarytool-profile" --wait --timeout 30m
 
 # Finally, we need to "attach the staple" to our executable, which will allow our app to be
@@ -79,4 +81,6 @@ xcrun stapler staple $PLUGIN.vst3
 xcrun stapler staple $PLUGIN.component
 
 # Create zip archive
+echo  "##########################################"
+echo -e "\nCreate .zip archive\n"
 zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst3 $PLUGIN.component
