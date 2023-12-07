@@ -60,7 +60,7 @@ zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst3 $PLUGIN.component
 # characteristics. Visit the Notarization docs for more information and strategies on how to optimize it if
 # you're curious
 echo "Notarize app"
-xcrun notarytool submit --verbose "$PLUGIN.zip" --keychain-profile "notarytool-profile" --wait --timeout 30m
+xcrun notarytool submit --verbose "${PLUGIN}_Mac.zip" --keychain-profile "notarytool-profile" --wait --timeout 30m
 
 # Finally, we need to "attach the staple" to our executable, which will allow our app to be
 # validated by macOS even when an internet connection is not available.
