@@ -23,7 +23,14 @@ cd "$ROOT/build"
 cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/AU/$PLUGIN.component" "$ROOT/ci_cd/bin"
 cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/VST3/$PLUGIN.vst3" "$ROOT/ci_cd/bin"
 
+# Run pluginval on the VST3
+cd "$ROOT/ci_cd/bin"
+curl -LO "https://github.com/Tracktion/pluginval/releases/download/v1.0.3/pluginval_macOS.zip"
+7z x pluginval_macOS.zip
+./pluginval.app/Contents/MacOS/pluginval --strictness-level 10 --verbose --validate "${PLUGIN}.vst3"
+
 # Turn our base64-encoded certificate back to a regular .p12 file
+cd "$ROOT"
 echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
 
 # We need to create a new keychain, otherwise using the certificate will prompt
@@ -35,14 +42,12 @@ security unlock-keychain -p "$MACOS_CI_KEYCHAIN_PWD" build.keychain
 security import certificate.p12 -k build.keychain -P "$MACOS_CERTIFICATE_PWD" -T /usr/bin/codesign
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI_KEYCHAIN_PWD" build.keychain
 
-# Codesign
+# Codesign & Notarize
+
 cd "$ROOT/ci_cd/bin"
+
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.vst3 -v
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.component -v
-
-# Notarize
-
-cd "$ROOT/ci_cd/bin"
 
 # Store the notarization credentials so that we can prevent a UI password dialog
 # from blocking the CI
