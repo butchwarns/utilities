@@ -9,13 +9,13 @@ concurrency:
 
 jobs:
   build:
-    name: Build
+    name: Build and validate release
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: "Run script"
+      - name: "build_mac.sh"
         run: |
           ./ci_cd/build_mac.sh
         shell: bash
