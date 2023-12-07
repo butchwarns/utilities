@@ -24,10 +24,15 @@ cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/AU/$PLUGIN.component" "$ROOT/ci_c
 cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/VST3/$PLUGIN.vst3" "$ROOT/ci_cd/bin"
 
 # Run pluginval on the VST3
+echo -e "\nValidating using pluginval.."
 cd "$ROOT/ci_cd/bin"
 curl -LO "https://github.com/Tracktion/pluginval/releases/download/v1.0.3/pluginval_macOS.zip"
 7z x pluginval_macOS.zip
-./pluginval.app/Contents/MacOS/pluginval --strictness-level 10 --verbose --validate "${PLUGIN}.vst3"
+echo -e "\nValidating AU..\n"
+./pluginval.app/Contents/MacOS/pluginval --strictness-level 10 --verbose --validate-in-process "${PLUGIN}.vst3" || exit 1
+echo -e "\nValidating VST3..\n"
+./pluginval.app/Contents/MacOS/pluginval --strictness-level 10 --verbose --validate-in-process "${PLUGIN}.component" || exit 1
+echo -e "All tests passed!\n"
 
 # Turn our base64-encoded certificate back to a regular .p12 file
 cd "$ROOT"
