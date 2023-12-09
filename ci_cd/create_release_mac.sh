@@ -81,6 +81,7 @@ cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/VST3/$PLUGIN.vst3" "$ROOT/ci_cd/b
 # xcrun stapler staple $PLUGIN.component
 
 # Create zip archive
+cd "$ROOT/ci_cd/bin"
 echo  "##########################################"
 echo -e "\nCreate .zip archive\n"
 zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst3 $PLUGIN.component
