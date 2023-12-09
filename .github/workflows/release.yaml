@@ -1,4 +1,4 @@
-name: "Release"
+name: Publish Release
 
 on:
   push:
@@ -6,33 +6,33 @@ on:
       - "v*"
 
 jobs:
-  release:
-    name: "Release"
-
-    runs-on: "macos-latest"
-
+  create-release:
+    runs-on: ubuntu-latest
     steps:
-      - name: "Determine tag"
-        run: 'echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV'
-
-      - name: "Create release"
-        uses: "actions/github-script@v6"
+      - name: Download artifact
+        uses: actions/download-artifact@v2
         with:
-          github-token: "${{ secrets.GH_TOKEN }}"
-          script: |
-            try {
-              const response = await github.rest.repos.createRelease({
-                draft: true,
-                generate_release_notes: false,
-                name: process.env.RELEASE_TAG,
-                owner: context.repo.owner,
-                prerelease: true,
-                repo: context.repo.repo,
-                tag_name: process.env.RELEASE_TAG,
-              });
+          name: Binaries
+          path: ci_cd/bin/*.zip
 
-              core.exportVariable('RELEASE_ID', response.data.id);
-              core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
-            } catch (error) {
-              core.setFailed(error.message);
-            }
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+          body: "Test release for pipeline setup."
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ci_cd/bin/*.sh
+          asset_name: Binaries
+          asset_content_type: application/octet-stream
