@@ -63,3 +63,5 @@ tests/host_tests/*
 
 .DS_Store
 notes/*
+
+ci_cd/bin
