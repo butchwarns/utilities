@@ -1,4 +1,6 @@
 #!/bin/bash -e
+
+# Enable shell debug output
 set -x
 
 cd "$(dirname "$0")"
