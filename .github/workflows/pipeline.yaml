@@ -1,23 +1,23 @@
 name: Build
 on:
   push:
-    branches:
-      - "**"
+    tags:
+      - "v*"
 
 concurrency:
   group: build-${{ github.ref || github.run_id }}
 
 jobs:
   build:
-    name: Build and validate release
+    name: build_and_validate
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: "build_mac.sh"
+      - name: "create_release_mac.sh"
         run: |
-          ./ci_cd/build_mac.sh
+          ./ci_cd/create_release_mac.sh
         shell: bash
         env:
           MACOS_CERTIFICATE: ${{ secrets.PROD_MACOS_CERTIFICATE }}
@@ -27,9 +27,15 @@ jobs:
           PROD_MACOS_NOTARIZATION_APPLE_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_APPLE_ID }}
           PROD_MACOS_NOTARIZATION_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
           PROD_MACOS_NOTARIZATION_PWD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
-      - name: Upload Artifact
+      - name: upload_artifact
         uses: actions/upload-artifact@v3
         with:
           name: Binaries
           path: ci_cd/bin/*.zip
           retention-days: 30
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            ci_cd/bin/*.zip
