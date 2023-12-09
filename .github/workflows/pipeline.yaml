@@ -44,7 +44,7 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v3
       - name: Create Release
-        run: ./release.sh
+        run: ./ci_cd/release.sh
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
