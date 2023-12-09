@@ -1,8 +1,8 @@
 name: Build
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - "**"
 
 concurrency:
   group: build-${{ github.ref || github.run_id }}
@@ -30,12 +30,21 @@ jobs:
       - name: upload_artifact
         uses: actions/upload-artifact@v3
         with:
-          name: Binaries
+          name: binaries
           path: ci_cd/bin/*.zip
           retention-days: 30
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          files: |
-            ci_cd/bin/*.zip
+
+  release:
+    name: release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+      - name: Create Release
+        run: ./release.sh
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
