@@ -40,6 +40,9 @@ jobs:
           PROD_MACOS_NOTARIZATION_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
           PROD_MACOS_NOTARIZATION_PWD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
 
+      - name: Install Packages
+        run: brew install --cask packages
+
       - name: "package.sh"
         run: |
           ./ci_cd/package.sh

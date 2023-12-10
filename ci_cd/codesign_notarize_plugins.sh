@@ -43,10 +43,3 @@ echo  "##########################################"
 echo "Attach staple"
 xcrun stapler staple $PLUGIN.vst3
 xcrun stapler staple $PLUGIN.component
-
-# Create zip archive
-cd "$ROOT/ci_cd/bin"
-echo  "##########################################"
-echo -e "\nCreate .zip archive\n"
-zip -r ${PLUGIN}_plugins_mac.zip $PLUGIN.vst3 $PLUGIN.component
-echo  "##########################################"
