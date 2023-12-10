@@ -12,22 +12,23 @@ cd "$ROOT/ci_cd/packaging/mac"
 echo $MACOS_CERTIFICATE_INSTALLER | base64 --decode > certificate_installer.p12
 
 security unlock-keychain -p "$MACOS_CI_KEYCHAIN_PWD" build.keychain
-security import certificate_installer.p12 -k build.keychain -P "$MACOS_CERTIFICATE_INSTALLER_PWD" -T /usr/bin/codesign
+security import certificate_installer.p12 -k build.keychain -P "$MACOS_CERTIFICATE_INSTALLER_PWD" -T /usr/bin/productsign
 
 echo  "##########################################"
 echo -e "\nCodesign Installer\n"
 
-/usr/bin/codesign --force -s "$MACOS_CERTIFICATE_INSTALLER_NAME" --options runtime ./build/$PLUGIN.pkg -v --timestamp
+cd "$ROOT/ci_cd/packaging/mac"
+/usr/bin/productsign --force -s "$MACOS_CERTIFICATE_INSTALLER_NAME" --timestamp ./build/$PLUGIN.pkg ../../bin/$PLUGIN.pkg
 
 echo  "##########################################"
 echo -e "\nNotarize Installer\n"
 
-xcrun notarytool submit --verbose "./build/${PLUGIN}.pkg" --keychain-profile "notarytool-profile" --wait --timeout 30m
+xcrun notarytool submit --verbose "../../bin/${PLUGIN}.pkg" --keychain-profile "notarytool-profile" --wait --timeout 30m
 
 echo  "##########################################"
 echo -e "\nStaple Installer\n"
 
 echo "Attach staple"
-xcrun stapler staple ./build/$PLUGIN.pkg
+xcrun stapler staple ../../bin/$PLUGIN.pkg
 
 echo  "##########################################"
