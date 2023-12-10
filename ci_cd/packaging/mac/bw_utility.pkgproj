@@ -81,7 +81,7 @@
 															<key>PATH</key>
 															<string>../../bin/bw_utility.vst3</string>
 															<key>PATH_TYPE</key>
-															<integer>1</integer>
+															<integer>3</integer>
 															<key>PERMISSIONS</key>
 															<integer>493</integer>
 															<key>TYPE</key>
@@ -634,7 +634,7 @@
 															<key>PATH</key>
 															<string>../../bin/bw_utility.component</string>
 															<key>PATH_TYPE</key>
-															<integer>1</integer>
+															<integer>3</integer>
 															<key>PERMISSIONS</key>
 															<integer>493</integer>
 															<key>TYPE</key>
@@ -1138,7 +1138,7 @@
 							<key>PATH</key>
 							<string>background.png</string>
 							<key>PATH_TYPE</key>
-							<integer>1</integer>
+							<integer>3</integer>
 						</dict>
 						<key>CUSTOM</key>
 						<true/>
@@ -1153,7 +1153,7 @@
 					<key>PATH</key>
 					<string>background.png</string>
 					<key>PATH_TYPE</key>
-					<integer>1</integer>
+					<integer>3</integer>
 				</dict>
 				<key>CUSTOM</key>
 				<true/>
@@ -1298,7 +1298,7 @@
 							<key>PATH</key>
 							<string>/Users/butch/dev/plugins/bw_utility/ci_cd/packaging/mac/license.txt</string>
 							<key>PATH_TYPE</key>
-							<integer>1</integer>
+							<integer>3</integer>
 						</dict>
 					</dict>
 				</array>
@@ -1317,7 +1317,7 @@
 							<key>PATH</key>
 							<string>/Users/butch/dev/plugins/bw_utility/ci_cd/packaging/mac/readme.txt</string>
 							<key>PATH_TYPE</key>
-							<integer>1</integer>
+							<integer>3</integer>
 						</dict>
 					</dict>
 				</array>
@@ -1358,7 +1358,7 @@
 				<key>PATH</key>
 				<string>build</string>
 				<key>PATH_TYPE</key>
-				<integer>1</integer>
+				<integer>3</integer>
 			</dict>
 			<key>EXCLUDED_FILES</key>
 			<array>
