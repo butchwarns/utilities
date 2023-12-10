@@ -25,8 +25,8 @@ security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI
 echo  "##########################################"
 echo -e "\nCodesign Plug-Ins\n"
 
-/usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.vst3 -v
-/usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.component -v
+/usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.vst3 -v --timestamp
+/usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.component -v --timestamp
 
 echo  "##########################################"
 

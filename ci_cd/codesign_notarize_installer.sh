@@ -14,10 +14,6 @@ echo $MACOS_CERTIFICATE_INSTALLER | base64 --decode > certificate_installer.p12
 security unlock-keychain -p "$MACOS_CI_KEYCHAIN_PWD" build.keychain
 security import certificate_installer.p12 -k build.keychain -P "$MACOS_CERTIFICATE_INSTALLER_PWD" -T /usr/bin/codesign
 
-echo "Create keychain profile"
-xcrun notarytool store-credentials "notarytool-profile" --apple-id "$PROD_MACOS_NOTARIZATION_APPLE_ID" --team-id "$PROD_MACOS_NOTARIZATION_TEAM_ID" --password "$PROD_MACOS_NOTARIZATION_PWD"
-
-
 echo  "##########################################"
 echo -e "\nCodesign Installer\n"
 
