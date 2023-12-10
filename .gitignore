@@ -42,6 +42,10 @@
 # Builds and CMake
 build/*
 !build/build.sh
+ci_cd/packaging/mac/*
+!ci_cd/packaging/mac/background.png
+!ci_cd/packaging/mac/bw_utility.pkgproj
+ci_cd/bin
 
 ################################################################################
 # Tests
@@ -63,5 +67,3 @@ tests/test_hosts/*
 
 .DS_Store
 notes/*
-
-ci_cd/bin
