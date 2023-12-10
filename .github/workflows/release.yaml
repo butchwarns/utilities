@@ -41,7 +41,7 @@ jobs:
           PROD_MACOS_NOTARIZATION_PWD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
 
       - name: Download Packages installer build tool
-        run: wget http://s.sudre.free.fr/Software/files/Packages.dmg
+        run: wget http://s.sudre.free.fr/Software/files/Packages.dmg --retry-on-host-error
 
       - name: Mount Packages image
         run: hdiutil attach Packages.dmg
