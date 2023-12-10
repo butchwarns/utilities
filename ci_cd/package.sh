@@ -3,10 +3,10 @@
 # Disable shell debug output
 set +x
 
-ROOT=$(cd "$(dirname "$0")/.."; pwd)
-cd "$ROOT/ci_cd/"
+SCRIPT_DIR="$(dirname "$0")"
+cd "$SCRIPT_DIR"
 
 echo  "##########################################"
 echo -e "\nBuilding Installer..\n"
-packagesbuild --project ./packaging/mac/bw_utility.pkgproj
+packagesbuild --reference-folder ./packaging/mac --project ./packaging/mac/bw_utility.pkgproj
 echo  "##########################################"
