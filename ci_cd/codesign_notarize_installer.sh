@@ -17,6 +17,12 @@ security import certificate_installer.p12 -k build.keychain -P "$MACOS_CERTIFICA
 echo "Create keychain profile"
 xcrun notarytool store-credentials "notarytool-profile" --apple-id "$PROD_MACOS_NOTARIZATION_APPLE_ID" --team-id "$PROD_MACOS_NOTARIZATION_TEAM_ID" --password "$PROD_MACOS_NOTARIZATION_PWD"
 
+
+echo  "##########################################"
+echo -e "\nCodesign Installer\n"
+
+/usr/bin/codesign --force -s "$MACOS_CERTIFICATE_INSTALLER_NAME" --options runtime ./build/$PLUGIN.pkg -v
+
 echo  "##########################################"
 echo -e "\nNotarize Installer\n"
 
@@ -25,14 +31,9 @@ zip -r ${PLUGIN}_installer_mac.zip ./build/$PLUGIN.pkg
 xcrun notarytool submit --verbose "${PLUGIN}_installer_mac.zip" --keychain-profile "notarytool-profile" --wait --timeout 30m
 
 echo  "##########################################"
-echo -e "\nStaple Plug-Ins\n"
+echo -e "\nStaple Installer\n"
 
 echo "Attach staple"
-xcrun stapler staple $PLUGIN.pkg
-
-echo  "##########################################"
-echo -e "\nCodesign Installer\n"
-
-/usr/bin/codesign --force -s "$MACOS_CERTIFICATE_INSTALLER_NAME" --options runtime $PLUGIN.pkg -v
+xcrun stapler staple ./build/$PLUGIN.pkg
 
 echo  "##########################################"
