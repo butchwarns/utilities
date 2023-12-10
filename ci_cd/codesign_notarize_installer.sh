@@ -1,7 +1,7 @@
 #! /bin/bash -e
 
-# Enable shell debug output
-set -x
+# Disable shell debug output
+set +x
 
 PLUGIN="bw_utility"
 
