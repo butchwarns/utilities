@@ -3,8 +3,6 @@ on:
   workflow_dispatch:
   pull_request:
     branches: [develop, main]
-  push:
-    branches: "**"
 
 concurrency:
   group: build-${{ github.ref || github.run_id }}
