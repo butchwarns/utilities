@@ -38,14 +38,13 @@ jobs:
           PROD_MACOS_NOTARIZATION_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
           PROD_MACOS_NOTARIZATION_PWD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
 
-      - name: Extract tag name
+      - name: "Extract tag name"
         if: startsWith(github.ref, 'refs/tags/')
         run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
         env:
           GITHUB_REF: ${{ github.ref }}
 
       - name: "upload_release.sh"
-        if: startsWith(github.ref, 'refs/tags/v')
         run: ./ci_cd/upload_release.sh ${{ env.TAG_NAME }}
         shell: bash
         env:
