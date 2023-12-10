@@ -1,15 +1,10 @@
 name: Integration Pipeline
 on:
   workflow_dispatch:
-    inputs:
-      targetBranch:
-        description: "Branch to run the workflow on."
-        required: false
-        default: "main"
   pull_request:
     branches: [develop, main]
   push:
-    branches: "*"
+    branches: "**"
 
 concurrency:
   group: build-${{ github.ref || github.run_id }}
