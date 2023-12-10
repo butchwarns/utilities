@@ -4,9 +4,6 @@
 scriptdir="$(dirname "$0")"
 cd "$scriptdir"
 
-cmake .. -GUnix\ Makefiles -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=debug
-cmake --build . --config debug
-
 # Check the first argument for build type
 if [ -z "$1" ]; then
     echo "No argument supplied. Please specify 'release' or 'debug'."
