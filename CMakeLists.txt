@@ -6,7 +6,7 @@ project(bw_utility VERSION 0.1.0)
 
 add_subdirectory(JUCE)                  
 
-juce_add_plugin(BW_UTILITY
+juce_add_plugin(bw_utility
     # VERSION ...                       # Set this if the plugin version is different to the project version
     # ICON_BIG ...                      # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
@@ -20,13 +20,13 @@ juce_add_plugin(BW_UTILITY
     PLUGIN_MANUFACTURER_CODE Buwa       # A four-character manufacturer id with at least one upper-case character
     PLUGIN_CODE Util                    # A unique four-character plugin id with exactly one upper-case character
                                         # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
-    FORMATS VST3                        # The formats to build. Other valid formats are: AAX Unity VST AU AUv3 Standalone
+    FORMATS VST3 AU                     # The formats to build. Valid formats are: VST3 AAX Unity VST AU AUv3 Standalone
     PRODUCT_NAME "bw_utility")          # The name of the final executable, which can differ from the target name
 
 ###############################################################################
 # Sources
 
-juce_generate_juce_header(BW_UTILITY)
+juce_generate_juce_header(bw_utility)
 
 set(SRC_PLUGIN_BASE
         source/PluginEditor.cpp
@@ -64,7 +64,7 @@ set(SRC_GUI
         source/gui/DCBlock.cpp
         source/gui/WindowContents.cpp)
 
-target_sources(BW_UTILITY
+target_sources(bw_utility
     PRIVATE
         ${SRC_PLUGIN_BASE}
         ${SRC_DSP}
@@ -73,7 +73,7 @@ target_sources(BW_UTILITY
 
 ###############################################################################
 
-target_compile_definitions(BW_UTILITY
+target_compile_definitions(bw_utility
     PUBLIC
         JUCE_WEB_BROWSER=0              # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
         JUCE_USE_CURL=0                 # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
@@ -91,7 +91,7 @@ juce_add_binary_data(BWUtilityBinaryData
         resources/fonts/Inter-Bold.otf
         resources/fonts/Inter-Black.otf)
 
-target_link_libraries(BW_UTILITY
+target_link_libraries(bw_utility
     PRIVATE
         BWUtilityBinaryData
         juce::juce_audio_utils

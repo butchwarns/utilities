@@ -1,0 +1,88 @@
+name: Release Pipeline
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: build-${{ github.ref || github.run_id }}
+
+jobs:
+  release_pipeline:
+    name: release_pipeline
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: "build_release.sh"
+        run: |
+          ./ci_cd/build_release.sh
+        shell: bash
+
+      - name: "validate.sh"
+        run: |
+          ./ci_cd/validate.sh
+        shell: bash
+
+      - name: "codesign_notarize_plugins.sh"
+        run: |
+          ./ci_cd/codesign_notarize_plugins.sh
+        shell: bash
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.PROD_MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.PROD_MACOS_CERTIFICATE_PWD }}
+          MACOS_CERTIFICATE_NAME: ${{ secrets.PROD_MACOS_CERTIFICATE_NAME }}
+          MACOS_CI_KEYCHAIN_PWD: ${{ secrets.PROD_MACOS_CI_KEYCHAIN_PWD }}
+          PROD_MACOS_NOTARIZATION_APPLE_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_APPLE_ID }}
+          PROD_MACOS_NOTARIZATION_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
+          PROD_MACOS_NOTARIZATION_PWD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
+
+      - name: Download Packages installer build tool
+        run: wget http://s.sudre.free.fr/Software/files/Packages.dmg --retry-on-host-error
+
+      - name: Mount Packages image
+        run: hdiutil attach Packages.dmg
+
+      - name: Install Packages
+        run: sudo installer -pkg /Volumes/Packages\ 1.2.10/Install\ Packages.pkg -target /
+
+      - name: "package.sh"
+        run: |
+          ./ci_cd/package.sh
+
+      - name: "codesign_notarize_installer.sh"
+        run: |
+          ./ci_cd/codesign_notarize_installer.sh
+        env:
+          MACOS_CERTIFICATE_INSTALLER: ${{ secrets.PROD_MACOS_CERTIFICATE_INSTALLER }}
+          MACOS_CERTIFICATE_INSTALLER_PWD: ${{ secrets.PROD_MACOS_CERTIFICATE_INSTALLER_PWD }}
+          MACOS_CERTIFICATE_INSTALLER_NAME: ${{ secrets.PROD_MACOS_CERTIFICATE_INSTALLER_NAME }}
+          MACOS_CI_KEYCHAIN_PWD: ${{ secrets.PROD_MACOS_CI_KEYCHAIN_PWD }}
+          PROD_MACOS_NOTARIZATION_APPLE_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_APPLE_ID }}
+          PROD_MACOS_NOTARIZATION_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
+          PROD_MACOS_NOTARIZATION_PWD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
+
+      - name: "bundle.sh"
+        run: |
+          ./ci_cd/bundle.sh
+
+      - name: "Extract tag name"
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        env:
+          GITHUB_REF: ${{ github.ref }}
+
+      - name: "upload_release.sh"
+        run: ./ci_cd/upload_release.sh ${{ env.TAG_NAME }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: upload_artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: binaries
+          path: ci_cd/bin/bw_utility_*.zip
+          retention-days: 30
