@@ -9,4 +9,4 @@ PLUGIN="bw_utility"
 ROOT=$(cd "$(dirname "$0")/.."; pwd)
 cd "$ROOT/ci_cd/bin"
 
-gh release create "$GITHUB_REF_NAME" -F ../../CHANGELOG.md ${PLUGIN}_*.zip
+gh release create "$1" -F ../../CHANGELOG.md ${PLUGIN}_*.zip
