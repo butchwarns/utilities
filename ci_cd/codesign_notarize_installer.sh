@@ -21,7 +21,7 @@ xcrun notarytool store-credentials "notarytool-profile" --apple-id "$PROD_MACOS_
 echo  "##########################################"
 echo -e "\nCodesign Installer\n"
 
-/usr/bin/codesign --force -s "$MACOS_CERTIFICATE_INSTALLER_NAME" --options runtime ./build/$PLUGIN.pkg -v
+/usr/bin/codesign --force -s "$MACOS_CERTIFICATE_INSTALLER_NAME" --options runtime ./build/$PLUGIN.pkg -v --timestamp
 
 echo  "##########################################"
 echo -e "\nNotarize Installer\n"
