@@ -21,10 +21,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
+
       - name: "build_validate.sh"
         run: |
           ./ci_cd/build_validate.sh
         shell: bash
+
       - name: "codesign_notarize.sh"
         run: |
           ./ci_cd/codesign_notarize.sh
@@ -49,6 +51,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+
       - name: upload_artifact
         uses: actions/upload-artifact@v3
         with:
