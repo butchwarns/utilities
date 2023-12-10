@@ -1,4 +1,4 @@
-name: Build
+name: Release Pipeline
 on:
   workflow_dispatch:
     inputs:
@@ -22,9 +22,14 @@ jobs:
         with:
           submodules: recursive
 
-      - name: "build_validate.sh"
+      - name: "build_release.sh"
         run: |
-          ./ci_cd/build_validate.sh
+          ./ci_cd/build_release.sh
+        shell: bash
+
+      - name: "validate.sh"
+        run: |
+          ./ci_cd/validate.sh
         shell: bash
 
       - name: "codesign_notarize.sh"
@@ -56,5 +61,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: binaries
-          path: ci_cd/bin/bw_utility_*
+          path: ci_cd/bin/bw_utility_*.zip
           retention-days: 30
