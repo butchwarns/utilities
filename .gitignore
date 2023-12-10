@@ -46,6 +46,8 @@ ci_cd/packaging/mac/*
 !ci_cd/packaging/mac/background.png
 !ci_cd/packaging/mac/bw_utility.pkgproj
 ci_cd/bin
+ci_cd/*.zip
+ci_cd/*.app
 
 ################################################################################
 # Tests

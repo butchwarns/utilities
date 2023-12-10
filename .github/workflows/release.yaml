@@ -27,9 +27,9 @@ jobs:
           ./ci_cd/validate.sh
         shell: bash
 
-      - name: "codesign_notarize.sh"
+      - name: "codesign_notarize_plugins.sh"
         run: |
-          ./ci_cd/codesign_notarize.sh
+          ./ci_cd/codesign_notarize_plugins.sh
         shell: bash
         env:
           MACOS_CERTIFICATE: ${{ secrets.PROD_MACOS_CERTIFICATE }}
@@ -40,8 +40,15 @@ jobs:
           PROD_MACOS_NOTARIZATION_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
           PROD_MACOS_NOTARIZATION_PWD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
 
+      - name: "package.sh"
+        run: |
+          ./ci_cd/package.sh
+
+      - name: "codesign_notarize_installer.sh"
+        run: |
+          ./ci_cd/codesign_notarize_installer.sh
+
       - name: "Extract tag name"
-        if: startsWith(github.ref, 'refs/tags/')
         run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
         env:
           GITHUB_REF: ${{ github.ref }}
