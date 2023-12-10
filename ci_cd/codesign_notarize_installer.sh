@@ -22,9 +22,7 @@ echo -e "\nCodesign Installer\n"
 echo  "##########################################"
 echo -e "\nNotarize Installer\n"
 
-echo "Creating temporary notarization archive"
-zip -r ${PLUGIN}_installer_mac.zip ./build/$PLUGIN.pkg
-xcrun notarytool submit --verbose "${PLUGIN}_installer_mac.zip" --keychain-profile "notarytool-profile" --wait --timeout 30m
+xcrun notarytool submit --verbose "./build/${PLUGIN}.pkg" --keychain-profile "notarytool-profile" --wait --timeout 30m
 
 echo  "##########################################"
 echo -e "\nStaple Installer\n"
