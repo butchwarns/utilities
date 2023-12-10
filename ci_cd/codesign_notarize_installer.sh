@@ -32,8 +32,8 @@ echo  "##########################################"
 echo -e "\nNotarize Installer\n"
 
 echo "Creating temporary notarization archive"
-zip -r ${PLUGIN}_plugins_mac.zip $PLUGIN.pkg
-xcrun notarytool submit --verbose "${PLUGIN}_plugins_mac.zip" --keychain-profile "notarytool-profile" --wait --timeout 30m
+zip -r ${PLUGIN}_installer_mac.zip $PLUGIN.pkg
+xcrun notarytool submit --verbose "${PLUGIN}_installer_mac.zip" --keychain-profile "notarytool-profile" --wait --timeout 30m
 
 echo  "##########################################"
 echo -e "\nStaple Plug-Ins\n"
