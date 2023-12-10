@@ -27,7 +27,7 @@ rm -rf ./build/$PLUGIN.pkg
 echo  "##########################################"
 echo -e "\nNotarize Installer\n"
 
-xcrun notarytool submit --verbose "../../bin/${PLUGIN}.pkg" --keychain-profile "notarytool-profile" --wait --timeout 30m
+xcrun notarytool submit --verbose "../../bin/$PLUGIN.pkg" --keychain-profile "notarytool-profile" --wait --timeout 30m
 
 echo  "##########################################"
 echo -e "\nStaple Installer\n"
