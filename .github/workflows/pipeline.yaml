@@ -1,8 +1,14 @@
 name: Build
 on:
+  workflow_dispatch:
+    inputs:
+      targetBranch:
+        description: "Branch to run the workflow on."
+        required: false
+        default: "main"
   push:
-    branches:
-      - "**"
+    tags:
+      - "v*"
 
 concurrency:
   group: build-${{ github.ref || github.run_id }}
@@ -48,5 +54,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: binaries
-          path: ci_cd/bin/*
+          path: ci_cd/bin/bw_utility_*
           retention-days: 30
