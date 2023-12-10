@@ -8,6 +8,7 @@ cd "$scriptdir"
 if [ -z "$1" ]; then
     echo "No argument supplied. Please specify 'release' or 'debug'."
     echo "(Defaulting to release build!)"
+
     build_type="release"
 else
     build_type=$1
