@@ -1296,7 +1296,7 @@
 						<key>VALUE</key>
 						<dict>
 							<key>PATH</key>
-							<string>/Users/butch/dev/plugins/bw_utility/ci_cd/packaging/mac/license.txt</string>
+							<string>./license.txt</string>
 							<key>PATH_TYPE</key>
 							<integer>3</integer>
 						</dict>
@@ -1315,7 +1315,7 @@
 						<key>VALUE</key>
 						<dict>
 							<key>PATH</key>
-							<string>/Users/butch/dev/plugins/bw_utility/ci_cd/packaging/mac/readme.txt</string>
+							<string>./readme.txt</string>
 							<key>PATH_TYPE</key>
 							<integer>3</integer>
 						</dict>
