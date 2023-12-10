@@ -5,7 +5,6 @@ set +x
 
 PLUGIN="bw_utility"
 
-# Go to project root folder
 ROOT=$(cd "$(dirname "$0")/.."; pwd)
 cd "$ROOT"
 
