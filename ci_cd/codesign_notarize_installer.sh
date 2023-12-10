@@ -1,7 +1,7 @@
 #! /bin/bash -e
 
-# Disable shell debug output
-set +x
+# Enable shell debug output
+set -x
 
 PLUGIN="bw_utility"
 
@@ -11,9 +11,6 @@ cd "$ROOT/ci_cd/packaging/mac"
 # Turn our base64-encoded certificate back to a regular .p12 file
 echo $MACOS_CERTIFICATE_INSTALLER | base64 --decode > certificate_installer.p12
 
-# We need to create a new keychain, otherwise using the certificate will prompt
-# with a UI dialog asking for the certificate password, which we can't
-# use in a headless CI environment
 security unlock-keychain -p "$MACOS_CI_KEYCHAIN_PWD" build.keychain
 security import certificate_installer.p12 -k build.keychain -P "$MACOS_CERTIFICATE_INSTALLER_PWD" -T /usr/bin/codesign
 
