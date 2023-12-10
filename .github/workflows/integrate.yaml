@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [develop, main]
   push:
-    branches: [develop, main]
+    branches: "*"
 
 concurrency:
   group: build-${{ github.ref || github.run_id }}
