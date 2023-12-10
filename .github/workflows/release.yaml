@@ -57,7 +57,13 @@ jobs:
         run: |
           ./ci_cd/codesign_notarize_installer.sh
         env:
-          MACOS_CERTIFICATE_PWD: ${{ secrets.PROD_MACOS_CERTIFICATE_PWD }}
+          MACOS_CERTIFICATE_INSTALLER: ${{ secrets.PROD_MACOS_CERTIFICATE_INSTALLER }}
+          MACOS_CERTIFICATE_INSTALLER_PWD: ${{ secrets.PROD_MACOS_CERTIFICATE_INSTALLER_PWD }}
+          MACOS_CERTIFICATE_INSTALLER_NAME: ${{ secrets.PROD_MACOS_CERTIFICATE_INSTALLER_NAME }}
+          MACOS_CI_KEYCHAIN_PWD: ${{ secrets.PROD_MACOS_CI_KEYCHAIN_PWD }}
+          PROD_MACOS_NOTARIZATION_APPLE_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_APPLE_ID }}
+          PROD_MACOS_NOTARIZATION_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
+          PROD_MACOS_NOTARIZATION_PWD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
 
       - name: "Extract tag name"
         run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
