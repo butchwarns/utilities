@@ -24,8 +24,10 @@ security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI
 
 echo  "##########################################"
 echo -e "\nCodesign Plug-Ins\n"
+
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.vst3 -v
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.component -v
+
 echo  "##########################################"
 
 # Store the notarization credentials so that we can prevent a UI password dialog
@@ -34,11 +36,14 @@ echo "Create keychain profile"
 xcrun notarytool store-credentials "notarytool-profile" --apple-id "$PROD_MACOS_NOTARIZATION_APPLE_ID" --team-id "$PROD_MACOS_NOTARIZATION_TEAM_ID" --password "$PROD_MACOS_NOTARIZATION_PWD"
 
 echo  "##########################################"
-echo -e "\nNotarizing..\n"
+echo -e "\nNotarize Plug-Ins\n"
+
 echo "Creating temporary notarization archive"
 zip -r ${PLUGIN}_plugins_mac.zip $PLUGIN.vst3 $PLUGIN.component
 xcrun notarytool submit --verbose "${PLUGIN}_plugins_mac.zip" --keychain-profile "notarytool-profile" --wait --timeout 30m
+
 echo  "##########################################"
+echo -e "\nStaple Plug-Ins\n"
 
 echo "Attach staple"
 xcrun stapler staple $PLUGIN.vst3
