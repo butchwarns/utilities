@@ -8,8 +8,8 @@ concurrency:
   group: build-${{ github.ref || github.run_id }}
 
 jobs:
-  build:
-    name: build_and_validate
+  release_pipeline:
+    name: release_pipeline
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -31,14 +31,14 @@ jobs:
           PROD_MACOS_NOTARIZATION_APPLE_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_APPLE_ID }}
           PROD_MACOS_NOTARIZATION_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
           PROD_MACOS_NOTARIZATION_PWD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
+      - name: "upload_release.sh"
+        run: ./ci_cd/upload_release.sh
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: upload_artifact
         uses: actions/upload-artifact@v3
         with:
           name: binaries
-          path: ci_cd/bin/*.zip
+          path: ci_cd/bin/*
           retention-days: 30
-      - name: Create Release
-        run: ./ci_cd/release.sh
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
