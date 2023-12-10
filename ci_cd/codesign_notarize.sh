@@ -29,6 +29,7 @@ echo  "##########################################"
 echo -e "\nCodesign\n"
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.vst3 -v
 /usr/bin/codesign --force -s "$MACOS_CERTIFICATE_NAME" --options runtime $PLUGIN.component -v
+echo  "##########################################"
 
 # Store the notarization credentials so that we can prevent a UI password dialog
 # from blocking the CI
@@ -38,7 +39,7 @@ xcrun notarytool store-credentials "notarytool-profile" --apple-id "$PROD_MACOS_
 # We can't notarize an app bundle directly, but we need to compress it as an archive.
 # Therefore, we create a zip file containing our app bundle, so that we can send it to the
 # notarization service
-echo "Creating temp notarization archive"
+echo "Creating temporary notarization archive"
 zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst3 $PLUGIN.component
 
 # Here we send the notarization request to the Apple's Notarization service, waiting for the result.
@@ -48,6 +49,7 @@ zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst3 $PLUGIN.component
 echo  "##########################################"
 echo -e "\nNotarize\n"
 xcrun notarytool submit --verbose "${PLUGIN}_Mac.zip" --keychain-profile "notarytool-profile" --wait --timeout 30m
+echo  "##########################################"
 
 # Finally, we need to "attach the staple" to our executable, which will allow our app to be
 # validated by macOS even when an internet connection is not available.
@@ -60,3 +62,4 @@ cd "$ROOT/ci_cd/bin"
 echo  "##########################################"
 echo -e "\nCreate .zip archive\n"
 zip -r ${PLUGIN}_Mac.zip $PLUGIN.vst3 $PLUGIN.component
+echo  "##########################################"
