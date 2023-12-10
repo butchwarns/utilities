@@ -22,7 +22,7 @@ cd "$ROOT/build"
 cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/AU/$PLUGIN.component" "$ROOT/ci_cd/bin"
 cp -R "$ROOT/build/${PLUGIN}_artefacts/Release/VST3/$PLUGIN.vst3" "$ROOT/ci_cd/bin"
 
-build/build_debug.sh# Run pluginval on the VST3
+# Run pluginval on the VST3
 echo  "##########################################"
 echo -e "\nValidating VST3 using pluginval..\n"
 cd "$ROOT/ci_cd/bin"
