@@ -22,6 +22,7 @@ echo -e "\nCodesign Installer\n"
 
 cd "$ROOT/ci_cd/packaging/mac"
 /usr/bin/productsign -s "$MACOS_CERTIFICATE_INSTALLER_NAME" --timestamp ./build/$PLUGIN.pkg ../../bin/$PLUGIN.pkg
+rm -rf ./build/$PLUGIN.pkg
 
 echo  "##########################################"
 echo -e "\nNotarize Installer\n"
