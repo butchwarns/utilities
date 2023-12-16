@@ -43,7 +43,7 @@ set(SRC_BDSP
         BDSP/source/smoother/SmootherLinear.cpp
         BDSP/source/cv/VoltPerOctave.cpp
         BDSP/source/filter/LP1_RC_TPT.cpp
-        BDSP/source/filter/HP1_RC_TPT.cpp)
+        BDSP/source/filter/LP2_SallenKey_TPT.cpp)
 
 set(SRC_GUI_COMPONENTS
         source/gui/components/Spacer.cpp
