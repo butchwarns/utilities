@@ -1,8 +1,10 @@
 # bw_utility CMakeLists.txt
 
 cmake_minimum_required(VERSION 3.15)
+set(CMAKE_CXX_STANDARD 17)
 
 project(bw_utility VERSION 0.1.0)
+
 
 add_subdirectory(JUCE)                  
 
@@ -41,7 +43,7 @@ set(SRC_BDSP
         BDSP/source/smoother/SmootherLinear.cpp
         BDSP/source/cv/VoltPerOctave.cpp
         BDSP/source/filter/LP1_RC_TPT.cpp
-        BDSP/source/filter/HP1_RC_TPT.cpp)
+        BDSP/source/filter/LP2_SallenKey_TPT.cpp)
 
 set(SRC_GUI_COMPONENTS
         source/gui/components/Spacer.cpp
