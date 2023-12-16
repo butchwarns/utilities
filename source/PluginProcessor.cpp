@@ -19,6 +19,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#include "../BDSP/source/MidSide.h"
+
 int PluginProcessor::window_width_saved = WIN_WIDTH;
 int PluginProcessor::window_height_saved = WIN_HEIGHT;
 
@@ -301,18 +303,6 @@ void PluginProcessor::apply_phase_flip(double flip_l, double &left, double flip_
     right *= flip_r;
 }
 
-void PluginProcessor::encode_mid_side(double left, double right, double &mid, double &side)
-{
-    mid = (left + right) / sqrt(2.0);
-    side = (left - right) / sqrt(2.0);
-}
-
-void PluginProcessor::decode_mid_side(double mid, double side, double &left, double &right)
-{
-    left = (mid + side) / sqrt(2.0);
-    right = (mid - side) / sqrt(2.0);
-}
-
 void PluginProcessor::split_bands(double left, double right, double &lo_l, double &hi_l, double &lo_r, double &hi_r)
 {
     CrossoverFilterOutput bands_left = crossover[Channel::L].process(left);
@@ -329,11 +319,11 @@ void PluginProcessor::apply_bass_width(double bass_width, double &left, double &
     double lo_mid = 0.0;
     double lo_side = 0.0;
 
-    encode_mid_side(lo_left, lo_right, lo_mid, lo_side);
+    bdsp::MidSide<double>::encode_uncorrelated(lo_left, lo_right, lo_mid, lo_side);
 
     lo_side *= bass_width;
 
-    decode_mid_side(lo_mid, lo_side, lo_left, lo_right);
+    bdsp::MidSide<double>::decode_uncorrelated(lo_left, lo_right, lo_mid, lo_side);
 
     left = hi_left + lo_left;
     right = hi_right + lo_right;
@@ -344,11 +334,11 @@ void PluginProcessor::apply_width(double width, double &left, double &right)
     double mid = 0.0;
     double side = 0.0;
 
-    encode_mid_side(left, right, mid, side);
+    bdsp::MidSide<double>::encode_uncorrelated(left, right, mid, side);
 
     side *= width;
 
-    decode_mid_side(mid, side, left, right);
+    bdsp::MidSide<double>::decode_uncorrelated(left, right, mid, side);
 }
 
 void PluginProcessor::apply_channels(ChannelsChoice channels, double &left, double &right)

@@ -89,8 +89,6 @@ private:
 
     inline void update_crossover_cutoff(double frequency);
     static inline void apply_phase_flip(double flip_l, double &left, double flip_r, double &right);
-    static inline void encode_mid_side(double left, double right, double &mid, double &side);
-    static inline void decode_mid_side(double mid, double side, double &left, double &right);
     inline void split_bands(double left, double right, double &lo_l, double &hi_l, double &lo_r, double &hi_r);
     static inline void apply_bass_width(double bass_width, double &left, double &right, double &lo_left, double &hi_left, double &lo_right, double &hi_right);
     static inline void apply_width(double width, double &left, double &right);
