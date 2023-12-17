@@ -19,7 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef CROSSOVER_FILTER_H
 #define CROSSOVER_FILTER_H
 
-#include "../../BDSP/source/filter/LP2_SallenKey_TPT.h"
+#include "../../BDSP/source/filter/LP1_RC_TPT.h"
 
 struct CrossoverFilterOutput
 {
@@ -42,7 +42,7 @@ public:
 private:
     double sample_rate;
 
-    bdsp::filter::LP2_SallenKey_TPT lp;
+    bdsp::filter::LP1_RC_TPT lp;
 };
 
 #endif // CROSSOVER_FILTER_H

@@ -163,6 +163,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         bass_width = 0.0f;
     }
     smooth_bass_width.set_target_val(bass_width);
+    const bool bass_mono_cue = p.bass_mono_cue();
     const double bass_mono_freq = p.bass_mono_freq();
     smooth_bass_mono_freq.set_target_val(bass_mono_freq);
 
@@ -205,7 +206,13 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         double hi_r = 0.0f;
         split_bands(l, r, lo_l, hi_l, lo_r, hi_r);
 
-        if (bass_mono)
+        if (bass_mono_cue)
+        {
+            hi_l = 0.0f;
+            hi_r = 0.0f;
+        }
+
+        if (bass_mono || bass_mono_cue)
         {
             apply_bass_width(bass_width_smooth, l, r, lo_l, hi_l, lo_r, hi_r);
         }

@@ -28,12 +28,11 @@ void CrossoverFilter::reset(double _sample_rate)
     sample_rate = _sample_rate;
 
     lp.reset(_sample_rate);
-    lp.set_q(0.5);
 }
 
 void CrossoverFilter::set_cutoff(double cutoff)
 {
-    lp.set_cutoff(cutoff);
+    lp.set_cutoff_prewarp(cutoff);
 }
 
 CrossoverFilterOutput CrossoverFilter::process(double x)

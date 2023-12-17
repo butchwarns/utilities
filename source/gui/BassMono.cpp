@@ -19,15 +19,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "BassMono.h"
 
 BassMono::BassMono(PluginParameters &p)
-    : checkbox(p, "bass_mono"),
+    : check_on(p, "bass_mono"),
+      check_cue(p, "bass_mono_cue"),
       slider(p, "bass_mono_freq", p.bass_mono_freq_string_from_value, p.bass_mono_freq_value_from_string)
 {
     addAndMakeVisible(&bass_mono);
     bass_mono.set_text("BASS MONO");
     bass_mono.getProperties().set("gui_class", "bold");
 
-    addAndMakeVisible(&checkbox);
-    checkbox.label.setText("ACTIVE", dontSendNotification);
+    addAndMakeVisible(&check_on);
+    check_on.label.setText("ON", dontSendNotification);
+
+    addAndMakeVisible(&check_cue);
+    check_cue.label.setText("CUE", dontSendNotification);
 
     addAndMakeVisible(&slider);
     slider.label.setText("FREQUENCY", dontSendNotification);
@@ -46,8 +50,9 @@ void BassMono::resized()
 
     bounds.removeFromTop(PAD);
 
-    auto active_check_bounds = bounds.removeFromTop(LABEL_HEIGHT);
-    checkbox.setBounds(active_check_bounds.removeFromTop(CHECKBOX_DIM));
+    auto check_bounds = bounds.removeFromTop(CHECKBOX_LABELED_HEIGHT);
+    check_on.setBounds(check_bounds.removeFromLeft(check_bounds.getWidth() / 2));
+    check_cue.setBounds(check_bounds);
 
     bounds.removeFromTop(2 * PAD);
 

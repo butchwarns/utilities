@@ -32,6 +32,7 @@ PluginParameters::PluginParameters(juce::AudioProcessor &processor)
     width_norm = apvts.getRawParameterValue("width");
     mono_norm = apvts.getRawParameterValue("mono");
     bass_mono_norm = apvts.getRawParameterValue("bass_mono");
+    bass_mono_cue_norm = apvts.getRawParameterValue("bass_mono_cue");
     bass_mono_freq_norm = apvts.getRawParameterValue("bass_mono_freq");
     phase_flip_l_norm = apvts.getRawParameterValue("phase_flip_l");
     phase_flip_r_norm = apvts.getRawParameterValue("phase_flip_r");
@@ -307,6 +308,28 @@ String PluginParameters::bass_mono_string_from_bool(bool value, int max_string_l
     return s;
 }
 
+bool PluginParameters::bass_mono_cue()
+{
+    return static_cast<bool>(*bass_mono_cue_norm);
+}
+
+String PluginParameters::bass_mono_cue_string_from_bool(bool value, int max_string_len)
+{
+    String s;
+    if (value)
+    {
+        s = "CUE BASS MONO ON";
+    }
+    else
+    {
+        s = "CUE BASS MONO OFF";
+    }
+
+    constrain_string_length(s, max_string_len);
+
+    return s;
+}
+
 double PluginParameters::bass_mono_freq()
 {
     const double freq = denormalise_bass_mono_freq((double)*bass_mono_freq_norm);
@@ -552,6 +575,7 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
 
     std::unique_ptr<ParameterGroup> bass_mono_grp = std::make_unique<ParameterGroup>("bass_mono", "BASS_MONO", "|");
     bass_mono_grp->addChild(std::make_unique<juce::AudioParameterBool>("bass_mono", "BASS_MONO", false, "", bass_mono_string_from_bool));
+    bass_mono_grp->addChild(std::make_unique<juce::AudioParameterBool>("bass_mono_cue", "BASS_MONO_CUE", false, "", bass_mono_cue_string_from_bool));
     const auto bass_mono_freq_default = (float)normalise_bass_mono_freq(120.0);
     bass_mono_grp->addChild(std::make_unique<juce::AudioParameterFloat>("bass_mono_freq", "BASS_MONO_FREQ", NormalisableRange<float>(0.0f, 1.0f, 0.0001f), bass_mono_freq_default, "", AudioProcessorParameter::genericParameter, bass_mono_freq_string_from_value));
 
