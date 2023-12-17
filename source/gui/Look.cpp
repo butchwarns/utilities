@@ -48,21 +48,29 @@ void Look::drawLinearSlider(Graphics &g, int x, int y, int width, int height, fl
 {
     ignoreUnused(x, y, width, height, minSliderPos, maxSliderPos, slider_style);
 
-    // Background
-    g.fillAll(BEIGE);
-
-    // Indicator region
     const auto bounds = slider.getLocalBounds();
-    g.setColour(GREY_TRANSPARENT);
-    g.fillRect(bounds.getX(), bounds.getY(), (int)(sliderPos), bounds.getHeight());
+
+    // Line
+    g.setColour(juce::Colours::black);
+    g.drawLine(0.0f, (float)(bounds.getHeight()) / 2.0f, (float)(bounds.getWidth()), (float)(bounds.getHeight()) / 2.0f, OUTLINE);
 
     // Thumb
-    g.setColour(Colours::black);
-    g.drawLine(sliderPos, 0.0f, sliderPos, (float)(slider.getLocalBounds().getHeight()), OUTLINE * 2.5f);
 
-    // Outline
-    g.setColour(juce::Colours::black);
-    g.drawRect(slider.getLocalBounds(), (int)OUTLINE);
+    auto thumb_rect = Rectangle<float>(sliderPos, (float)(bounds.getHeight()) / 2.0f - (float)(SLIDER_HORIZONTAL_THUMB_HEIGHT) / 2.0f, (float)(SLIDER_HORIZONTAL_THUMB_WIDTH), (float)(SLIDER_HORIZONTAL_THUMB_HEIGHT));
+    auto slider_pos_relative = (sliderPos - (float)bounds.getX()) / (float)bounds.getWidth();
+    thumb_rect.translate(slider_pos_relative * (-(float)SLIDER_HORIZONTAL_THUMB_WIDTH - 2.0f), 0.0f);
+
+    g.setColour(Colours::black);
+    g.drawRect(thumb_rect.translated(1.0, 1.0), OUTLINE);
+    g.drawRect(thumb_rect.translated(2.0, 2.0), OUTLINE);
+
+    g.setColour(BEIGE);
+    g.fillRect(thumb_rect);
+    g.setColour(GREY_TRANSPARENT);
+    g.fillRect(thumb_rect);
+
+    g.setColour(Colours::black);
+    g.drawRect(thumb_rect, OUTLINE);
 }
 
 void Look::drawRotarySlider(Graphics &g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, Slider &slider)
@@ -143,16 +151,20 @@ void Look::drawTickBox(Graphics &g, Component &component,
     // Background
     g.fillAll(BEIGE);
 
+    if (ticked)
+    {
+        g.fillAll(GREY_TRANSPARENT);
+        g.fillAll(GREY_TRANSPARENT);
+        g.drawRect(bounds.getX() + 1, bounds.getY() + 1, bounds.getWidth() - 1, bounds.getHeight() - 1, (int)OUTLINE);
+    }
+    else
+    {
+        g.drawRect(bounds.getX(), bounds.getY(), bounds.getWidth() - 1, bounds.getHeight() - 1, (int)OUTLINE);
+    }
+
     // Outline
     g.setColour(juce::Colours::black);
     g.drawRect(bounds, (int)OUTLINE);
-
-    if (ticked)
-    {
-        g.setColour(Colours::black);
-        g.setFont(Look::getFontInterBlack(FONT_SIZE));
-        g.drawFittedText("X", bounds, juce::Justification::centred, 1, 1.0f);
-    }
 }
 
 void Look::drawLabel(Graphics &g, Label &label)
@@ -249,7 +261,7 @@ void Look::drawComboBox(Graphics &g, int width, int height, bool isButtonDown, i
     g.setColour(Colours::black);
     auto font = getFontInterRegular((float)(bounds.getHeight()));
     g.setFont(font);
-    g.drawFittedText("->", bounds_button, Justification::centred, 1, 1.0f);
+    g.drawFittedText(String(CharPointer_UTF8("\xE2\x86\x93")), bounds_button, Justification::centred, 1, 1.0f);
 
     // Outline
     g.setColour(Colours::black);

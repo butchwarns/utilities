@@ -23,6 +23,8 @@ constexpr double VOLUME_MIN = -66.1;
 constexpr double VOLUME_MAX = 35.0;
 constexpr double VOLUME_OFF_THRESHOLD = VOLUME_MIN + 0.1;
 constexpr double WIDTH_MAX = 4.0;
+const double BASS_MONO_FREQ_CV_MIN = bdsp::cv::VoltPerOctave<double>::freq_to_volt(20.0, ZERO_VOLT_FREQ_BASS_MONO);
+const double BASS_MONO_FREQ_CV_MAX = bdsp::cv::VoltPerOctave<double>::freq_to_volt(500.0, ZERO_VOLT_FREQ_BASS_MONO);
 
 PluginParameters::PluginParameters(juce::AudioProcessor &processor)
     : apvts(processor, nullptr, "parameters", parameter_layout())
@@ -340,14 +342,15 @@ double PluginParameters::bass_mono_freq()
 double PluginParameters::normalise_bass_mono_freq(double freq)
 {
     const double cv = bdsp::cv::VoltPerOctave<double>::freq_to_volt(freq, ZERO_VOLT_FREQ_BASS_MONO);
-    const double cv_norm = bdsp::mappings::normalise(cv, -5.0, 5.0);
+    const double cv_norm = bdsp::mappings::normalise(cv, BASS_MONO_FREQ_CV_MIN, BASS_MONO_FREQ_CV_MAX);
 
     return cv_norm;
 }
 
 double PluginParameters::denormalise_bass_mono_freq(double val_norm)
 {
-    const double cv = bdsp::mappings::map_linear_norm(val_norm, -5.0, 5.0);
+    const double cv = bdsp::mappings::map_linear_norm(val_norm, BASS_MONO_FREQ_CV_MIN, BASS_MONO_FREQ_CV_MAX);
+
     const double freq = bdsp::cv::VoltPerOctave<double>::volt_to_freq(cv, ZERO_VOLT_FREQ_BASS_MONO);
 
     return freq;
