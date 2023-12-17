@@ -4,7 +4,7 @@
         {
             "label": "build debug",
             "type": "shell",
-            "command": "cd ${workspaceFolder}/build && ./build_debug.sh",
+            "command": "cd ${workspaceFolder}/build && ./build.sh debug",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -14,7 +14,7 @@
         {
             "label": "build release",
             "type": "shell",
-            "command": "cd ${workspaceFolder}/build && ./build_release.sh",
+            "command": "cd ${workspaceFolder}/build && ./build.sh release",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

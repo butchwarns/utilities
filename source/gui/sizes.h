@@ -40,8 +40,10 @@ constexpr int SLIDER_ROTARY_HEIGHT = KNOB_DIM + LABEL_HEIGHT;
 constexpr int SLIDER_ROTARY_LABELED_HEIGHT = SLIDER_ROTARY_HEIGHT + LABEL_HEIGHT;
 
 // SliderHorizontal
-constexpr int SLIDER_HORIZONTAL_NO_LABEL_HEIGHT = 20 + 2 * PAD;
+constexpr int SLIDER_HORIZONTAL_NO_LABEL_HEIGHT = 30 + 2 * PAD;
 constexpr int SLIDER_HORIZONTAL_HEIGHT = SLIDER_HORIZONTAL_NO_LABEL_HEIGHT + LABEL_HEIGHT;
+constexpr int SLIDER_HORIZONTAL_THUMB_HEIGHT = 30;
+constexpr int SLIDER_HORIZONTAL_THUMB_WIDTH = 10;
 
 // SliderHorizontalLabeled
 constexpr int SLIDER_HORIZONTAL_LABELED_HEIGHT = SLIDER_HORIZONTAL_HEIGHT + LABEL_HEIGHT;
@@ -55,6 +57,7 @@ constexpr int SPACER_DIM = 11; // Width for vertical spacers, height for horizon
 
 // Header
 constexpr int HEADER_HEIGHT = 25;
+
 // Footer
 constexpr int FOOTER_HEIGHT = 25;
 
@@ -74,7 +77,7 @@ constexpr int SLIDERS_HEIGHT = 3 * SLIDER_ROTARY_LABELED_HEIGHT;
 constexpr int DC_BLOCK_HEIGHT = LABEL_HEIGHT + PAD + CHECKBOX_LABELED_HEIGHT;
 
 // Plugin window
-constexpr int COLUMN1_WIDTH = 95;
+constexpr int COLUMN1_WIDTH = 105;
 constexpr int COLUMN2_WIDTH = 65;
 constexpr int COLUMN1_HEIGHT = 3 * SPACER_DIM + PHASE_FLIP_HEIGHT + CHANNELS_HEIGHT + BASS_MONO_HEIGHT + DC_BLOCK_HEIGHT;
 constexpr int COLUMN2_HEIGHT = SLIDERS_HEIGHT;

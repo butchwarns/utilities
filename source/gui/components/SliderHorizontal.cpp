@@ -60,7 +60,7 @@ void SliderHorizontal::resized()
 {
     auto bounds = getLocalBounds();
 
-    slider.setBounds(bounds.removeFromTop(LABEL_HEIGHT));
+    slider.setBounds(bounds.removeFromTop(SLIDER_HORIZONTAL_NO_LABEL_HEIGHT));
     label.setBounds(bounds);
 }
 

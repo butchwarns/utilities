@@ -1,8 +1,10 @@
 # bw_utility CMakeLists.txt
 
 cmake_minimum_required(VERSION 3.15)
+set(CMAKE_CXX_STANDARD 17)
 
 project(bw_utility VERSION 0.1.0)
+
 
 add_subdirectory(JUCE)                  
 
@@ -40,8 +42,7 @@ set(SRC_BDSP
         BDSP/source/filter/HP1_DCBlock.cpp
         BDSP/source/smoother/SmootherLinear.cpp
         BDSP/source/cv/VoltPerOctave.cpp
-        BDSP/source/filter/LP1_RC_TPT.cpp
-        BDSP/source/filter/HP1_RC_TPT.cpp)
+        BDSP/source/filter/LP1_RC_TPT.cpp)
 
 set(SRC_GUI_COMPONENTS
         source/gui/components/Spacer.cpp
@@ -75,11 +76,12 @@ target_sources(bw_utility
 
 target_compile_definitions(bw_utility
     PUBLIC
-        JUCE_WEB_BROWSER=0              # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
-        JUCE_USE_CURL=0                 # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
+        JUCE_WEB_BROWSER=0                  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
+        JUCE_USE_CURL=0                     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
         JUCE_VST3_CAN_REPLACE_VST2=0
-        JUCE_DISPLAY_SPLASH_SCREEN=0    # If you disable the splashscreen, you either need a valid JUCE license or release under GPLv3
-        JUCE_REPORT_APP_USAGE=0)
+        JUCE_DISPLAY_SPLASH_SCREEN=0        # If you disable the splashscreen, you either need a valid JUCE license or release under GPLv3
+        JUCE_REPORT_APP_USAGE=0
+        JUCE_ENABLE_REPAINT_DEBUGGING=0)
 
 juce_add_binary_data(BWUtilityBinaryData 
     NAMESPACE 
