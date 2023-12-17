@@ -37,7 +37,8 @@ private:
     void resized() override;
 
     LabelTitle bass_mono;
-    CheckboxLabeled checkbox;
+    CheckboxLabeled check_on;
+    CheckboxLabeled check_cue;
     SliderHorizontalLabeled slider;
 };
 

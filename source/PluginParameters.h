@@ -69,6 +69,8 @@ public:
     static String mono_string_from_bool(bool value, int max_string_len);
     bool bass_mono();
     static String bass_mono_string_from_bool(bool value, int max_string_len);
+    bool bass_mono_cue();
+    static String bass_mono_cue_string_from_bool(bool value, int max_string_len);
     double bass_mono_freq();
     static inline double normalise_bass_mono_freq(double freq);
     static inline double denormalise_bass_mono_freq(double val_norm);
@@ -94,6 +96,7 @@ private:
     std::atomic<float> *width_norm;
     std::atomic<float> *mono_norm;
     std::atomic<float> *bass_mono_norm;
+    std::atomic<float> *bass_mono_cue_norm;
     std::atomic<float> *bass_mono_freq_norm;
     std::atomic<float> *phase_flip_l_norm;
     std::atomic<float> *phase_flip_r_norm;
