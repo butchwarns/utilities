@@ -1284,11 +1284,6 @@
 			<key>INTRODUCTION</key>
 			<dict>
 				<key>LOCALIZATIONS</key>
-				<array/>
-			</dict>
-			<key>LICENSE</key>
-			<dict>
-				<key>LOCALIZATIONS</key>
 				<array>
 					<dict>
 						<key>LANGUAGE</key>
@@ -1296,12 +1291,17 @@
 						<key>VALUE</key>
 						<dict>
 							<key>PATH</key>
-							<string>./license.txt</string>
+							<string>introduction.html</string>
 							<key>PATH_TYPE</key>
 							<integer>3</integer>
 						</dict>
 					</dict>
 				</array>
+			</dict>
+			<key>LICENSE</key>
+			<dict>
+				<key>LOCALIZATIONS</key>
+				<array/>
 				<key>MODE</key>
 				<integer>0</integer>
 			</dict>
@@ -1315,7 +1315,7 @@
 						<key>VALUE</key>
 						<dict>
 							<key>PATH</key>
-							<string>./readme.txt</string>
+							<string>readme.html</string>
 							<key>PATH_TYPE</key>
 							<integer>3</integer>
 						</dict>
