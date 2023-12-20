@@ -156,10 +156,12 @@ void Look::drawTickBox(Graphics &g, Component &component,
         g.fillAll(GREY_TRANSPARENT);
         g.fillAll(GREY_TRANSPARENT);
         g.drawRect(bounds.getX() + 1, bounds.getY() + 1, bounds.getWidth() - 1, bounds.getHeight() - 1, (int)OUTLINE);
+        g.drawRect(bounds.getX() + 2, bounds.getY() + 2, bounds.getWidth() - 3, bounds.getHeight() - 3, (int)OUTLINE);
     }
     else
     {
         g.drawRect(bounds.getX(), bounds.getY(), bounds.getWidth() - 1, bounds.getHeight() - 1, (int)OUTLINE);
+        g.drawRect(bounds.getX() + 1, bounds.getY() + 1, bounds.getWidth() - 3, bounds.getHeight() - 3, (int)OUTLINE);
     }
 
     // Outline
@@ -255,6 +257,7 @@ void Look::drawComboBox(Graphics &g, int width, int height, bool isButtonDown, i
     g.fillRect(bounds_button);
     if (isButtonDown)
     {
+        g.fillRect(bounds_button);
         g.fillRect(bounds_button);
     }
 
