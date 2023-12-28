@@ -177,7 +177,6 @@ void Look::drawLabel(Graphics &g, Label &label)
         const Font font(getLabelFont(label));
         g.setFont(font);
 
-        // auto textArea = getLabelBorderSize(label).subtractedFrom(label.getLocalBounds());
         const auto bounds = label.getLocalBounds();
 
         g.drawFittedText(label.getText(), bounds, label.getJustificationType(),
