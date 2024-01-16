@@ -568,19 +568,19 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
 
     typedef juce::AudioProcessorParameterGroup ParameterGroup;
 
-    std::unique_ptr<ParameterGroup> phase_flip_grp = std::make_unique<ParameterGroup>("phase_flip", "PHASE_FLIP", "|");
+    auto phase_flip_grp = std::make_unique<ParameterGroup>("phase_flip", "PHASE_FLIP", "|");
     const auto phase_flip_l_id = ParameterID{"phase_flip_l", 1};
     phase_flip_grp->addChild(std::make_unique<juce::AudioParameterBool>(phase_flip_l_id, "PHASE_FLIP_L", false, "", phase_flip_l_string_from_bool));
     const auto phase_flip_r_id = ParameterID{"phase_flip_r", 1};
     phase_flip_grp->addChild(std::make_unique<juce::AudioParameterBool>(phase_flip_r_id, "PHASE_FLIP_R", false, "", phase_flip_r_string_from_bool));
 
-    std::unique_ptr<ParameterGroup> channels_grp = std::make_unique<ParameterGroup>("channels", "CHANNELS", "|");
+    auto channels_grp = std::make_unique<ParameterGroup>("channels", "CHANNELS", "|");
     const auto channels_id = ParameterID{"channels", 1};
     channels_grp->addChild(std::make_unique<juce::AudioParameterChoice>(channels_id, "CHANNELS", CHANNELS_CHOICES, 0, "", channels_string_from_index));
     const auto mono_id = ParameterID{"mono", 1};
     channels_grp->addChild(std::make_unique<juce::AudioParameterBool>(mono_id, "MONO", false, "", mono_string_from_bool));
 
-    std::unique_ptr<ParameterGroup> bass_mono_grp = std::make_unique<ParameterGroup>("bass_mono", "BASS_MONO", "|");
+    auto bass_mono_grp = std::make_unique<ParameterGroup>("bass_mono", "BASS_MONO", "|");
     const auto bass_mono_id = ParameterID{"bass_mono", 1};
     bass_mono_grp->addChild(std::make_unique<juce::AudioParameterBool>(bass_mono_id, "BASS_MONO", false, "", bass_mono_string_from_bool));
     const auto bass_mono_cue_id = ParameterID{"bass_mono_cue", 1};
@@ -589,7 +589,7 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
     const auto bass_mono_freq_default = (float)normalise_bass_mono_freq(120.0);
     bass_mono_grp->addChild(std::make_unique<juce::AudioParameterFloat>(bass_mono_freq_id, "BASS_MONO_FREQ", NormalisableRange<float>(0.0f, 1.0f, 0.0001f), bass_mono_freq_default, "", AudioProcessorParameter::genericParameter, bass_mono_freq_string_from_value));
 
-    std::unique_ptr<ParameterGroup> sliders_grp = std::make_unique<ParameterGroup>("sliders", "SLIDERS", "|");
+    auto sliders_grp = std::make_unique<ParameterGroup>("sliders", "SLIDERS", "|");
     const auto width_id = ParameterID{"width", 1};
     const auto width_default = (float)normalise_width_percent(100);
     sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>(width_id, "WIDTH", NormalisableRange<float>(0.0f, 1.0f, 0.0025f), width_default, "", AudioProcessorParameter::genericParameter, width_string_from_value));
@@ -597,9 +597,9 @@ Apvts::ParameterLayout PluginParameters::parameter_layout()
     const auto volume_default = (float)normalise_volume_db(0.0);
     sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>(volume_id, "VOLUME", NormalisableRange<float>(0.0f, 1.0f, 0.0000001f), volume_default, "", AudioProcessorParameter::genericParameter, volume_string_from_value));
     const auto pan_id = ParameterID{"pan", 1};
-    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>("pan", "PAN", NormalisableRange<float>(0.0f, 1.0f, 0.001f), 0.5f, "", AudioProcessorParameter::genericParameter, pan_string_from_value));
+    sliders_grp->addChild(std::make_unique<juce::AudioParameterFloat>(pan_id, "PAN", NormalisableRange<float>(0.0f, 1.0f, 0.001f), 0.5f, "", AudioProcessorParameter::genericParameter, pan_string_from_value));
 
-    std::unique_ptr<ParameterGroup> dc_block_group = std::make_unique<ParameterGroup>("dc_block", "DC_BLOCK", "|");
+    auto dc_block_group = std::make_unique<ParameterGroup>("dc_block", "DC_BLOCK", "|");
     const auto dc_block_id = ParameterID{"dc_block", 1};
     dc_block_group->addChild(std::make_unique<juce::AudioParameterBool>(dc_block_id, "DC_BLOCK", false, "", dc_block_string_from_bool));
 
