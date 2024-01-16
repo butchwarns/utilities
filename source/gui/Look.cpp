@@ -193,7 +193,7 @@ Font Look::getLabelFont(Label &label)
     {
         return getFontInterBold(FONT_SIZE);
     }
-    if ((props["text_style"] == "black") || (props["text_style"] == "title"))
+    if ((props["text_style"] == "black") || (props["gui_class"] == "title"))
     {
         return getFontInterBlack(FONT_SIZE);
     }

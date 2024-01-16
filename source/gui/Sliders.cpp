@@ -25,16 +25,13 @@ Sliders::Sliders(PluginParameters &p)
 {
     addAndMakeVisible(&slider_width);
     slider_width.label.set_text("WIDTH");
-    slider_width.label.getProperties().set("text_style", "bold");
 
     addAndMakeVisible(&slider_volume);
     slider_volume.label.set_text("VOLUME");
-    slider_volume.label.getProperties().set("text_style", "bold");
     slider_volume.slider.slider.getProperties().set("gui_class", "slider_rotary_off");
 
     addAndMakeVisible(&slider_pan);
     slider_pan.label.set_text("PAN");
-    slider_pan.label.getProperties().set("text_style", "bold");
     slider_pan.slider.slider.getProperties().set("gui_class", "slider_symmetric");
 }
 

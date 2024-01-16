@@ -21,10 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 PhaseFlip::PhaseFlip(PluginParameters &p) : check_l(p, "phase_flip_l"), check_r(p, "phase_flip_r")
 {
     addAndMakeVisible(&label);
-    label.setText("PHASE FLIP", dontSendNotification);
-    label.setColour(Label::textColourId, Colours::black);
-    label.setJustificationType(Justification::centred);
-    label.getProperties().set("text_class", "bold");
+    label.set_text("PHASE FLIP");
 
     addAndMakeVisible(&check_l);
     check_l.label.setText("L", dontSendNotification);
