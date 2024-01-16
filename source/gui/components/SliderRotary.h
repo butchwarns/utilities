@@ -32,7 +32,7 @@ class SliderRotary
 {
 public:
     SliderRotary(PluginParameters &p,
-                 String param_id,
+                 const String &param_id,
                  std::function<String(float value, int maximumStringLength)> _string_from_value,
                  std::function<std::optional<double>(const String &string)> _value_from_string);
 

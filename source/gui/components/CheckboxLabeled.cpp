@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "CheckboxLabeled.h"
 
-CheckboxLabeled::CheckboxLabeled(PluginParameters &p, ParameterID param_id) : attachment(nullptr)
+CheckboxLabeled::CheckboxLabeled(PluginParameters &p, const String &param_id) : attachment(nullptr)
 {
     addAndMakeVisible(&label);
     label.setJustificationType(Justification::centred);
@@ -27,7 +27,7 @@ CheckboxLabeled::CheckboxLabeled(PluginParameters &p, ParameterID param_id) : at
 
     addAndMakeVisible(&checkbox);
 
-    attachment = std::make_unique<ButtonAttachment>(p.apvts, param_id.getParamID(), checkbox);
+    attachment = std::make_unique<ButtonAttachment>(p.apvts, param_id, checkbox);
 }
 
 void CheckboxLabeled::paint(Graphics &g)

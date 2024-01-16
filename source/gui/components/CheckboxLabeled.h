@@ -26,7 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 class CheckboxLabeled : public Component
 {
 public:
-    CheckboxLabeled(PluginParameters &p, ParameterID param_id);
+    CheckboxLabeled(PluginParameters &p, const String &param_id);
 
     juce::Label label;
     juce::ToggleButton checkbox;

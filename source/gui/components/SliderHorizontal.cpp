@@ -20,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "../colours.h"
 
 SliderHorizontal::SliderHorizontal(PluginParameters &_p,
-                                   String param_id,
+                                   const String &param_id,
                                    std::function<String(float value, int maximumStringLength)> _string_from_value,
                                    std::function<std::optional<double>(String string)> _value_from_string)
     : p(_p),
