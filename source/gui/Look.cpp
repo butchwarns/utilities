@@ -187,23 +187,21 @@ void Look::drawLabel(Graphics &g, Label &label)
 
 Font Look::getLabelFont(Label &label)
 {
-    if (label.getProperties()["gui_class"] == "bold")
+    const auto props = label.getProperties();
+
+    if (props["text_style"] == "bold")
     {
         return getFontInterBold(FONT_SIZE);
     }
-    if (label.getProperties()["gui_class"] == "black")
+    if ((props["text_style"] == "black") || (props["text_style"] == "title"))
     {
         return getFontInterBlack(FONT_SIZE);
     }
-    else if (label.getProperties()["gui_class"] == "italic")
+    else if (props["text_style"] == "italic")
     {
         return getFontInterItalic(FONT_SIZE);
     }
-    else if (label.getProperties()["gui_class"] == "title")
-    {
-        return getFontInterBlack(FONT_SIZE_TITLE);
-    }
-    else
+    else // Default
     {
         return getFontInterRegular(FONT_SIZE);
     }

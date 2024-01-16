@@ -24,7 +24,7 @@ Channels::Channels(PluginParameters &p) : checkbox(p, "mono")
     channels.setText("CHANNELS", dontSendNotification);
     channels.setJustificationType(juce::Justification::centred);
     channels.setColour(Label::textColourId, Colours::black);
-    channels.getProperties().set("gui_class", "bold");
+    channels.getProperties().set("text_style", "bold");
 
     addAndMakeVisible(&selector);
     selector.addItemList(CHANNELS_CHOICES, 1);

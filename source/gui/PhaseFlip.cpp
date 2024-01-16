@@ -24,7 +24,7 @@ PhaseFlip::PhaseFlip(PluginParameters &p) : check_l(p, "phase_flip_l"), check_r(
     label.setText("PHASE FLIP", dontSendNotification);
     label.setColour(Label::textColourId, Colours::black);
     label.setJustificationType(Justification::centred);
-    label.getProperties().set("gui_class", "bold");
+    label.getProperties().set("text_class", "bold");
 
     addAndMakeVisible(&check_l);
     check_l.label.setText("L", dontSendNotification);

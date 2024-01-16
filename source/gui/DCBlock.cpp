@@ -24,7 +24,7 @@ DCBlock::DCBlock(PluginParameters &p) : checkbox(p, "dc_block")
     label.setText("DC BLOCK", dontSendNotification);
     label.setJustificationType(Justification::centred);
     label.setColour(Label::textColourId, Colours::black);
-    label.getProperties().set("gui_class", "bold");
+    label.getProperties().set("text_style", "bold");
     checkbox.label.setText("CUT", dontSendNotification);
 
     addAndMakeVisible(&checkbox);

@@ -25,7 +25,7 @@ BassMono::BassMono(PluginParameters &p)
 {
     addAndMakeVisible(&bass_mono);
     bass_mono.set_text("BASS MONO");
-    bass_mono.getProperties().set("gui_class", "bold");
+    bass_mono.getProperties().set("text_style", "bold");
 
     addAndMakeVisible(&check_on);
     check_on.label.setText("ON", dontSendNotification);
