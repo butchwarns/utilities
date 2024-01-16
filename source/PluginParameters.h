@@ -47,6 +47,7 @@ public:
 
     ChannelsChoice channels();
     static String channels_string_from_index(int value, int max_string_len);
+
     double volume();
     static inline double normalise_volume(double gain);
     static inline double normalise_volume_db(double db);
@@ -56,6 +57,7 @@ public:
     static std::optional<double> volume_value_from_string(const String &string);
     static inline double skew_volume(double val_norm);
     static inline double unskew_volume(double val_norm);
+
     double width();
     static inline double normalise_width(double width);
     static inline double normalise_width_percent(double width_percent);
@@ -65,26 +67,33 @@ public:
     static std::optional<double> width_value_from_string(const String &string);
     static inline double skew_width(double val_norm);
     static inline double unskew_width(double val_norm);
+
     bool mono();
     static String mono_string_from_bool(bool value, int max_string_len);
+
     bool bass_mono();
     static String bass_mono_string_from_bool(bool value, int max_string_len);
+
     bool bass_mono_cue();
     static String bass_mono_cue_string_from_bool(bool value, int max_string_len);
+
     double bass_mono_freq();
     static inline double normalise_bass_mono_freq(double freq);
     static inline double denormalise_bass_mono_freq(double val_norm);
     static String bass_mono_freq_string_from_value(double value, int max_string_len);
     static std::optional<double> bass_mono_freq_value_from_string(const String &string);
+
     double phase_flip_l();
     double phase_flip_r();
     static inline double denormalise_phase_flip(double val_norm);
     static String phase_flip_l_string_from_bool(bool value, int max_string_len);
     static String phase_flip_r_string_from_bool(bool value, int max_string_len);
+
     double pan();
     static inline double denormalise_pan(double val_norm);
     static String pan_string_from_value(double value, int max_string_len);
     static std::optional<double> pan_value_from_string(const String &string);
+
     bool dc_block();
     static String dc_block_string_from_bool(bool value, int max_string_len);
 

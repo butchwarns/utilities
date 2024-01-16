@@ -21,10 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 Channels::Channels(PluginParameters &p) : checkbox(p, "mono")
 {
     addAndMakeVisible(&channels);
-    channels.setText("CHANNELS", dontSendNotification);
-    channels.setJustificationType(juce::Justification::centred);
-    channels.setColour(Label::textColourId, Colours::black);
-    channels.getProperties().set("gui_class", "bold");
+    channels.set_text("CHANNELS");
 
     addAndMakeVisible(&selector);
     selector.addItemList(CHANNELS_CHOICES, 1);

@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "../typedefs.h"
 #include "../PluginParameters.h"
 #include "components/CheckboxLabeled.h"
+#include "components/LabelTitle.h"
 
 class Channels : public juce::Component
 {
@@ -34,8 +35,8 @@ private:
     void paint(juce::Graphics &g) override;
     void resized() override;
 
-    juce::Label channels;
-    juce::ComboBox selector;
+    LabelTitle channels;
+    ComboBox selector;
     CheckboxLabeled checkbox;
 
     std::unique_ptr<ComboBoxAttachment> attachment_selector;

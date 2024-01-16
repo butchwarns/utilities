@@ -25,18 +25,14 @@ Sliders::Sliders(PluginParameters &p)
 {
     addAndMakeVisible(&slider_width);
     slider_width.label.set_text("WIDTH");
-    slider_width.label.getProperties().set("gui_class", "bold");
 
     addAndMakeVisible(&slider_volume);
     slider_volume.label.set_text("VOLUME");
-    slider_volume.label.getProperties().set("gui_class", "bold");
-    slider_volume.slider.slider.getProperties().set("gui_class", "slider_rotary_off");
+    slider_volume.rotary.slider.getProperties().set("gui_class", "slider_rotary_off");
 
     addAndMakeVisible(&slider_pan);
     slider_pan.label.set_text("PAN");
-    slider_pan.label.getProperties().set("gui_class", "bold");
-    slider_pan.slider.slider.getProperties().set("param", "pan");
-    slider_pan.slider.slider.getProperties().set("gui_class", "slider_symmetric");
+    slider_pan.rotary.slider.getProperties().set("gui_class", "slider_symmetric");
 }
 
 void Sliders::paint(juce::Graphics &g)
