@@ -35,7 +35,7 @@ public:
                         std::function<std::optional<double>(const String &string)> value_from_string);
 
     LabelTitle label;
-    SliderRotary slider;
+    SliderRotary rotary;
 
 private:
     void paint(Graphics &g) override;

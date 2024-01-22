@@ -35,6 +35,7 @@ Footer::Footer()
     bw.setText("->BW", dontSendNotification);
     bw.setJustificationType(juce::Justification::centred);
     bw.setColour(juce::Label::textColourId, juce::Colours::white);
+    bw.getProperties().set("gui_class", "label");
 
     addAndMakeVisible(&link);
     link.setURL(juce::URL("https://butchwarns.de/"));

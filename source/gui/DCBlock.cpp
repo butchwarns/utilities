@@ -21,13 +21,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 DCBlock::DCBlock(PluginParameters &p) : checkbox(p, "dc_block")
 {
     addAndMakeVisible(&label);
-    label.setText("DC BLOCK", dontSendNotification);
-    label.setJustificationType(Justification::centred);
-    label.setColour(Label::textColourId, Colours::black);
-    label.getProperties().set("gui_class", "bold");
-    checkbox.label.setText("CUT", dontSendNotification);
+    label.set_text("DC BLOCK");
 
     addAndMakeVisible(&checkbox);
+    checkbox.label.setText("CUT", dontSendNotification);
 
     attachment = std::make_unique<ButtonAttachment>(p.apvts, "dc_block", checkbox.checkbox);
 }

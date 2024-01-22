@@ -12,6 +12,7 @@ pwd
 echo  "##########################################"
 echo -e "\nCreate .zip archive\n"
 
-zip -r ${PLUGIN}_mac.zip $PLUGIN.vst3 $PLUGIN.component $PLUGIN.pkg
+# Bundle plugin installer, raw plugins and changelog
+zip -r ${PLUGIN}_mac.zip $PLUGIN.vst3 $PLUGIN.component $PLUGIN.pkg ../CHANGELOG.md
 
 echo  "##########################################"

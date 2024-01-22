@@ -177,7 +177,6 @@ void Look::drawLabel(Graphics &g, Label &label)
         const Font font(getLabelFont(label));
         g.setFont(font);
 
-        // auto textArea = getLabelBorderSize(label).subtractedFrom(label.getLocalBounds());
         const auto bounds = label.getLocalBounds();
 
         g.drawFittedText(label.getText(), bounds, label.getJustificationType(),
@@ -188,23 +187,21 @@ void Look::drawLabel(Graphics &g, Label &label)
 
 Font Look::getLabelFont(Label &label)
 {
-    if (label.getProperties()["gui_class"] == "bold")
+    const auto props = label.getProperties();
+
+    if (props["text_style"] == "bold")
     {
         return getFontInterBold(FONT_SIZE);
     }
-    if (label.getProperties()["gui_class"] == "black")
+    if ((props["text_style"] == "black") || (props["gui_class"] == "title"))
     {
         return getFontInterBlack(FONT_SIZE);
     }
-    else if (label.getProperties()["gui_class"] == "italic")
+    else if (props["text_style"] == "italic")
     {
         return getFontInterItalic(FONT_SIZE);
     }
-    else if (label.getProperties()["gui_class"] == "title")
-    {
-        return getFontInterBlack(FONT_SIZE_TITLE);
-    }
-    else
+    else // Default
     {
         return getFontInterRegular(FONT_SIZE);
     }
@@ -255,6 +252,7 @@ void Look::drawComboBox(Graphics &g, int width, int height, bool isButtonDown, i
     g.fillRect(bounds_button);
     if (isButtonDown)
     {
+        g.fillRect(bounds_button);
         g.fillRect(bounds_button);
     }
 

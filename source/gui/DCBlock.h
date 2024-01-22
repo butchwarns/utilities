@@ -22,6 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <JuceHeader.h>
 #include "../PluginParameters.h"
 #include "components/CheckboxLabeled.h"
+#include "components/LabelTitle.h"
 #include "../typedefs.h"
 
 class DCBlock : public Component
@@ -33,7 +34,7 @@ private:
     void paint(Graphics &g) override;
     void resized() override;
 
-    Label label;
+    LabelTitle label;
     CheckboxLabeled checkbox;
 
     std::unique_ptr<ButtonAttachment> attachment;

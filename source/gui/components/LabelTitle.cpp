@@ -23,7 +23,7 @@ LabelTitle::LabelTitle()
     addAndMakeVisible(&label);
     label.setJustificationType(Justification::centred);
     label.setColour(Label::textColourId, Colours::black);
-    label.getProperties().set("gui_class", "bold");
+    label.getProperties().set("text_style", "bold");
 }
 
 void LabelTitle::set_text(String text)
