@@ -56,7 +56,7 @@ public:
     static String volume_string_from_value(double value, int max_string_len);
     static std::optional<double> volume_value_from_string(const String &string);
     static inline double skew_volume(double val_norm);
-    static inline double unskew_volume(double val_norm);
+    static inline double unskew_volume(double val_skewed);
 
     double width();
     static inline double normalise_width(double width);
