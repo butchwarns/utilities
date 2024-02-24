@@ -1,6 +1,6 @@
 /*
 PluginParameters.cpp
-Copyright (C) 2023 Butch Warns
+Copyright (C) 2024 Butch Warns
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -165,16 +165,16 @@ double PluginParameters::skew_volume(double val_norm)
     return bdsp::mappings::map_linear(val_norm, zero_norm, 1.0, 0.5, 1.0);
 }
 
-double PluginParameters::unskew_volume(double val_norm)
+double PluginParameters::unskew_volume(double val_skewed)
 {
     const double zero_norm = bdsp::mappings::normalise(0.0, VOLUME_MIN, VOLUME_MAX);
 
-    if (val_norm <= 0.5)
+    if (val_skewed <= 0.5)
     {
-        return bdsp::mappings::map_linear(val_norm, 0.0, 0.5, 0.0, zero_norm);
+        return bdsp::mappings::map_linear(val_skewed, 0.0, 0.5, 0.0, zero_norm);
     }
 
-    return bdsp::mappings::map_linear(val_norm, 0.5, 1.0, zero_norm, 1.0);
+    return bdsp::mappings::map_linear(val_skewed, 0.5, 1.0, zero_norm, 1.0);
 }
 
 double PluginParameters::width()
@@ -184,13 +184,13 @@ double PluginParameters::width()
 
 double PluginParameters::normalise_width(double width)
 {
-    return width / WIDTH_MAX;
+    const double val_norm = width / WIDTH_MAX;
+    return skew_width(val_norm);
 }
 
 double PluginParameters::normalise_width_percent(double width_percent)
 {
-    const double val_norm = width_percent / (100.0 * WIDTH_MAX);
-    return skew_width(val_norm);
+    return normalise_width(width_percent / 100.0);
 }
 
 double PluginParameters::denormalise_width(double val_norm)
@@ -201,8 +201,7 @@ double PluginParameters::denormalise_width(double val_norm)
 
 double PluginParameters::denormalise_width_percent(double val_norm)
 {
-    val_norm = unskew_width(val_norm);
-    return 100.0 * WIDTH_MAX * val_norm;
+    return 100.0 * denormalise_width(val_norm);
 }
 
 String PluginParameters::width_string_from_value(double value, int max_string_len)
@@ -234,7 +233,7 @@ std::optional<double> PluginParameters::width_value_from_string(const String &st
         double value = 0.0;
         value = std::stod(string.toStdString());
         value = normalise_width_percent(value);
-        return value;
+        return std::optional<double>{value};
     }
     catch (const std::invalid_argument &e)
     {
@@ -248,7 +247,7 @@ std::optional<double> PluginParameters::width_value_from_string(const String &st
 
 double PluginParameters::skew_width(double val_norm)
 {
-    if (val_norm <= 0.5)
+    if (val_norm <= 0.25)
     {
         return bdsp::mappings::map_linear(val_norm, 0.0, 0.25, 0.0, 0.5);
     }
@@ -256,14 +255,14 @@ double PluginParameters::skew_width(double val_norm)
     return bdsp::mappings::map_linear(val_norm, 0.25, 1.0, 0.5, 1.0);
 }
 
-double PluginParameters::unskew_width(double val_norm)
+double PluginParameters::unskew_width(double val_skewed)
 {
-    if (val_norm <= 0.5)
+    if (val_skewed <= 0.5)
     {
-        return bdsp::mappings::map_linear(val_norm, 0.0, 0.5, 0.0, 0.25);
+        return bdsp::mappings::map_linear(val_skewed, 0.0, 0.5, 0.0, 0.25);
     }
 
-    return bdsp::mappings::map_linear(val_norm, 0.5, 1.0, 0.25, 1.0);
+    return bdsp::mappings::map_linear(val_skewed, 0.5, 1.0, 0.25, 1.0);
 }
 
 bool PluginParameters::mono()

@@ -1,6 +1,6 @@
 /*
 PluginParameters.h
-Copyright (C) 2023 Butch Warns
+Copyright (C) 2024 Butch Warns
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ public:
     static String volume_string_from_value(double value, int max_string_len);
     static std::optional<double> volume_value_from_string(const String &string);
     static inline double skew_volume(double val_norm);
-    static inline double unskew_volume(double val_norm);
+    static inline double unskew_volume(double val_skewed);
 
     double width();
     static inline double normalise_width(double width);
@@ -66,7 +66,7 @@ public:
     static String width_string_from_value(double value, int max_string_len);
     static std::optional<double> width_value_from_string(const String &string);
     static inline double skew_width(double val_norm);
-    static inline double unskew_width(double val_norm);
+    static inline double unskew_width(double val_skewed);
 
     bool mono();
     static String mono_string_from_bool(bool value, int max_string_len);
