@@ -66,7 +66,7 @@ public:
     static String width_string_from_value(double value, int max_string_len);
     static std::optional<double> width_value_from_string(const String &string);
     static inline double skew_width(double val_norm);
-    static inline double unskew_width(double val_norm);
+    static inline double unskew_width(double val_skewed);
 
     bool mono();
     static String mono_string_from_bool(bool value, int max_string_len);

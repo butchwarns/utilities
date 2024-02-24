@@ -165,16 +165,16 @@ double PluginParameters::skew_volume(double val_norm)
     return bdsp::mappings::map_linear(val_norm, zero_norm, 1.0, 0.5, 1.0);
 }
 
-double PluginParameters::unskew_volume(double val_norm)
+double PluginParameters::unskew_volume(double val_skewed)
 {
     const double zero_norm = bdsp::mappings::normalise(0.0, VOLUME_MIN, VOLUME_MAX);
 
-    if (val_norm <= 0.5)
+    if (val_skewed <= 0.5)
     {
-        return bdsp::mappings::map_linear(val_norm, 0.0, 0.5, 0.0, zero_norm);
+        return bdsp::mappings::map_linear(val_skewed, 0.0, 0.5, 0.0, zero_norm);
     }
 
-    return bdsp::mappings::map_linear(val_norm, 0.5, 1.0, zero_norm, 1.0);
+    return bdsp::mappings::map_linear(val_skewed, 0.5, 1.0, zero_norm, 1.0);
 }
 
 double PluginParameters::width()
