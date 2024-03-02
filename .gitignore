@@ -44,7 +44,7 @@ build/*
 !build/build.sh
 ci_cd/packaging/mac/*
 !ci_cd/packaging/mac/background.png
-!ci_cd/packaging/mac/bw_utility.pkgproj
+!ci_cd/packaging/mac/utilities.pkgproj
 !ci_cd/packaging/mac/*.html
 !ci_cd/packaging/mac/*.txt
 ci_cd/bin

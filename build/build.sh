@@ -5,11 +5,11 @@ scriptdir="$(dirname "$0")"
 cd "$scriptdir"
 
 # Check the first argument for build type
+build_type="debug"
 if [ -z "$1" ]; then
     echo "No argument supplied. Please specify 'release' or 'debug'."
-    echo "(Defaulting to release build!)"
+    echo "(Defaulting to $build_type build!)"
 
-    build_type="release"
 else
     build_type=$1
 fi

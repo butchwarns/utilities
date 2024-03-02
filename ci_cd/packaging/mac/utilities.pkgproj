@@ -79,7 +79,7 @@
 															<key>GID</key>
 															<integer>0</integer>
 															<key>PATH</key>
-															<string>../../bin/bw_utility.vst3</string>
+															<string>../../bin/utilities.vst3</string>
 															<key>PATH_TYPE</key>
 															<integer>3</integer>
 															<key>PERMISSIONS</key>
@@ -632,7 +632,7 @@
 															<key>GID</key>
 															<integer>0</integer>
 															<key>PATH</key>
-															<string>../../bin/bw_utility.component</string>
+															<string>../../bin/utilities.component</string>
 															<key>PATH_TYPE</key>
 															<integer>3</integer>
 															<key>PERMISSIONS</key>
@@ -1335,7 +1335,7 @@
 						<key>LANGUAGE</key>
 						<string>English</string>
 						<key>VALUE</key>
-						<string>bw_utility</string>
+						<string>utilities</string>
 					</dict>
 				</array>
 			</dict>
@@ -1529,7 +1529,7 @@
 				</dict>
 			</array>
 			<key>NAME</key>
-			<string>bw_utility</string>
+			<string>utilities</string>
 			<key>PAYLOAD_ONLY</key>
 			<false/>
 			<key>TREAT_MISSING_PRESENTATION_DOCUMENTS_AS_WARNING</key>

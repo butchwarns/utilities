@@ -1,12 +1,12 @@
-# bw_utility
+# utilities
 
-[![Integration Pipeline](https://github.com/butchwarns/bw_utility/actions/workflows/integrate.yaml/badge.svg)](https://github.com/butchwarns/bw_utility/actions/workflows/integrate.yaml)
-[![Release Pipeline](https://github.com/butchwarns/bw_utility/actions/workflows/release.yaml/badge.svg)](https://github.com/butchwarns/bw_utility/actions/workflows/release.yaml)
+[![Integration Pipeline](https://github.com/butchwarns/utilities/actions/workflows/integrate.yaml/badge.svg)](https://github.com/butchwarns/utilities/actions/workflows/integrate.yaml)
+[![Release Pipeline](https://github.com/butchwarns/utilities/actions/workflows/release.yaml/badge.svg)](https://github.com/butchwarns/utilities/actions/workflows/release.yaml)
 
-<img src='/images/bw_utility-v_0_1_1.jpg' width='200' alt="bw_utility v0.1.1 user interface">
+<img src='/images/utilities-v_0_1_2.png' width='200' alt="utilities v0.1.2 user interface">
 
 ## Description
-The *bw_utility* plugin is a simple VST3/AU utility tool for macOS.
+The *utilities* plugin is a simple VST3/AU utility tool for macOS.
 
 ## Project status
 Functional work in progress. (I do intend to add more features and create installers for Linux/Windows sometime in the future!)
@@ -21,7 +21,7 @@ Functional work in progress. (I do intend to add more features and create instal
 - PAN - Controls left-right panning.
   
 ## Installation
-Currently only _macOS_ is supported. Installers can be downloaded in the [releases](https://github.com/butchwarns/bw_utility/releases) section.
+Currently only _macOS_ is supported. Installers can be downloaded in the [releases](https://github.com/butchwarns/utilities/releases) section.
 
 If you are savvy with JUCE/C++, you can build the plugin for any operating system using CMake:  
 Clone the repo, populate submodules, and run `build.sh release`. The plugin should be automatically user-installed.
