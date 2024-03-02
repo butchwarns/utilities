@@ -17,9 +17,9 @@ jobs:
         with:
           submodules: recursive
 
-      - name: "build_release.sh"
+      - name: "build_and_copy.sh release"
         run: |
-          ./ci_cd/build_release.sh
+          ./ci_cd/build_and_copy.sh release
         shell: bash
 
       - name: "validate.sh"

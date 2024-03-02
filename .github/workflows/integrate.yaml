@@ -16,9 +16,9 @@ jobs:
         with:
           submodules: recursive
 
-      - name: "build_debug.sh"
+      - name: "build_and_copy.sh debug"
         run: |
-          ./ci_cd/build_debug.sh
+          ./ci_cd/build_and_copy.sh debug
         shell: bash
 
       - name: "validate.sh"
