@@ -13,7 +13,7 @@ jobs:
     name: release_pipeline
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -84,5 +84,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: binaries
-          path: ci_cd/bin/bw_utility_*.zip
+          path: ci_cd/bin/utilities_*.zip
           retention-days: 30
