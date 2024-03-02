@@ -3,7 +3,7 @@
 # Disable shell debug output
 set +x
 
-PLUGIN="bw_utility"
+PLUGIN="utilities"
 
 ROOT=$(cd "$(dirname "$0")/.."; pwd)
 cd "$ROOT"

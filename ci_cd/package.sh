@@ -9,6 +9,6 @@ cd "$SCRIPT_DIR"
 echo  "##########################################"
 echo -e "\nBuilding Installer..\n"
 
-packagesbuild --reference-folder ./packaging/mac --project ./packaging/mac/bw_utility.pkgproj
+packagesbuild --reference-folder ./packaging/mac --project ./packaging/mac/utilities.pkgproj
 
 echo  "##########################################"
