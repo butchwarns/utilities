@@ -91,7 +91,7 @@ double PluginParameters::denormalise_volume(double val_norm)
 double PluginParameters::denormalise_volume_db(double val_norm)
 {
     val_norm = unskew_volume(val_norm);
-    const auto db = bdsp::mappings::map_linear_norm<double>(val_norm, VOLUME_MIN, VOLUME_MAX);
+    const auto db = bdsp::mappings::linear_norm<double>(val_norm, VOLUME_MIN, VOLUME_MAX);
 
     return db;
 }
@@ -159,10 +159,10 @@ double PluginParameters::skew_volume(double val_norm)
 
     if (val_norm <= zero_norm)
     {
-        return bdsp::mappings::map_linear(val_norm, 0.0, zero_norm, 0.0, 0.5);
+        return bdsp::mappings::linear(val_norm, 0.0, zero_norm, 0.0, 0.5);
     }
 
-    return bdsp::mappings::map_linear(val_norm, zero_norm, 1.0, 0.5, 1.0);
+    return bdsp::mappings::linear(val_norm, zero_norm, 1.0, 0.5, 1.0);
 }
 
 double PluginParameters::unskew_volume(double val_skewed)
@@ -171,10 +171,10 @@ double PluginParameters::unskew_volume(double val_skewed)
 
     if (val_skewed <= 0.5)
     {
-        return bdsp::mappings::map_linear(val_skewed, 0.0, 0.5, 0.0, zero_norm);
+        return bdsp::mappings::linear(val_skewed, 0.0, 0.5, 0.0, zero_norm);
     }
 
-    return bdsp::mappings::map_linear(val_skewed, 0.5, 1.0, zero_norm, 1.0);
+    return bdsp::mappings::linear(val_skewed, 0.5, 1.0, zero_norm, 1.0);
 }
 
 double PluginParameters::width()
@@ -249,20 +249,20 @@ double PluginParameters::skew_width(double val_norm)
 {
     if (val_norm <= 0.25)
     {
-        return bdsp::mappings::map_linear(val_norm, 0.0, 0.25, 0.0, 0.5);
+        return bdsp::mappings::linear(val_norm, 0.0, 0.25, 0.0, 0.5);
     }
 
-    return bdsp::mappings::map_linear(val_norm, 0.25, 1.0, 0.5, 1.0);
+    return bdsp::mappings::linear(val_norm, 0.25, 1.0, 0.5, 1.0);
 }
 
 double PluginParameters::unskew_width(double val_skewed)
 {
     if (val_skewed <= 0.5)
     {
-        return bdsp::mappings::map_linear(val_skewed, 0.0, 0.5, 0.0, 0.25);
+        return bdsp::mappings::linear(val_skewed, 0.0, 0.5, 0.0, 0.25);
     }
 
-    return bdsp::mappings::map_linear(val_skewed, 0.5, 1.0, 0.25, 1.0);
+    return bdsp::mappings::linear(val_skewed, 0.5, 1.0, 0.25, 1.0);
 }
 
 bool PluginParameters::mono()
@@ -348,7 +348,7 @@ double PluginParameters::normalise_bass_mono_freq(double freq)
 
 double PluginParameters::denormalise_bass_mono_freq(double val_norm)
 {
-    const double cv = bdsp::mappings::map_linear_norm(val_norm, BASS_MONO_FREQ_CV_MIN, BASS_MONO_FREQ_CV_MAX);
+    const double cv = bdsp::mappings::linear_norm(val_norm, BASS_MONO_FREQ_CV_MIN, BASS_MONO_FREQ_CV_MAX);
 
     const double freq = bdsp::cv::VoltPerOctave<double>::volt_to_freq(cv, ZERO_VOLT_FREQ_BASS_MONO);
 
@@ -449,7 +449,7 @@ double PluginParameters::pan()
 
 double PluginParameters::denormalise_pan(double val_norm)
 {
-    return bdsp::mappings::map_linear_norm(val_norm, 0.0, bdsp::constants::PI / 2.0);
+    return bdsp::mappings::linear_norm(val_norm, 0.0, bdsp::constants::PI / 2.0);
 }
 
 String PluginParameters::pan_string_from_value(double value, int max_string_len)
@@ -459,11 +459,11 @@ String PluginParameters::pan_string_from_value(double value, int max_string_len)
     val_formatted << std::fixed << std::setprecision(0);
     if (value < 0.5 - centre_range)
     {
-        val_formatted << bdsp::mappings::map_linear(value, 0.0, 0.5, 50.0, 0.0) << "L";
+        val_formatted << bdsp::mappings::linear(value, 0.0, 0.5, 50.0, 0.0) << "L";
     }
     else if (value > 0.5 + centre_range)
     {
-        val_formatted << bdsp::mappings::map_linear(value, 0.5, 1.0, 0.0, 50.0) << "R";
+        val_formatted << bdsp::mappings::linear(value, 0.5, 1.0, 0.0, 50.0) << "R";
     }
     else
     {
@@ -490,7 +490,7 @@ std::optional<double> PluginParameters::pan_value_from_string(const String &stri
             string.dropLastCharacters(1);
             double value = 0.0;
             value = std::stod(string.toStdString());
-            value = bdsp::mappings::map_linear<double>(value, 0, 50, 0.5, 0.0);
+            value = bdsp::mappings::linear<double>(value, 0, 50, 0.5, 0.0);
             return value;
         }
         catch (const std::invalid_argument &e)
@@ -507,7 +507,7 @@ std::optional<double> PluginParameters::pan_value_from_string(const String &stri
             string.dropLastCharacters(1);
             double value = 0.0;
             value = std::stod(string.toStdString());
-            value = bdsp::mappings::map_linear<double>(value, 0, 50, 0.5, 1.0);
+            value = bdsp::mappings::linear<double>(value, 0, 50, 0.5, 1.0);
             return value;
         }
         catch (const std::invalid_argument &e)
